@@ -178,62 +178,53 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="./index.php?page=list_employee" class="nav-link nav-list_employee tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>List</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="./index.php?page=new_employee"
                                 class="nav-link nav-new_employee tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add Employee</p>
                             </a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a href="./index.php?page=new_administrative_support"
-                                class="nav-link nav-new_administrative_support tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Add Ad Support</p>
-                            </a>
-                        </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link nav-edit_flight_employee">
-                                <i class="nav-icon fas fa-user-astronaut"></i>
-                                <p>
-                                    Flight Employee
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
+                            <a href="#" class="nav-link nav-list_employee tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>List</p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="./index.php?page=new_pilot" class="nav-link nav-new_pilot tree-item">
+                                    <a href="./index.php?page=list_employee" class="nav-link nav-list_employee tree-item">
                                         <i class="fas fa-angle-right nav-icon"></i>
-                                        <p>Add Pilot</p>
+                                        <p>All</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="./index.php?page=new_flight_attendant"
-                                        class="nav-link nav-new_flight_attendant tree-item">
+                                    <a href="./index.php?page=list_administrative_support" class="nav-link nav-list_administrative_support tree-item">
                                         <i class="fas fa-angle-right nav-icon"></i>
-                                        <p>Add Flight Attendant</p>
+                                        <p>Adminstrative Support</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./index.php?page=list_flight_employee"
+                                        class="nav-link nav-list_flight_employee tree-item">
+                                        <i class="fas fa-angle-right nav-icon"></i>
+                                        <p>Flight Employee</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./index.php?page=list_engineer"
+                                        class="nav-link nav-list_engineer tree-item">
+                                        <i class="fas fa-angle-right nav-icon"></i>
+                                        <p>Engineer</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="./index.php?page=list_traffic_controller"
+                                        class="nav-link nav-list_traffic_controller tree-item">
+                                        <i class="fas fa-angle-right nav-icon"></i>
+                                        <p>Traffic Controller</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="./index.php?page=new_engineer" class="nav-link nav-new_engineer tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Add Engineer</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index.php?page=new_traffic_controller"
-                                class="nav-link nav-new_traffic_controller tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Add Traffic Controller</p>
-                            </a>
-                        </li> -->
                     </ul>
                 </li>
                 <?php endif; ?>
