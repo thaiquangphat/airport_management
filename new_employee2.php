@@ -73,14 +73,26 @@
                 <div class="row">
                 <div class="col-md-12">
                         <div class="form-group">
-                            <label for="" class="control-label">Choose type</label>
-                            <select class="form-control form-control-sm select2" name="EmpType">
-                                <option></option>
-                                <option value="ADSupport">Administrative Support</option>
-                                <option value="FlightEmployee">Flight Employee</option>
-                                <option value="Engineer">Engineer</option>
-                                <option value="Traffic Controller">Traffic Controller</option>
-                            </select>
+                            <label for="" class="control-label">Employee Type</label>
+                            <?php 
+                                $type="";
+                                $query="SELECT * FROM Administrative_Support WHERE SSN = '" . $SSN . "'";
+                                $verify=$conn->query($query)->num_rows;
+                                if ($verify > 0) $type="ADSupport";
+
+                                $query="SELECT * FROM Engineer WHERE SSN = '" . $SSN . "'";
+                                $verify=$conn->query($query)->num_rows;
+                                if ($verify > 0) $type="Engineer";
+
+                                $query="SELECT * FROM Flight_Employee WHERE FESSN = '" . $SSN . "'";
+                                $verify=$conn->query($query)->num_rows;
+                                if ($verify > 0) $type="FlightEmployee";
+
+                                $query="SELECT * FROM Traffic_Controller WHERE SSN = '" . $SSN . "'";
+                                $verify=$conn->query($query)->num_rows;
+                                if ($verify > 0) $type="TrafficController";
+                            ?>
+                            <input type="text" class="form-control form-control-sm" name="EmpType" value="<?php echo isset($type) ? $type : '' ?>" readonly>
                         </div>
                     </div>
                 </div>
@@ -103,6 +115,7 @@ img#cimg {
 }
 </style>
 <script>
+
 $(document).ready(function() {
     // Function to handle change event of the select element for Sex
     $('#manage_employee select[name="Sex"]').change(function() {
@@ -114,12 +127,6 @@ $(document).ready(function() {
     $('#manage_employee input[name="DOB"]').change(function() {
         var selectedDateOfBirth = $(this).val();
         $('#manage_employee input[name="DOB"]').val(selectedDateOfBirth);
-    });
-
-    // Function to handle change event of the input element for EmpType
-    $('#manage_employee input[name="EmpType"]').change(function() {
-        var selectedEmpType = $(this).val();
-        $('#manage_employee input[name="EmpType"]').val(selectedEmpType);
     });
 })
 
@@ -146,6 +153,26 @@ $('#manage_employee').submit(function(e) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
                     location.replace('index.php?page=list_employee')
+                }, 750)
+            } else if (resp == 3) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=edit_administrative_support')
+                }, 750)
+            } else if (resp == 4) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=edit_flight_employee')
+                }, 750)
+            } else if (resp == 5) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=edit_engineer')
+                }, 750)
+            } else if (resp == 6) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=edit_traffic_controller')
                 }, 750)
             } else {
                 alert_toast('Data failed to saved.', "error");

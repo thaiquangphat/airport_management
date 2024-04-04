@@ -85,7 +85,7 @@
                                 <option value="ADSupport">Administrative Support</option>
                                 <option value="Flight Employee">Flight Employee</option>
                                 <option value="Engineer">Engineer</option>
-                                <option value="Traffic Controller">Traffic Controller</option>
+                                <option value="TrafficController">Traffic Controller</option>
                             </select>
                         </div>
                     </div>

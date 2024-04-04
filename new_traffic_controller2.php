@@ -41,7 +41,7 @@ $('#manage_employee').submit(function(e) {
     $('#msg').html('');
 
     $.ajax({
-        url: 'ajax.php?action=save_traffic_controller',
+        url: 'ajax.php?action=update_traffic_controller',
         data: new FormData($(this)[0]),
         cache: false,
         contentType: false,

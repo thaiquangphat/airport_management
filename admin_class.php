@@ -616,9 +616,9 @@ class Action
         $save = $this->db->query("INSERT INTO Employee set $data");
         if ($save) {
             if ($EmpType == 'ADSupport') return 3;
-            else if ($EmpType == 'Flight Employee') return 4;
-            if ($EmpType == 'Engineer') return 5;
-            if ($EmpType == 'Traffic Controller') return 6;
+            else if ($EmpType == 'FlightEmployee') return 4;
+            else if ($EmpType == 'Engineer') return 5;
+            else if ($EmpType == 'TrafficController') return 6;
             return 1;
         } else {
             return 0;
@@ -628,6 +628,7 @@ class Action
     function update_employee() {
         extract($_POST);
         $data = "";
+        $_SESSION['saveSSN'] = $SSN;
         // Iterate through each POST parameter
         if (isset($NewSSN) && !empty($NewSSN)) {
             if (empty($data)) {
@@ -651,7 +652,10 @@ class Action
         // Execute the SQL update query
         $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
         if ($save) {
-            // Return 1 indicating success
+            if ($EmpType == 'ADSupport') return 3;
+            else if ($EmpType == 'FlightEmployee') return 4;
+            else if ($EmpType == 'Engineer') return 5;
+            else if ($EmpType == 'TrafficController') return 6;
             return 1;
         } else {
             // Return 0 or error message indicating failure
@@ -665,6 +669,221 @@ class Action
         $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $ssn . "'");
         if ($delete) {
             return 1;
+        }
+    }
+
+    function save_administrative_support() {
+        extract($_POST);
+        $data = "";
+
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k)) {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        $check = $this->db->query(
+            "SELECT * FROM Administrative_Support where SSN = '" . $SSN . "'")->num_rows;
+        if ($check > 0) {
+            return 2;
+            exit();
+        }
+
+        $save = $this->db->query("INSERT INTO Administrative_Support set $data");
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function update_administrative_support() {
+        extract($_POST);
+        $data = "";
+        // Iterate through each POST parameter
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k) && $k != 'SSN') {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        // Execute the SQL update query
+        $save = $this->db->query("UPDATE Administrative_Support SET $data WHERE SSN = '" . $SSN . "'");
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }  
+
+    function save_engineer() {
+        extract($_POST);
+        $data = "";
+
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k)) {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        $check = $this->db->query(
+            "SELECT * FROM Engineer where SSN = '" . $SSN . "'")->num_rows;
+        if ($check > 0) {
+            return 2;
+            exit();
+        }
+
+        $save = $this->db->query("INSERT INTO Engineer set $data");
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function update_engineer() {
+        extract($_POST);
+        $data = "";
+        // Iterate through each POST parameter
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k) && $k != 'SSN') {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        // Execute the SQL update query
+        $save = $this->db->query("UPDATE Engineer SET $data WHERE SSN = '" . $SSN . "'");
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function save_traffic_controller() {
+        extract($_POST);
+        $data = "";
+
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k)) {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        $check = $this->db->query(
+            "SELECT * FROM Traffic_Controller where SSN = '" . $SSN . "'")->num_rows;
+        if ($check > 0) {
+            return 2;
+            exit();
+        }
+
+        $save = $this->db->query("INSERT INTO Traffic_Controller set $data");
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function update_traffic_controller() {
+        extract($_POST);
+        $data = "";
+        // Iterate through each POST parameter
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k) && $k != 'SSN') {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+
+        if (empty($data)) return 1;
+
+        // Execute the SQL update query
+        $save = $this->db->query("UPDATE Traffic_Controller SET $data WHERE SSN = '" . $SSN . "'");
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function save_flight_employee() {
+        extract($_POST);
+
+        $sql="INSERT INTO Flight_Employee set FESSN = '" .$SSN . "'";
+        $save = $this->db->query($sql);
+        if (!$save) {
+            return 0;
+        } 
+
+        if ($FType == 'Pilot') {
+            $sql="INSERT INTO Pilot set SSN = '" .$SSN . "'" . ", License = '" . $Lisence . "'";
+            $check = $this->db->query("SELECT * FROM Pilot where SSN = '" . $SSN . "'")->num_rows;
+            if ($check > 0) {
+                return 2;
+                exit();
+            }
+
+            $save = $this->db->query($sql);
+            if ($save) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        $sql="INSERT INTO Flight_Attendant set SSN = '" .$SSN . "'" . ", Year_Experience = '" . $Year_Experience . "'";
+        $check = $this->db->query("SELECT * FROM Flight_Attendant where SSN = '" . $SSN . "'")->num_rows;
+        if ($check > 0) {
+            return 2;
+            exit();
+        }
+
+        $save = $this->db->query($sql);
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function update_flight_employee() {
+        extract($_POST);
+
+        if ($FType == 'Pilot') {
+            $sql="UPDATE Pilot set License = '" .$License . "' WHERE SSN = '" . $SSN . "'";
+            $save = $this->db->query($sql);
+            if ($save) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        $sql="UPDATE Flight_Attendant set Year_Experience = '" .$Year_Experience . "' WHERE SSN = '" . $SSN . "'";
+        $save = $this->db->query($sql);
+        if ($save) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 

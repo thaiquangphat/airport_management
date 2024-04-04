@@ -1,45 +1,39 @@
 <?php
-    $FSSN = $_SESSION['saveSSN'];
+    $ESSN = $_SESSION['saveSSN'];
 ?>
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
             <form action="" id="manage_employee">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">SSN</label>
                             <input type="text" name="SSN" class="form-control form-control-sm" required
-                                value="<?php echo isset($FSSN) ? $FSSN : '' ?>" readonly>
+                                value="<?php echo isset($ESSN) ? $ESSN : '' ?>" readonly>
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="form-group">
-                            <label for="" class="control-label">Type</label>
-                            <select class="form-control form-control-sm select2" name="FType">
+                            <label for="" class="control-label">EType</label>
+                            <?php
+                                $type="";
+                                $check=$conn->query("SELECT * FROM Engineer WHERE SSN = '" . $ESSN . "' and EType = 'Avionic Engineer'")->num_rows; 
+                                if ($check > 0) $type = 'Avionic Engineer';
+
+                                $check=$conn->query("SELECT * FROM Engineer WHERE SSN = '" . $ESSN . "' and EType = 'Mechanical Engineer'")->num_rows; 
+                                if ($check > 0) $type = 'Mechanical Engineer';
+
+                                $check=$conn->query("SELECT * FROM Engineer WHERE SSN = '" . $ESSN . "' and EType = 'Electrical Engineer'")->num_rows; 
+                                if ($check > 0) $type = 'Electrical Engineer';
+                            ?>
+                            <select class="form-control form-control-sm select2" name="EType">
                                 <option></option>
-                                <option value="Flight Attendant" selected="selected">Flight Attendant</option>
-                                <option value="Pilot">Pilot</option>
+                                <option value="Avionic Engineer" <?php echo isset($type) && $type == 'Avionic Engineer' ? 'selected' : '' ?>>Avionic Engineer</option>
+                                <option value="Mechanical Engineer" <?php echo isset($type) && $type == 'Mechanical Engineer' ? 'selected' : '' ?>>Mechanical Engineer</option>
+                                <option value="Electrical Engineer" <?php echo isset($type) && $type == 'Electrical Engineer' ? 'selected' : '' ?>>Electrical Engineer</option>
                             </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">License</label>
-                            <input type="text" name="License" class="form-control form-control-sm"
-                                value="<?php echo isset($License) ? $License : '' ?>" placeholder="Leave blank if flight attendant">
-                            <small id="#msg"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">Year Experience</label>
-                            <input type="text" name="Year_Experience" class="form-control form-control-sm"
-                                value="<?php echo isset($Year_Experience) ? $Year_Experience : '' ?>" placeholder="Leave blank if pilot">
-                            <small id="#msg"></small>
                         </div>
                     </div>
                 </div>
@@ -47,7 +41,7 @@
                 <div class="col-lg-12 text-right justify-content-center d-flex">
                     <button class="btn btn-primary mr-2">Save</button>
                     <button class="btn btn-secondary" type="button"
-                        onclick="location.href = 'index.php?page=list_employee'">Cancel</button>
+                        onclick="location.href = 'index.php?page=list_engineer'">Cancel</button>
                 </div>
             </form>
         </div>
@@ -64,9 +58,9 @@ img#cimg {
 <script>
 $(document).ready(function() {
     // Function to handle change event of the select element for Sex
-    $('#manage_employee select[name="FType"]').change(function() {
-        var selectedFType = $(this).val();
-        $('#manage_employee input[name="FType"]').val(selectedFType);
+    $('#manage_employee select[name="EType"]').change(function() {
+        var selectedEType = $(this).val();
+        $('#manage_employee input[name="EType"]').val(selectedEType);
     });
 })
 
@@ -76,7 +70,7 @@ $('#manage_employee').submit(function(e) {
     $('#msg').html('');
 
     $.ajax({
-        url: 'ajax.php?action=save_flight_employee',
+        url: 'ajax.php?action=update_engineer',
         data: new FormData($(this)[0]),
         cache: false,
         contentType: false,
@@ -93,7 +87,7 @@ $('#manage_employee').submit(function(e) {
             } else if (resp == 1) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_flight_employee')
+                    location.replace('index.php?page=list_engineer')
                 }, 750)
             } else {
                 alert_toast('Data failed to saved.', "error");

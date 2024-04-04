@@ -126,6 +126,46 @@ if($action == 'delete_employee'){
 	if($save)
 		echo $save;
 }
+if($action == 'save_administrative_support'){
+	$save = $crud->save_administrative_support();
+	if($save)
+		echo $save;
+}
+if($action == 'update_administrative_support'){
+	$save = $crud->update_administrative_support();
+	if($save)
+		echo $save;
+}
+if($action == 'save_traffic_controller'){
+	$save = $crud->save_traffic_controller();
+	if($save)
+		echo $save;
+}
+if($action == 'update_traffic_controller'){
+	$save = $crud->update_traffic_controller();
+	if($save)
+		echo $save;
+}
+if($action == 'save_engineer'){
+	$save = $crud->save_engineer();
+	if($save)
+		echo $save;
+}
+if($action == 'update_engineer'){
+	$save = $crud->update_engineer();
+	if($save)
+		echo $save;
+}
+if($action == 'save_flight_employee'){
+	$save = $crud->save_flight_employee();
+	if($save)
+		echo $save;
+}
+if($action == 'update_flight_employee'){
+	$save = $crud->update_flight_employee();
+	if($save)
+		echo $save;
+}
 if($action == 'save_passenger'){
 	$save = $crud->save_passenger();
 	if($save)
