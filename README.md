@@ -9,4 +9,3 @@
 
 - [05/04/24]
     - Changing the sidebar of employee
-    - Enable edit employee to change role
