@@ -9,3 +9,4 @@
 
 - [05/04/24]
     - Changing the sidebar of employee
+    - Fix Flight Employee & Pilot & Flight Attendant --> edit and add

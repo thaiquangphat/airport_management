@@ -26,8 +26,11 @@
                                     $check=$conn->query("SELECT * FROM Flight_Attendant WHERE SSN = '" . $FSSN . "'")->num_rows; 
                                     if ($check > 0) $type = 'Flight Attendant';
                                 ?>
-                                <option value="Flight Attendant" <?php echo isset($type) && $type == 'Flight Attendant' ? 'selected' : '' ?>>Flight Attendant</option>
-                                <option value="Pilot" <?php echo isset($type) && $type == 'Pilot' ? 'selected' : '' ?>>Pilot</option>
+                                <option value="Flight Attendant"
+                                    <?php echo isset($type) && $type == 'Flight Attendant' ? 'selected' : '' ?>>Flight
+                                    Attendant</option>
+                                <option value="Pilot" <?php echo isset($type) && $type == 'Pilot' ? 'selected' : '' ?>>
+                                    Pilot</option>
                             </select>
                         </div>
                     </div>
@@ -48,7 +51,8 @@
                                 }
                             ?>
                             <input type="text" name="License" class="form-control form-control-sm"
-                                value="<?php echo isset($license) ? $license : '' ?>" placeholder="Leave blank if flight attendant">
+                                value="<?php echo isset($license) ? $license : '' ?>"
+                                placeholder="Leave blank if flight attendant">
                             <small id="#msg"></small>
                         </div>
                     </div>
@@ -96,6 +100,19 @@ $(document).ready(function() {
     $('#manage_employee select[name="FType"]').change(function() {
         var selectedFType = $(this).val();
         $('#manage_employee input[name="FType"]').val(selectedFType);
+
+        // If selected type is Pilot
+        if (selectedFType === 'Pilot') {
+            // Make the Year Experience field readonly
+            $('input[name="Year_Experience"]').prop('readonly', true);
+            // Make the License field editable
+            $('input[name="License"]').prop('readonly', false);
+        } else if (selectedFType === 'Flight Attendant') {
+            // Make the License field readonly
+            $('input[name="License"]').prop('readonly', true);
+            // Make the Year Experience field editable
+            $('input[name="Year_Experience"]').prop('readonly', false);
+        }
     });
 })
 

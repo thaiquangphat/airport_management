@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-md-4">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Salary</label>
                             <input type="text" name="Salary" class="form-control form-control-sm" required
