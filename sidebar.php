@@ -110,6 +110,32 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="#" class="nav-link nav-edit_airline nav-view_model">
+                        <i class="nav-icon fas fa-robot"></i>
+                        <p>
+                            Model
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <?php if($_SESSION['login_type'] == 1): ?>
+                        <li class="nav-item">
+                            <a href="./index.php?page=new_model" class="nav-link nav-new_model tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Add New</p>
+                            </a>
+                        </li>
+                        <?php endif; ?>
+                        <li class="nav-item">
+                            <a href="./index.php?page=list_model" class="nav-link nav-list_model tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>List</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_airplane nav-view_airplane">
                         <i class="nav-icon fas fa-plane"></i>
                         <p>
