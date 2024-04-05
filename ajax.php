@@ -86,12 +86,12 @@ if($action == 'save_model'){
 	if($save)
 		echo $save;
 }
-if($action == 'update_modele'){
+if($action == 'update_model'){
 	$save = $crud->update_model();
 	if($save)
 		echo $save;
 }
-if($action == 'delete_airplane'){
+if($action == 'delete_model'){
 	$save = $crud->delete_model();
 	if($save)
 		echo $save;

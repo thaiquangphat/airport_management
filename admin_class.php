@@ -510,7 +510,7 @@ class Action
     function delete_model() {
         extract($_POST);
         // Wrap the APCode value in single quotes
-        $delete = $this->db->query("DELETE FROM Model WHERE ID = '" . $modelid . "'");
+        $delete = $this->db->query("DELETE FROM Model WHERE ID = '" . $id . "'");
         if ($delete) {
             return 1;
         }
@@ -606,14 +606,13 @@ class Action
                 }
             }
         }
-        $check = $this->db->query(
-            "SELECT * FROM Flight where FlightID = $FlightID")->num_rows;
+        $check = $this->db->query("SELECT * FROM Flight where FlightID = '" .$FlightID . "'")->num_rows;
         if ($check > 0) {
             return 2;
             exit();
         }
         // Construct the SQL query string
-        $sql = "INSERT INTO Airplane SET $data";
+        $sql = "INSERT INTO Flight SET $data";
 
         // Print the SQL query string to the console
         // Print the SQL query string
@@ -657,7 +656,7 @@ class Action
     function delete_flight() {
         extract($_POST);
         // Wrap the APCode value in single quotes
-        $delete = $this->db->query("DELETE FROM Airplane WHERE AirplaneID = '" . $flightid . "'");
+        $delete = $this->db->query("DELETE FROM Flight WHERE FlightID = '" . $flightid . "'");
         if ($delete) {
             return 1;
         }

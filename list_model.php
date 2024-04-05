@@ -81,13 +81,13 @@ $(document).ready(function() {
     });
 })
 
-function delete_model($modelid) {
+function delete_model($id) {
     start_load()
     $.ajax({
         url: 'ajax.php?action=delete_model',
         method: 'POST',
         data: {
-            modelid: $modelid
+            id: $id
         },
         success: function(resp) {
             if (resp == 1) {

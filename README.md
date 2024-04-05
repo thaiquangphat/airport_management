@@ -15,7 +15,8 @@
     - Airline, Employee still ok
     - Add Edit of Owner not done
     - List of Consultant ok
-    - Fail to delete of Model, Airplane -> Delete Airplane is fine, something wrong with the returned value.
-    - Flight only List and Delete ok
+    - Fail to delete of Model, Airplane --> Delete Airplane is fine, something wrong with the returned value.
+    - Flight only List and Delete ok --> fixed delete (previous version accidently delete in airplane), add is fix
     - Fix Airport after new DDL
     - Fix 'Electrical Engineer' to 'Electric Engineer', fix edit and add in Flight Employee.
+    - Fixed deletion in Model and Airplane, bug in typo in ajax.php

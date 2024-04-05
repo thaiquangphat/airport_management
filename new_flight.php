@@ -81,7 +81,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="" class="control-label">Expected Arrive Time</label>
-                            <input type="date" name="EAT" class="form-control form-control-sm" required
+                            <input type="date" name="EAT" class="form-control form-control-sm"
                                 value="<?php echo isset($EAT) ? $EAT : '' ?>">
                             <small id="#msg"></small>
                         </div>
@@ -91,7 +91,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="" class="control-label">Expected Departure Time</label>
-                            <input type="date" name="EDT" class="form-control form-control-sm" required
+                            <input type="date" name="EDT" class="form-control form-control-sm"
                                 value="<?php echo isset($EDT) ? $EDT : '' ?>">
                             <small id="#msg"></small>
                         </div>
@@ -127,6 +127,13 @@ $(document).ready(function() {
     $('#manage_flight select[name="Status"]').change(function() {
         var selectedStatus = $(this).val();
         $('#manage_flight input[name="Status"]').val(selectedStatus);
+
+        if (selectedStatus === 'Unassigned') {
+            // Make the Year Experience field readonly
+            $('input[name="EDT"]').prop('readonly', true);
+            // Make the License field editable
+            $('input[name="EAT"]').prop('readonly', true);
+        }
     });
 
     $('#manage_flight select[name="AirplaneID"]').change(function() {
@@ -144,14 +151,14 @@ $(document).ready(function() {
         $('#manage_flight input[name="FlightCode"]').val(selectedFlightCode);
     });
 
-    $('#manage_flight select[name="ExpectedDepTime"]').change(function() {
-        var selectedExpectedDepTime = $(this).val();
-        $('#manage_flight input[name="ExpectedDepTime"]').val(selectedExpectedDepTime);
+    $('#manage_flight select[name="EDT"]').change(function() {
+        var selectedEDT = $(this).val();
+        $('#manage_flight input[name="EDT"]').val(selectedEDT);
     });
 
-    $('#manage_flight select[name="ExpectedArrTime"]').change(function() {
-        var selectedExpectedArrTime = $(this).val();
-        $('#manage_flight input[name="ExpectedArrTime"]').val(selectedExpectedArrTime);
+    $('#manage_flight select[name="EAT"]').change(function() {
+        var selectedEAT = $(this).val();
+        $('#manage_flight input[name="EAT"]').val(selectedEAT);
     });
 })
 
