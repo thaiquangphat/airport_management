@@ -11,3 +11,10 @@
     - Changing the sidebar of employee
     - Fix Flight Employee & Pilot & Flight Attendant --> edit and add
     - Enable employees to change roles, enable multiple choice on traffic controller
+    - Assign new DDL in the App.
+    - Airline, Employee still ok
+    - Add Edit of Owner not done
+    - List of Consultant ok
+    - Fail to delete of Model, Airplane
+    - Flight only List and Delete ok
+    - Fix Airport after new DDL

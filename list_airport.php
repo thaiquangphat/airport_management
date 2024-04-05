@@ -17,6 +17,8 @@
                         <th>Airport Name</th>
                         <th>Airport Code</th>
                         <th>City</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -31,6 +33,8 @@
                         <td><b><?php echo $row['APName'] ?></b></td>
                         <td><b><?php echo $row['APCode'] ?></b></td>
                         <td><b><?php echo $row['City'] ?></b></td>
+                        <td><b><?php echo $row['Latitude'] ?></b></td>
+                        <td><b><?php echo $row['Longitude'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

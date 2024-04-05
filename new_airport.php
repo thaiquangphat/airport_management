@@ -22,6 +22,16 @@
                             <input type="text" name="City" class="form-control form-control-sm" required
                                 value="<?php echo isset($City) ? $City : '' ?>">
                         </div>
+                        <div class="form-group">
+                            <label for="" class="control-label">Latitude</label>
+                            <input type="number" name="Latitude" class="form-control form-control-sm" step="any"
+                                required value="<?php echo isset($Latitude) ? $Latitude : '' ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="control-label">Longitude</label>
+                            <input type="number" name="Longitude" class="form-control form-control-sm" step="any"
+                                required value="<?php echo isset($Longitude) ? $Longitude : '' ?>">
+                        </div>
                     </div>
                 </div>
                 <hr>
