@@ -49,7 +49,7 @@
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-md-4">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Salary</label>
                             <input type="text" name="Salary" class="form-control form-control-sm" required
@@ -76,14 +76,14 @@
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-md-12">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="" class="control-label">Choose type</label>
                             <select class="form-control form-control-sm select2" name="EmpType">
                                 <option></option>
                                 <option value="None" selected="selected">None</option>
                                 <option value="ADSupport">Administrative Support</option>
-                                <option value="Flight Employee">Flight Employee</option>
+                                <option value="FlightEmployee">Flight Employee</option>
                                 <option value="Engineer">Engineer</option>
                                 <option value="TrafficController">Traffic Controller</option>
                             </select>

@@ -18,8 +18,8 @@
                         <div class="form-group">
                             <label for="" class="control-label">Type</label>
                             <select class="form-control form-control-sm select2" name="FType">
-                                <option></option>
-                                <option value="Flight Attendant" selected="selected">Flight Attendant</option>
+                                <option selected="selected"></option>
+                                <option value="Flight Attendant">Flight Attendant</option>
                                 <option value="Pilot">Pilot</option>
                             </select>
                         </div>
@@ -30,7 +30,8 @@
                         <div class="form-group">
                             <label for="" class="control-label">License</label>
                             <input type="text" name="License" class="form-control form-control-sm"
-                                value="<?php echo isset($License) ? $License : '' ?>" placeholder="Leave blank if flight attendant">
+                                value="<?php echo isset($License) ? $License : '' ?>"
+                                placeholder="Leave blank if flight attendant">
                             <small id="#msg"></small>
                         </div>
                     </div>
@@ -38,7 +39,8 @@
                         <div class="form-group">
                             <label for="" class="control-label">Year Experience</label>
                             <input type="text" name="Year_Experience" class="form-control form-control-sm"
-                                value="<?php echo isset($Year_Experience) ? $Year_Experience : '' ?>" placeholder="Leave blank if pilot">
+                                value="<?php echo isset($Year_Experience) ? $Year_Experience : '' ?>"
+                                placeholder="Leave blank if pilot">
                             <small id="#msg"></small>
                         </div>
                     </div>
@@ -63,10 +65,22 @@ img#cimg {
 </style>
 <script>
 $(document).ready(function() {
-    // Function to handle change event of the select element for Sex
     $('#manage_employee select[name="FType"]').change(function() {
         var selectedFType = $(this).val();
         $('#manage_employee input[name="FType"]').val(selectedFType);
+
+        // If selected type is Pilot
+        if (selectedFType === 'Pilot') {
+            // Make the Year Experience field readonly
+            $('input[name="Year_Experience"]').prop('readonly', true);
+            // Make the License field editable
+            $('input[name="License"]').prop('readonly', false);
+        } else if (selectedFType === 'Flight Attendant') {
+            // Make the License field readonly
+            $('input[name="License"]').prop('readonly', true);
+            // Make the Year Experience field editable
+            $('input[name="Year_Experience"]').prop('readonly', false);
+        }
     });
 })
 
