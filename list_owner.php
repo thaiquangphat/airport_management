@@ -12,7 +12,7 @@
             <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
-                    href="./index.php?page=new_person"><i class="fa fa-plus"></i> Add New Owner-Person</a>
+                    href="./index.php?page=new_owner_person"><i class="fa fa-plus"></i> Add New Owner-Person</a>
             </div>
             <?php endif; ?>
         </div>
@@ -78,7 +78,8 @@
             <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
-                    href="./index.php?page=new_cooperation"><i class="fa fa-plus"></i> Add New Owner-Cooperation</a>
+                    href="./index.php?page=new_owner_cooperation"><i class="fa fa-plus"></i> Add New
+                    Owner-Cooperation</a>
             </div>
             <?php endif; ?>
         </div>
@@ -149,30 +150,12 @@ $(document).ready(function() {
         document.getElementById(selectedOption + '-table').style.display = 'block';
     });
 
-    // NOTE HONG XOA
-    // $('.view_person').click(function() {
-    //     window.location.href = "view_person.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.view_cooperation').click(function() {
-    //     window.location.href = "view_cooperation.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_person').click(function() {
-    //     _conf_str("Are you sure to delete this Owner-Person?", "delete_person", [$(this).attr(
-    //         'data-id')])
-    // })
-    // $('.delete_cooperation').click(function() {
-    //     _conf_str("Are you sure to delete this Owner-Cooperation?", "delete_cooperation", [$(this).attr(
-    //         'data-id')])
-    // })
-    // NOTE HONG XOA
     $(document).on('click', '.view_person', function() {
         window.location.href = "view_person.php?id=" + $(this).attr('data-id');
     });
 
     $(document).on('click', '.delete_person', function() {
-        _conf_str("Are you sure to delete this Owner-Person?", "delete_person", [$(this).attr(
+        _conf_str("Are you sure to delete this Owner-Person?", "delete_owner", [$(this).attr(
             'data-id')]);
     });
 
@@ -181,39 +164,15 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.delete_cooperation', function() {
-        _conf_str("Are you sure to delete this Owner-Cooperation?", "delete_cooperation", [$(this).attr(
+        _conf_str("Are you sure to delete this Owner-Cooperation?", "delete_owner", [$(this).attr(
             'data-id')]);
     });
 })
 
-function delete_person($ownerid) {
+function delete_owner($ownerid) {
     start_load()
     $.ajax({
-        url: 'ajax.php?action=delete_person',
-        method: 'POST',
-        data: {
-            ownerid: $ownerid
-        },
-        success: function(resp) {
-            if (resp == 1) {
-                alert_toast("Data successfully deleted", 'success')
-                setTimeout(function() {
-                    location.reload()
-                }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_owner')
-                }, 750)
-            }
-        }
-    })
-}
-
-function delete_cooperation($ownerid) {
-    start_load()
-    $.ajax({
-        url: 'ajax.php?action=delete_cooperation',
+        url: 'ajax.php?action=delete_owner',
         method: 'POST',
         data: {
             ownerid: $ownerid

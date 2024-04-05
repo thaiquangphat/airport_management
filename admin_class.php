@@ -422,6 +422,15 @@ class Action
         }
     }
 
+    function delete_owner() {
+        extract($_POST);
+        // Wrap the APCode value in single quotes
+        $delete = $this->db->query("DELETE FROM Owner WHERE OwnerID = " . $ownerid);
+        if ($delete) {
+            return 1;
+        }
+    }
+
     function delete_person() {
         extract($_POST);
         // Wrap the APCode value in single quotes
@@ -479,7 +488,6 @@ class Action
             return 4; // Data failed to save
         }
     }
-    
 
     function update_airplane() {
         extract($_POST);
@@ -515,6 +523,7 @@ class Action
             return 1;
         }
     }
+    
     function save_flight() {
         extract($_POST);
         $data = "";
