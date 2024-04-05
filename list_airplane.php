@@ -25,7 +25,6 @@
                         <th>Airline ID</th>
                         <th>Owner ID</th>
                         <th>Model ID</th>
-                        <th>Model Name</th>
                         <th>Leased Date</th>
                         <th>Action</th>
                     </tr>
@@ -43,7 +42,6 @@
                         <td><b><?php echo $row['AirlineID'] ?></b></td>
                         <td><b><?php echo $row['OwnerID'] ?></b></td>
                         <td><b><?php echo $row['ModelID'] ?></b></td>
-                        <td><b><?php echo $row['MName'] ?></b></td>
                         <td><b><?php echo $row['LeasedDate'] ?></b></td>
                         <td class="text-center">
                             <button type="button"

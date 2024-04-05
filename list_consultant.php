@@ -19,6 +19,7 @@
                 <thead>
                     <tr>
                         <th>Consultant ID</th>
+                        <th>Consultant Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -31,6 +32,7 @@
 					?>
                     <tr>
                         <td><b><?php echo $row['ID'] ?></b></td>
+                        <td><b><?php echo $row['Name'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

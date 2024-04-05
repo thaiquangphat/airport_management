@@ -36,7 +36,7 @@
                 <tbody>
                     <?php
 					$i = 1;
-					$qry = $conn->query("SELECT * FROM Person order by SSN asc");
+					$qry = $conn->query("SELECT * FROM Person JOIN Owner ON Owner.OwnerID = Person.OwnerID order by SSN asc");
                     $i++;
 					while($row= $qry->fetch_assoc()):
 					?>
@@ -101,7 +101,7 @@
                 <tbody>
                     <?php
 					$i = 1;
-					$qry = $conn->query("SELECT * FROM Cooperation order by Name asc");
+					$qry = $conn->query("SELECT * FROM Cooperation JOIN Owner ON Owner.OwnerID = Cooperation.OwnerID order by Name asc");
                     $i++;
 					while($row= $qry->fetch_assoc()):
 					?>
