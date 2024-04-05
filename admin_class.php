@@ -449,6 +449,73 @@ class Action
         }
     }
 
+    function save_model() {
+        extract($_POST);
+    
+        // Check if all required fields are received
+        if (!isset($ID) || !isset($MName) || !isset($Capacity) || !isset($MaxSpeed)) {
+            return 0; // Return 0 if any required field is missing
+        }
+    
+        // Check for existing AirplaneID
+        if (empty($ID)) {
+            $checkModelID = $this->db->query("SELECT * FROM Model WHERE ID = '$ID'");
+            if ($checkModelID->num_rows > 0) {
+                return 2; // Airplane ID already exists
+            }
+        }
+    
+        if (empty($ID)) {
+            // Construct the SQL query for insertion
+            $sql = "INSERT INTO Model (ID, MName, Capacity, MaxSpeed) VALUES ('$ID', '$MName', '$Capacity', '$MaxSpeed')";
+        } else {
+            // Construct the SQL query for update
+            $sql = "UPDATE Model SET MName = '$MName', Capacity = '$Capacity', MaxSpeed = '$MaxSpeed' WHERE ID = '$ID'";
+        }
+    
+        // Execute the SQL query
+        if ($this->db->query($sql)) {
+            return 1; // Data successfully saved
+        } else {
+            return 4; // Data failed to save
+        }
+    }
+
+    function update_model() {
+        extract($_POST);
+        $data = "";
+        // Iterate through each POST parameter
+        foreach ($_POST as $k => $v) {
+            // Exclude numeric indices and certain parameters
+            if (!is_numeric($k) && $k != 'ID') {
+                // Append each key-value pair to the $data string
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        // Execute the SQL update query
+        $save = $this->db->query("UPDATE Model SET $data WHERE ID = '" . $ID . "'");
+        if ($save) {
+            // Return 1 indicating success
+            return 1;
+        } else {
+            // Return 0 or error message indicating failure
+            return 0; // Or return an error message, depending on your error handling mechanism
+        }
+    }    
+
+    function delete_model() {
+        extract($_POST);
+        // Wrap the APCode value in single quotes
+        $delete = $this->db->query("DELETE FROM Model WHERE ID = '" . $modelid . "'");
+        if ($delete) {
+            return 1;
+        }
+    }
+
     function save_airplane() {
         extract($_POST);
     

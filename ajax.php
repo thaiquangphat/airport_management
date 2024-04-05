@@ -81,6 +81,21 @@ if($action == 'delete_cooperation'){
 	if($save)
 		echo $save;
 }
+if($action == 'save_model'){
+	$save = $crud->save_model();
+	if($save)
+		echo $save;
+}
+if($action == 'update_modele'){
+	$save = $crud->update_model();
+	if($save)
+		echo $save;
+}
+if($action == 'delete_airplane'){
+	$save = $crud->delete_model();
+	if($save)
+		echo $save;
+}
 if($action == 'save_airplane'){
 	$save = $crud->save_airplane();
 	if($save)
