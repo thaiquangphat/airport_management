@@ -25,14 +25,14 @@
                                 $check=$conn->query("SELECT * FROM Engineer WHERE SSN = '" . $ESSN . "' and EType = 'Mechanical Engineer'")->num_rows; 
                                 if ($check > 0) $type = 'Mechanical Engineer';
 
-                                $check=$conn->query("SELECT * FROM Engineer WHERE SSN = '" . $ESSN . "' and EType = 'Electrical Engineer'")->num_rows; 
-                                if ($check > 0) $type = 'Electrical Engineer';
+                                $check=$conn->query("SELECT * FROM Engineer WHERE SSN = '" . $ESSN . "' and EType = 'Electric Engineer'")->num_rows; 
+                                if ($check > 0) $type = 'Electric Engineer';
                             ?>
                             <select class="form-control form-control-sm select2" name="EType">
                                 <option></option>
                                 <option value="Avionic Engineer" <?php echo isset($type) && $type == 'Avionic Engineer' ? 'selected' : '' ?>>Avionic Engineer</option>
                                 <option value="Mechanical Engineer" <?php echo isset($type) && $type == 'Mechanical Engineer' ? 'selected' : '' ?>>Mechanical Engineer</option>
-                                <option value="Electrical Engineer" <?php echo isset($type) && $type == 'Electrical Engineer' ? 'selected' : '' ?>>Electrical Engineer</option>
+                                <option value="Electric Engineer" <?php echo isset($type) && $type == 'Electric Engineer' ? 'selected' : '' ?>>Electric Engineer</option>
                             </select>
                         </div>
                     </div>

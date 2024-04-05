@@ -15,6 +15,7 @@
     - Airline, Employee still ok
     - Add Edit of Owner not done
     - List of Consultant ok
-    - Fail to delete of Model, Airplane
+    - Fail to delete of Model, Airplane -> Delete Airplane is fine, something wrong with the returned value.
     - Flight only List and Delete ok
     - Fix Airport after new DDL
+    - Fix 'Electrical Engineer' to 'Electric Engineer', fix edit and add in Flight Employee.

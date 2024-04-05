@@ -111,7 +111,7 @@ $('#manage_model').submit(function(e) {
                     location.replace('index.php?page=list_model')
                 }, 750)
             } else {
-                alert_toast('Data failed to saved.', "fail");
+                alert_toast('Data failed to saved.', "error");
                 setTimeout(function() {
                     location.replace('index.php?page=list_model')
                 }, 750)

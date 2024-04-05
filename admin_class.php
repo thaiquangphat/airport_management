@@ -965,27 +965,6 @@ class Action
         }
 
         return 1;
-
-
-        // foreach ($_POST as $k => $v) {
-        //     if (!is_numeric($k) && $k != 'SSN') {
-        //         if (empty($data)) {
-        //             $data .= " $k='$v' ";
-        //         } else {
-        //             $data .= ", $k='$v' ";
-        //         }
-        //     }
-        // }
-
-        // if (empty($data)) return 1;
-
-        // // Execute the SQL update query
-        // $save = $this->db->query("UPDATE Traffic_Controller SET $data WHERE SSN = '" . $SSN . "'");
-        // if ($save) {
-        //     return 1;
-        // } else {
-        //     return 0;
-        // }
     }
 
     function save_flight_employee() {
@@ -998,7 +977,7 @@ class Action
         } 
 
         if ($FType == 'Pilot') {
-            $sql="INSERT INTO Pilot set SSN = '" .$SSN . "'" . ", License = '" . $Lisence . "'";
+            $sql="INSERT INTO Pilot set SSN = '" .$SSN . "'" . ", License = '" . $License . "'";
             $check = $this->db->query("SELECT * FROM Pilot where SSN = '" . $SSN . "'")->num_rows;
             if ($check > 0) {
                 return 2;
@@ -1012,19 +991,20 @@ class Action
                 return 0;
             }
         }
+        else {
+            $sql="INSERT INTO Flight_Attendant set SSN = '" .$SSN . "'" . ", Year_Experience = '" . $Year_Experience . "'";
+            $check = $this->db->query("SELECT * FROM Flight_Attendant where SSN = '" . $SSN . "'")->num_rows;
+            if ($check > 0) {
+                return 2;
+                exit();
+            }
 
-        $sql="INSERT INTO Flight_Attendant set SSN = '" .$SSN . "'" . ", Year_Experience = '" . $Year_Experience . "'";
-        $check = $this->db->query("SELECT * FROM Flight_Attendant where SSN = '" . $SSN . "'")->num_rows;
-        if ($check > 0) {
-            return 2;
-            exit();
-        }
-
-        $save = $this->db->query($sql);
-        if ($save) {
-            return 1;
-        } else {
-            return 0;
+            $save = $this->db->query($sql);
+            if ($save) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
     }
 

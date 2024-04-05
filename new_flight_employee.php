@@ -82,6 +82,16 @@ $(document).ready(function() {
             $('input[name="Year_Experience"]').prop('readonly', false);
         }
     });
+    
+    $('#manage_employee input[name="License"]').change(function() {
+        var selectedLicense = $(this).val();
+        $('#manage_employee input[name="License"]').val(selectedLicense);
+    });
+
+    $('#manage_employee input[name="Year_experience"]').change(function() {
+        var selectedYear_experience = $(this).val();
+        $('#manage_employee input[name="Year_experience"]').val(selectedYear_experience);
+    });
 })
 
 $('#manage_employee').submit(function(e) {
@@ -108,6 +118,11 @@ $('#manage_employee').submit(function(e) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
                     location.replace('index.php?page=list_flight_employee')
+                }, 750)
+            } else if (resp == 3) {
+                alert_toast('Debug.', "error");
+                setTimeout(function() {
+                    location.reload();
                 }, 750)
             } else {
                 alert_toast('Data failed to saved.', "error");

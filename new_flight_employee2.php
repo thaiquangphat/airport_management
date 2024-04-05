@@ -114,6 +114,16 @@ $(document).ready(function() {
             $('input[name="Year_Experience"]').prop('readonly', false);
         }
     });
+
+    $('#manage_employee input[name="License"]').change(function() {
+        var selectedLicense = $(this).val();
+        $('#manage_employee input[name="License"]').val(selectedLicense);
+    });
+
+    $('#manage_employee input[name="Year_experience"]').change(function() {
+        var selectedYear_experience = $(this).val();
+        $('#manage_employee input[name="Year_experience"]').val(selectedYear_experience);
+    });
 })
 
 $('#manage_employee').submit(function(e) {

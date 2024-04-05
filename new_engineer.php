@@ -21,7 +21,7 @@
                                 <option></option>
                                 <option value="Avionic Engineer" selected="selected">Avionic Engineer</option>
                                 <option value="Mechanical Engineer">Mechanical Engineer</option>
-                                <option value="Electrical Engineer">Electrical Engineer</option>
+                                <option value="Electric Engineer">Electric Engineer</option>
                             </select>
                         </div>
                     </div>

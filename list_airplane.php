@@ -107,7 +107,7 @@ function delete_airplane($airplaneid) {
                     location.reload()
                 }, 1500)
             } else {
-                alert_toast('Data failed to delete.', "fail");
+                alert_toast('Data failed to delete.', "error");
                 setTimeout(function() {
                     location.replace('index.php?page=list_airplane')
                 }, 750)
