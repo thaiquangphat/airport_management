@@ -66,6 +66,11 @@ if($action == 'delete_airline'){
 	if($save)
 		echo $save;
 }
+if($action == 'delete_owner'){
+	$save = $crud->delete_owner();
+	if($save)
+		echo $save;
+}
 if($action == 'delete_person'){
 	$save = $crud->delete_person();
 	if($save)

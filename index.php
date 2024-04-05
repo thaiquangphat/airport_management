@@ -125,8 +125,7 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2024 <a href="https://github.com/thaiquangphat"
-                    target="_blank">QuangPhatThai</a>.</strong>
+            <strong>Copyright &copy; 2024 <a href="https://chat.openai.com/" target="_blank">PhuKhoiPaul</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b><?php echo $_SESSION["system"]["name"]; ?></b>
