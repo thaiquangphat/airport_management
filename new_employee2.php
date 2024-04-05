@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">Employee Type</label>
                             <?php 
@@ -93,6 +93,19 @@
                                 if ($verify > 0) $type="TrafficController";
                             ?>
                             <input type="text" class="form-control form-control-sm" name="EmpType" value="<?php echo isset($type) ? $type : '' ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="" class="control-label">Choose type</label>
+                            <select class="form-control form-control-sm select2" name="NewEmpType">
+                                <option value="No change" selected="selected">No change</option>
+                                <option value="None">None</option>
+                                <option value="ADSupport">Administrative Support</option>
+                                <option value="FlightEmployee">Flight Employee</option>
+                                <option value="Engineer">Engineer</option>
+                                <option value="TrafficController">Traffic Controller</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -173,6 +186,26 @@ $('#manage_employee').submit(function(e) {
                 alert_toast('Data successfully saved, redirecting.', "success");
                 setTimeout(function() {
                     location.replace('index.php?page=edit_traffic_controller')
+                }, 750)
+            } else if (resp == 7) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=new_administrative_support')
+                }, 750)
+            } else if (resp == 8) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=new_flight_employee')
+                }, 750)
+            } else if (resp == 9) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=new_engineer')
+                }, 750)
+            } else if (resp == 10) {
+                alert_toast('Data successfully saved, redirecting.', "success");
+                setTimeout(function() {
+                    location.replace('index.php?page=new _traffic_controller')
                 }, 750)
             } else {
                 alert_toast('Data failed to saved.', "error");

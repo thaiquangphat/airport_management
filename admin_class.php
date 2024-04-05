@@ -649,7 +649,7 @@ class Action
 
         foreach ($_POST as $k => $v) {
             // Exclude numeric indices and certain parameters
-            if (!is_numeric($k) && $k != 'SSN' && $k != 'EmpType' && $k != 'NewSSN') {
+            if (!is_numeric($k) && $k != 'SSN' && $k != 'EmpType' && $k != 'NewSSN' && $k != 'NewEmpType') {
                 // Append each key-value pair to the $data string
                 if (empty($data)) {
                     $data .= " $k='$v' ";
@@ -658,17 +658,44 @@ class Action
                 }
             }
         }
-        // Execute the SQL update query
-        $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
-        if ($save) {
-            if ($EmpType == 'ADSupport') return 3;
-            else if ($EmpType == 'FlightEmployee') return 4;
-            else if ($EmpType == 'Engineer') return 5;
-            else if ($EmpType == 'TrafficController') return 6;
-            return 1;
-        } else {
-            // Return 0 or error message indicating failure
-            return 0; // Or return an error message, depending on your error handling mechanism
+
+        if ($EmpType == $NewEmpType || $NewEmpType == 'No change') {
+            // Execute the SQL update query
+            $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
+            if ($save) {
+                if ($EmpType == 'ADSupport') return 3;
+                else if ($EmpType == 'FlightEmployee') return 4;
+                else if ($EmpType == 'Engineer') return 5;
+                else if ($EmpType == 'TrafficController') return 6;
+                return 1;
+            } else {
+                // Return 0 or error message indicating failure
+                return 0; // Or return an error message, depending on your error handling mechanism
+            }
+        }
+        else {
+            $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
+            if ($save) {
+                $delete="";
+                if ($EmpType == 'ADSupport') {
+                    $delete = $this->db->query("DELETE FROM Administrative_Support WHERE SSN = '" . $SSN . "'");
+                }
+                else if ($EmpType == 'FlightEmployee') {
+                    $delete = $this->db->query("DELETE FROM Flight_Employee WHERE SSN = '" . $SSN . "'");
+                }
+                else if ($EmpType == 'Engineer') {
+                    $delete = $this->db->query("DELETE FROM Engineer WHERE SSN = '" . $SSN . "'");
+                }
+                else if ($EmpType == 'TrafficController') {
+                    $delete = $this->db->query("DELETE FROM Traffic_Controller WHERE SSN = '" . $SSN . "'");
+                }
+                if ($delete && $NewEmpType == 'ADSupport') return 7;
+                if ($delete && $NewEmpType == 'FlightEmployee') return 8;
+                if ($delete && $NewEmpType == 'Engineer') return 9;
+                if ($delete && $NewEmpType == 'FlightEmployee') return 10;
+
+                return 0;
+            }
         }
     }    
 
@@ -785,53 +812,110 @@ class Action
         extract($_POST);
         $data = "";
 
-        foreach ($_POST as $k => $v) {
-            if (!is_numeric($k)) {
-                if (empty($data)) {
-                    $data .= " $k='$v' ";
-                } else {
-                    $data .= ", $k='$v' ";
-                }
-            }
-        }
-        $check = $this->db->query(
-            "SELECT * FROM Traffic_Controller where SSN = '" . $SSN . "'")->num_rows;
+        $check = $this->db->query("SELECT * FROM Traffic_Controller where SSN = '" . $SSN . "'")->num_rows;
         if ($check > 0) {
             return 2;
             exit();
         }
 
-        $save = $this->db->query("INSERT INTO Traffic_Controller set $data");
-        if ($save) {
-            return 1;
-        } else {
-            return 0;
+        $save = $this->db->query("INSERT INTO Traffic_Controller set SSN= '" . $SSN . "'");
+        if (!$save) return 0;
+
+        if ($Morning == 'Pick') {
+            $morning = $this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Morning'");
+            if (!$morning) return 0;
         }
+
+        if ($Afternoon == 'Pick') {
+            $afternoon = $this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Afternoon'");
+            if (!$afternoon) return 0;
+        }
+
+        if ($Evening == 'Pick') {
+            $evening = $this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Evening'");
+            if (!$evening) return 0;
+        }
+
+        if ($Night == 'Pick') {
+            $night = $this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Nights'");
+            if (!$night) return 0;
+        }
+
+        return 1;
     }
 
     function update_traffic_controller() {
         extract($_POST);
-        $data = "";
-        // Iterate through each POST parameter
-        foreach ($_POST as $k => $v) {
-            if (!is_numeric($k) && $k != 'SSN') {
-                if (empty($data)) {
-                    $data .= " $k='$v' ";
-                } else {
-                    $data .= ", $k='$v' ";
-                }
-            }
+
+        $morning=$this->db->query("SELECT * FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Morning'")->num_rows;
+        $afternoon=$this->db->query("SELECT * FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Afternoon'")->num_rows;
+        $evening=$this->db->query("SELECT * FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Evening'")->num_rows;
+        $night=$this->db->query("SELECT * FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Night'")->num_rows;
+
+        // Handle for changes in Morning
+        if ($morning > 0 && $Morning == 'Unpick') {
+            $save=$this->db->query("DELETE FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Morning'");
+            if (!$save) return 0;
+        }
+        else if ($morning == 0 && $Morning == 'Pick') {
+            $save=$this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Morning'");
+            if (!$save) return 0;
         }
 
-        if (empty($data)) return 1;
-
-        // Execute the SQL update query
-        $save = $this->db->query("UPDATE Traffic_Controller SET $data WHERE SSN = '" . $SSN . "'");
-        if ($save) {
-            return 1;
-        } else {
-            return 0;
+        // Handle for changes in Afternoon
+        if ($afternoon > 0 && $Afternoon == 'Unpick') {
+            $save=$this->db->query("DELETE FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Afternoon'");
+            if (!$save) return 0;
         }
+        else if ($afternoon == 0 && $Afternoon == 'Pick') {
+            $save=$this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Afternoon'");
+            if (!$save) return 0;
+        }
+
+
+        // Handle for changes in Evening
+        if ($evening > 0 && $Evening == 'Unpick') {
+            $save=$this->db->query("DELETE FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Evening'");
+            if (!$save) return 0;
+        }
+        else if ($evening == 0 && $Evening == 'Pick') {
+            $save=$this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Evening'");
+            if (!$save) return 0;
+        }
+
+
+        // Handle for changes in Night
+        if ($night > 0 && $Night == 'Unpick') {
+            $save=$this->db->query("DELETE FROM TCShift WHERE TCSSN = '" . $SSN . "' AND Shift = 'Night'");
+            if (!$save) return 0;
+        }
+        else if ($night == 0 && $Night == 'Pick') {
+            $save=$this->db->query("INSERT INTO TCShift set TCSSN = '" . $SSN . "', Shift = 'Night'");
+            if (!$save) return 0;
+        }
+
+        return 1;
+
+
+        // foreach ($_POST as $k => $v) {
+        //     if (!is_numeric($k) && $k != 'SSN') {
+        //         if (empty($data)) {
+        //             $data .= " $k='$v' ";
+        //         } else {
+        //             $data .= ", $k='$v' ";
+        //         }
+        //     }
+        // }
+
+        // if (empty($data)) return 1;
+
+        // // Execute the SQL update query
+        // $save = $this->db->query("UPDATE Traffic_Controller SET $data WHERE SSN = '" . $SSN . "'");
+        // if ($save) {
+        //     return 1;
+        // } else {
+        //     return 0;
+        // }
     }
 
     function save_flight_employee() {

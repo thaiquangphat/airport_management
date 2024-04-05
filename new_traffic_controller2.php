@@ -15,6 +15,64 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="" class="control-label">Morning Shift</label>
+                            <select class="form-control form-control-sm select2" name="Morning">
+                                <?php
+                                    $type="Unpick";
+                                    $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Morning'")->num_rows;
+                                    if ($num > 0) $type="Pick"; 
+                                ?>
+                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="" class="control-label">Afternoon Shift</label>
+                            <select class="form-control form-control-sm select2" name="Afternoon">
+                                <?php
+                                    $type="Unpick";
+                                    $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Afternoon'")->num_rows;
+                                    if ($num > 0) $type="Pick"; 
+                                ?>
+                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="" class="control-label">Evening Shift</label>
+                            <select class="form-control form-control-sm select2" name="Evening">
+                                <?php
+                                    $type="Unpick";
+                                    $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Evening'")->num_rows;
+                                    if ($num > 0) $type="Pick"; 
+                                ?>
+                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="" class="control-label">Night Shift</label>
+                            <select class="form-control form-control-sm select2" name="Night">
+                                <?php
+                                    $type="Unpick";
+                                    $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Night'")->num_rows;
+                                    if ($num > 0) $type="Pick"; 
+                                ?>
+                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <hr>
                 <div class="col-lg-12 text-right justify-content-center d-flex">
                     <button class="btn btn-primary mr-2">Save</button>
@@ -34,6 +92,28 @@ img#cimg {
 }
 </style>
 <script>
+$(document).ready(function() {
+    // Function to handle change event of the select element for Morning
+    $('#manage_employee select[name="Morning"]').change(function() {
+        var selectedMorning = $(this).val();
+        $('#manage_employee input[name="Morning"]').val(selectedMorning);
+    });
+
+    $('#manage_employee select[name="Afternoon"]').change(function() {
+        var selectedAfternoon = $(this).val();
+        $('#manage_employee input[name="Afternoon"]').val(selectedAfternoon);
+    });
+
+    $('#manage_employee select[name="Evening"]').change(function() {
+        var selectedEvening = $(this).val();
+        $('#manage_employee input[name="Evening"]').val(selectedEvening);
+    });
+
+    $('#manage_employee select[name="Night"]').change(function() {
+        var selectedNight = $(this).val();
+        $('#manage_employee input[name="Night"]').val(selectedNight);
+    });
+})
 
 $('#manage_employee').submit(function(e) {
     e.preventDefault()

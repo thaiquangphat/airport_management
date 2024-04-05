@@ -15,19 +15,32 @@
                     <tr>
                         <th>SSN</th>
                         <th>Name</th>
+                        <th>Morning Shift</th>
+                        <th>Afternoon Shift</th>
+                        <th>Evening Shift</th>
+                        <th>Night Shift</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
 					$i = 1;
-					$qry = $conn->query("SELECT Employee.SSN, concat(Employee.Fname,' ',Employee.Minit, ' ', Employee.Lname) as name FROM Employee Join Traffic_Controller on Employee.SSN = Traffic_Controller.SSN");
+					$qry = $conn->query("SELECT Employee.SSN, concat(Employee.Fname,' ',Employee.Minit, ' ', Employee.Lname) as name,
+                                        CASE WHEN (SELECT COUNT(*) FROM TCShift WHERE TCShift.TCSSN = Employee.SSN AND Shift = 'Morning') > 0 THEN 'X' ELSE '' END as 'Morning Shift',
+                                        CASE WHEN (SELECT COUNT(*) FROM TCShift WHERE TCShift.TCSSN = Employee.SSN AND Shift = 'Afternoon') > 0 THEN 'X' ELSE '' END as 'Afternoon Shift',
+                                        CASE WHEN (SELECT COUNT(*) FROM TCShift WHERE TCShift.TCSSN = Employee.SSN AND Shift = 'Evening') > 0 THEN 'X' ELSE '' END as 'Evening Shift',
+                                        CASE WHEN (SELECT COUNT(*) FROM TCShift WHERE TCShift.TCSSN = Employee.SSN AND Shift = 'Night') > 0 THEN 'X' ELSE '' END as 'Night Shift'
+                                        FROM Employee Join Traffic_Controller on Employee.SSN = Traffic_Controller.SSN");
                     $i++;
 					while($row= $qry->fetch_assoc()):
 					?>
                     <tr>
                         <td><b><?php echo $row['SSN'] ?></b></td>
                         <td><b><?php echo $row['name'] ?></b></td>
+                        <td><b><?php echo $row['Morning Shift'] ?></b></td>
+                        <td><b><?php echo $row['Afternoon Shift'] ?></b></td>
+                        <td><b><?php echo $row['Evening Shift'] ?></b></td>
+                        <td><b><?php echo $row['Night Shift'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
