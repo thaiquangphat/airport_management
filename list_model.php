@@ -16,7 +16,6 @@
                         <th>Model ID</th>
                         <th>Model Name</th>
                         <th>Capacity</th>
-                        <th>Model ID</th>
                         <th>Max Speed</th>
                         <th>Action</th>
                     </tr>
@@ -30,7 +29,6 @@
 					?>
                     <tr>
                         <td><b><?php echo $row['ID'] ?></b></td>
-                        <td><b><?php echo $row['MName'] ?></b></td>
                         <td><b><?php echo $row['MName'] ?></b></td>
                         <td><b><?php echo $row['Capacity'] ?></b></td>
                         <td><b><?php echo $row['MaxSpeed'] ?></b></td>

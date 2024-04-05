@@ -37,8 +37,8 @@
                         <td><b><?php echo $row['FlightID'] ?></b></td>
                         <td><b><?php echo $row['Status'] ?></b></td>
                         <td><b><?php echo $row['FlightCode'] ?></b></td>
-                        <td><b><?php echo $row['ExpectedArrTime'] ?></b></td>
-                        <td><b><?php echo $row['ExpectedDepTime'] ?></b></td>
+                        <td><b><?php echo $row['EAT'] ?></b></td>
+                        <td><b><?php echo $row['EDT'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
@@ -52,7 +52,7 @@
 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item"
-                                    href="./index.php?page=edit_flight&flightid=<?php echo $row["FlgithID"]; ?>">Edit</a>
+                                    href="./index.php?page=edit_flight&flightid=<?php echo $row["FlightID"]; ?>">Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete_flight" href="javascript:void(0)"
                                     data-id="<?php echo $row['FlightID'] ?>">Delete</a>

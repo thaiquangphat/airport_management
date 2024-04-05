@@ -81,8 +81,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="" class="control-label">Expected Arrive Time</label>
-                            <input type="date" name="ExpectedArrTime" class="form-control form-control-sm" required
-                                value="<?php echo isset($ExpectedArrTime) ? $ExpectedArrTime : '' ?>">
+                            <input type="date" name="EAT" class="form-control form-control-sm" required
+                                value="<?php echo isset($EAT) ? $EAT : '' ?>">
                             <small id="#msg"></small>
                         </div>
                     </div>
@@ -91,8 +91,8 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="" class="control-label">Expected Departure Time</label>
-                            <input type="date" name="ExpectedDepTime" class="form-control form-control-sm" required
-                                value="<?php echo isset($ExpectedDepTime) ? $ExpectedDepTime : '' ?>">
+                            <input type="date" name="EDT" class="form-control form-control-sm" required
+                                value="<?php echo isset($EDT) ? $EDT : '' ?>">
                             <small id="#msg"></small>
                         </div>
                     </div>

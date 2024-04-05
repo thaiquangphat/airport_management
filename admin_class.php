@@ -514,6 +514,9 @@ class Action
         if ($delete) {
             return 1;
         }
+        else {
+            return 0;
+        }
     }
 
     function save_airplane() {
