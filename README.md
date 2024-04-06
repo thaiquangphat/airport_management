@@ -20,3 +20,7 @@
     - Fix Airport after new DDL
     - Fix 'Electrical Engineer' to 'Electric Engineer', fix edit and add in Flight Employee.
     - Fixed deletion in Model and Airplane, bug in typo in ajax.php
+- [06/04/24]
+    - Add Add and Edit for Flight
+    - Flight can now choose actual arrival and departure time, Unassigned flights don't have AAT and ADT, On Air flights don't have AAT, Landed flights have all four.
+    - AAT, ADT, EAT, EDT are able to select date and time.
