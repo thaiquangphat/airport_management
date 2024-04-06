@@ -606,8 +606,21 @@ class Action
                 }
             }
         }
-        $check = $this->db->query("SELECT * FROM Flight where FlightID = '" .$FlightID . "'")->num_rows;
-        if ($check > 0) {
+
+        $updatecheck = $this->db->query("SELECT * FROM Flight where FlightID = '" .$FlightID . "' AND FlightCode = '" . $FlightCode . "'")->num_rows;
+        if ($updatecheck == 1 && !empty($FlightID)) {
+            $save = $this->db->query("UPDATE Flight SET $data WHERE FlightID = " . $FlightID);
+            if ($save) {
+                // Return 1 indicating success
+                return 1;
+            } else {
+                // Return 0 or error message indicating failure
+                return 0; // Or return an error message, depending on your error handling mechanism
+            }
+        }
+
+        $newcheck = $this->db->query("SELECT * FROM Flight where FlightID = '" .$FlightID . "'")->num_rows;
+        if ($newcheck > 0) {
             return 2;
             exit();
         }

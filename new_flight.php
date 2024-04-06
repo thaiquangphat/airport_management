@@ -10,9 +10,10 @@
                         <div class="form-group">
                             <label for="">Status</label>
                             <select class="form-control form-control-sm select2" name="Status" required>
-                                <option value="On Air">On Air</option>
-                                <option value="Landed">Landed</option>
-                                <option value="Unassigned">Unassigned</option>
+                                <option></option>
+                                <option value="On Air" <?php echo isset($Status) && $Status == 'On Air' ? 'selected' : ''?>>On Air</option>
+                                <option value="Landed" <?php echo isset($Status) && $Status == 'Landed' ? 'selected' : ''?>>Landed</option>
+                                <option value="Unassigned" <?php echo isset($Status) && $Status == 'Unassigned' ? 'selected' : ''?>>Unassigned</option>
                             </select>
                         </div>
                     </div>
@@ -78,31 +79,46 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="" class="control-label">Expected Arrive Time</label>
-                            <input type="date" name="EAT" class="form-control form-control-sm"
-                                value="<?php echo isset($EAT) ? $EAT : '' ?>">
+                            <label for="" class="control-label">Expected Departure Time</label>
+                            <input type="datetime-local" name="EDT" class="form-control form-control-sm"
+                                value="<?php echo isset($EDT) ? $EDT : '' ?>" required>
+                            <small id="#msg"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="" class="control-label">Actual Departure Time</label>
+                            <input type="datetime-local" name="ADT" class="form-control form-control-sm"
+                                value="<?php echo isset($ADT) ? $ADT : '' ?>" required>
                             <small id="#msg"></small>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="" class="control-label">Expected Departure Time</label>
-                            <input type="date" name="EDT" class="form-control form-control-sm"
-                                value="<?php echo isset($EDT) ? $EDT : '' ?>">
+                            <label for="" class="control-label">Expected Arrive Time</label>
+                            <input type="datetime-local" name="EAT" class="form-control form-control-sm"
+                                value="<?php echo isset($EAT) ? $EAT : '' ?>" required>
+                            <small id="#msg"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="" class="control-label">Actual Arrive Time</label>
+                            <input type="datetime-local" name="AAT" class="form-control form-control-sm"
+                                value="<?php echo isset($AAT) ? $AAT : '' ?>" required>
                             <small id="#msg"></small>
                         </div>
                     </div>
                 </div>
-
                 <hr>
                 <div class="col-lg-12 text-right justify-content-center d-flex">
                     <button class="btn btn-primary mr-2">Save</button>
                     <button class="btn btn-secondary" type="button"
-                        onclick="location.href = 'index.php?page=list_airplane'">Cancel</button>
+                        onclick="location.href = 'index.php?page=list_flight'">Cancel</button>
                 </div>
             </form>
         </div>
@@ -129,10 +145,20 @@ $(document).ready(function() {
         $('#manage_flight input[name="Status"]').val(selectedStatus);
 
         if (selectedStatus === 'Unassigned') {
-            // Make the Year Experience field readonly
-            $('input[name="EDT"]').prop('readonly', true);
-            // Make the License field editable
-            $('input[name="EAT"]').prop('readonly', true);
+            $('input[name="EDT"]').prop('readonly', false);
+            $('input[name="EAT"]').prop('readonly', false);
+            $('input[name="ADT"]').prop('readonly', true);
+            $('input[name="AAT"]').prop('readonly', true);
+        } else if (selectedStatus === 'On Air') {
+            $('input[name="EDT"]').prop('readonly', false);
+            $('input[name="EAT"]').prop('readonly', false);
+            $('input[name="ADT"]').prop('readonly', false);
+            $('input[name="AAT"]').prop('readonly', true);
+        } else if (selectedStatus === 'Landed') {
+            $('input[name="EDT"]').prop('readonly', false);
+            $('input[name="EAT"]').prop('readonly', false);
+            $('input[name="ADT"]').prop('readonly', false);
+            $('input[name="AAT"]').prop('readonly', false);
         }
     });
 
@@ -159,6 +185,16 @@ $(document).ready(function() {
     $('#manage_flight select[name="EAT"]').change(function() {
         var selectedEAT = $(this).val();
         $('#manage_flight input[name="EAT"]').val(selectedEAT);
+    });
+
+    $('#manage_flight select[name="ADT"]').change(function() {
+        var selectedADT = $(this).val();
+        $('#manage_flight input[name="ADT"]').val(selectedADT);
+    });
+
+    $('#manage_flight select[name="EDT"]').change(function() {
+        var selectedEDT = $(this).val();
+        $('#manage_flight input[name="EDT"]').val(selectedEDT);
     });
 })
 
