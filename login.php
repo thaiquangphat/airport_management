@@ -80,14 +80,6 @@ ob_end_flush();
                         <!-- /.col -->
                     </div>
                     <div class="row">
-                        <!-- <div class="col-12">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div> -->
                         <!-- /.col -->
                         <div class="links">Don't have an account?<a href="register.php"> Register</button>
                         </div>

@@ -292,12 +292,14 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    <?php if($_SESSION['login_type'] != 3): ?>
                     <li class="nav-item">
                         <a href="./index.php?page=new_consultant" class="nav-link nav-new_consultant tree-item">
                             <i class="fas fa-angle-right nav-icon"></i>
                             <p>Add New</p>
                         </a>
                     </li>
+                    <?php endif?>
                     <li class="nav-item">
                         <a href="./index.php?page=list_consultant" class="nav-link nav-list_consultant tree-item">
                             <i class="fas fa-angle-right nav-icon"></i>
