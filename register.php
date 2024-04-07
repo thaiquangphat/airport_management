@@ -13,7 +13,7 @@ foreach ($system as $k => $v) {
 // }
 ob_end_flush();
 ?>
-<?php if (isset($_SESSION["login_id"])) {
+<?php if (isset($_SESSION["register_id"])) {
     header("location:index.php?page=home");
 } ?>
 <?php include "header.php"; ?>
@@ -37,17 +37,33 @@ ob_end_flush();
 }
 </style>
 
-<body id="intro" class="hold-transition login-page bg-black">
-    <div class="login-box" style="background-color: rgba(255,255,255,0.8);">
-        <div class="login-logo">
+<body id="intro" class="hold-transition register-page bg-black">
+    <div class="register-box" style="background-color: rgba(255,255,255,0.8);">
+        <div class="register-logo">
             <a href="#" class="text-black"><b><?php echo $_SESSION["system"][
         "name"
-    ]; ?> - Login</b></a>
+    ]; ?> - Register</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card" style="">
-            <div class="card-body login-card-body" style="">
-                <form action="" id="login-form">
+            <div class="card-body register-card-body" style="">
+                <form action="" id="register-form">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="fname" required placeholder="First name">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="lname" required placeholder="Last name">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" name="email" required placeholder="Email">
                         <div class="input-group-append">
@@ -64,32 +80,24 @@ ob_end_flush();
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <!-- <div class="col-12">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" name="confirmpassword" required placeholder="Confirm Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
                             </div>
-                        </div> -->
+                        </div>
+                    </div>
+                    <div class="row">
                         <!-- /.col -->
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
                         </div>
                         <!-- /.col -->
                     </div>
                     <div class="row">
-                        <!-- <div class="col-12">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div> -->
                         <!-- /.col -->
-                        <div class="links">Don't have an account?<a href="register.php"> Register</button>
+                        <div class="links">Already have an account?<a href="login.php"> Login</button>
                         </div>
                         <!-- /.col -->
                     </div>
@@ -101,13 +109,13 @@ ob_end_flush();
     <!-- /.login-box -->
     <script>
     $(document).ready(function() {
-        $('#login-form').submit(function(e) {
+        $('#register-form').submit(function(e) {
             e.preventDefault()
             start_load()
             if ($(this).find('.alert-danger').length > 0)
                 $(this).find('.alert-danger').remove();
             $.ajax({
-                url: 'ajax.php?action=login',
+                url: 'ajax.php?action=register',
                 method: 'POST',
                 data: $(this).serialize(),
                 error: err => {
@@ -117,9 +125,19 @@ ob_end_flush();
                 success: function(resp) {
                     if (resp == 1) {
                         location.href = 'index.php?page=home';
+                    } else if (resp == 3) {
+                        $('#register-form').prepend(
+                            '<div class="alert alert-danger">Passwords unmatched.</div>'
+                        )
+                        end_load();
+                    } else if (resp == 2) {
+                        $('#register-form').prepend(
+                            '<div class="alert alert-danger">Email already exist.</div>'
+                        )
+                        end_load();
                     } else {
-                        $('#login-form').prepend(
-                            '<div class="alert alert-danger">Username or password is incorrect.</div>'
+                        $('#register-form').prepend(
+                            '<div class="alert alert-danger">Debug.</div>'
                         )
                         end_load();
                     }

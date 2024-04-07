@@ -47,7 +47,33 @@ class Action
             return 2;
         }
     }
-	
+
+    function register() {
+        extract($_POST);
+
+        if ($password != $confirmpassword) return 3;
+
+        $qry = $this->db->query("SELECT * FROM users WHERE email = '" . $email . "'");
+        if ($qry->num_rows > 0) {
+            return 2;
+        }
+
+        $save = $this->db->query("INSERT INTO users SET firstname = '" . $fname . "', lastname = '" . $lname . "' email = '" . $email . "' password = md5('" . $password . "'), type = 3");
+
+        $qry = $this->db->query("SELECT *, concat(firstname,' ',lastname) as name FROM users where email = '" . $email . "' and password = '" . md5($password) ."'  ");
+        
+        if ($qry->num_rows > 0) {
+            foreach ($qry->fetch_array() as $key => $value) {
+                if ($key != "password" && !is_numeric($key)) {
+                    $_SESSION["login_" . $key] = $value;
+                }
+            }
+            if ($save)
+                return 1;
+        } else {
+            return 2;
+        }
+    }	
 	// logout meethod destroys the session and redirects user to login page.
     function logout()
     {

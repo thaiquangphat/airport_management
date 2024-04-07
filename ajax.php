@@ -10,6 +10,11 @@ if($action == 'login'){
 	if($login)
 		echo $login;
 }
+if($action == 'register'){
+	$register = $crud->register();
+	if($register)
+		echo $register;
+}
 if($action == 'logout'){
 	// $logout = $crud->logout();
 	// if($logout)
