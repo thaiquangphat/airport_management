@@ -24,5 +24,4 @@
     - Add Add and Edit for Flight
     - Flight can now choose actual arrival and departure time, Unassigned flights don't have AAT and ADT, On Air flights don't have AAT, Landed flights have all four.
     - AAT, ADT, EAT, EDT are able to select date and time.
- 
-    - hello world
+- [07/04/24]
