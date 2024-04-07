@@ -58,7 +58,8 @@ class Action
             return 2;
         }
 
-        $save = $this->db->query("INSERT INTO users SET firstname = '" . $fname . "', lastname = '" . $lname . "' email = '" . $email . "' password = md5('" . $password . "'), type = 3");
+        $save = $this->db->query("INSERT INTO users SET firstname = '" . $fname . "', lastname = '" . $lname . "', email = '" . $email . "', password = '" . md5($password) . "', type = 3");
+        if (!$save) return 2;
 
         $qry = $this->db->query("SELECT *, concat(firstname,' ',lastname) as name FROM users where email = '" . $email . "' and password = '" . md5($password) ."'  ");
         
