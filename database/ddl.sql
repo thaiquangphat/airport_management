@@ -931,13 +931,76 @@ BEGIN
     WHERE SSN = NEW.SSN;
     
     IF cntEmp > 0 THEN
-		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Oner cannot be employee';
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Owner cannot be employee';
 	END IF;
 END;
 //
 DELIMITER ;
 
+-- --------------------------------------------------------------------
+-- TRIGGER TO MAKE SURE EACH MODEL MUST BE MAINTAINED BY AT LEAST AN ENGINEER OF EACH TYPE
+
+DELIMITER //
+CREATE TRIGGER Model_Engineer_BD BEFORE DELETE
+ON Expertise
+FOR EACH ROW
+BEGIN
+	DECLARE avionic_cnt INT;
+    DECLARE mechanic_cnt INT;
+    DECLARE electric_cnt INT;
+    
+    SELECT COUNT(*) INTO avionic_cnt
+    FROM Expertise AS EX
+    JOIN Engineer AS EN ON EX.ESSN = EN.SSN AND EN.EType = 'Avionic Engineer' AND EX.ModelID = OLD.ModelID;
+    
+    IF avionic_cnt = 1 THEN
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Cannot remove this avionic engineer in order to maintain model';
+	END IF;
+    
+    SELECT COUNT(*) INTO mechanic_cnt
+    FROM Expertise AS EX
+    JOIN Engineer AS EN ON EX.ESSN = EN.SSN AND EN.EType = 'Mechanical Engineer' AND EX.ModelID = OLD.ModelID;
+    
+    IF mechanic_cnt = 1 THEN
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Cannot remove this mechanical engineer in order to maintain model';
+	END IF;
+    
+    SELECT COUNT(*) INTO electric_cnt
+    FROM Expertise AS EX
+    JOIN Engineer AS EN ON EX.ESSN = EN.SSN AND EN.EType = 'Electric Engineer' AND EX.ModelID = OLD.ModelID;
+    
+    IF electric_cnt = 1 THEN
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Cannot remove this electric engineer in order to maintain model';
+	END IF;
+END;
+//
+DELIMITER ;
 
 -- --------------------------------------------------------------------
-
+DELIMITER //
+CREATE TRIGGER Pilot_FlightAtt_Flight_BD BEFORE DELETE
+ON Operates
+FOR EACH ROW
+BEGIN
+	DECLARE pilot_cnt INT;
+    DECLARE fa_cnt INT;
+    
+    SELECT COUNT(*) INTO pilot_cnt
+    FROM Operates
+    WHERE FlightID = OLD.FlightID AND Role = 'Pilot';
+    
+    IF pilot_cnt = 2 THEN
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Cannot remove pilot, minimum 2 pilots reached';
+	END IF;
+    
+    SELECT COUNT(*) INTO fa_cnt
+    FROM Operates
+    WHERE FlightID = OLD.FlightID AND Role = 'FA';
+    
+    IF pilot_cnt = 2 THEN
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Cannot remove flight attendant, minimum 2 flight attendants reached';
+	END IF;
+END;
+//
+DELIMITER ;
 
