@@ -7,19 +7,20 @@
                 <div class="row">
                     <div class="col-md-12 border-right">
                         <div class="form-group">
-                            <label for="" class="control-label">Airport Code</label>
+                            <label for="" class="control-label" class="alert alert-warning" role="alert">Airport
+                                Code</label>
                             <input type="text" name="APCode" class="form-control form-control-sm" required
                                 value="<?php echo isset($APCode) ? $APCode : '' ?>">
                             <small id="#msg"></small>
                         </div>
                         <div class="form-group">
                             <label for="" class="control-label">Airport Name</label>
-                            <input type="text" name="APName" class="form-control form-control-sm" required
-                                value="<?php echo isset($APName) ? $APName : '' ?>">
+                            <input type="text" name="APName" class="form-control form-control-sm" maxlength="50"
+                                required value="<?php echo isset($APName) ? $APName : '' ?>">
                         </div>
                         <div class="form-group">
                             <label for="" class="control-label">Airport City</label>
-                            <input type="text" name="City" class="form-control form-control-sm" required
+                            <input type="text" name="City" class="form-control form-control-sm" maxlength="50" required
                                 value="<?php echo isset($City) ? $City : '' ?>">
                         </div>
                         <div class="form-group">
@@ -53,6 +54,25 @@ img#cimg {
 }
 </style>
 <script>
+$(document).ready(function() {
+    // Function to handle input in the APCode field
+    $('[name="APCode"]').on('input', function() {
+        var inputLength = $(this).val().length;
+        if (inputLength < 3) {
+            $('#msg').html(
+                "<div class='alert alert-warning' role='alert'>Airport Code should be exactly 3 characters.</div>"
+            );
+        } else if (inputLength > 3) {
+            $(this).val($(this).val().substr(0, 3)); // Trim input to 3 characters
+            $('#msg').html(
+                "<div class='alert alert-warning' role='alert'>Airport Code should be exactly 3 characters.</div>"
+            );
+        } else {
+            $('#msg').html(''); // Clear any existing warning messages
+        }
+    });
+});
+
 $('#manage_airport').submit(function(e) {
     e.preventDefault()
     start_load()
@@ -72,7 +92,9 @@ $('#manage_airport').submit(function(e) {
                     location.replace('index.php?page=list_airport')
                 }, 750)
             } else if (resp == 2) {
-                $('#msg').html("<div class='alert alert-danger'>Airport Code already exist.</div>");
+                $('#msg').html(
+                    "<div class='alert alert-danger' role='alert'>Airport Code already exist.</div>"
+                );
                 $('[name="APCode"]').addClass("border-danger")
                 end_load()
             } else {

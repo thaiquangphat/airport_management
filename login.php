@@ -89,7 +89,10 @@ ob_end_flush();
                             </div>
                         </div> -->
                         <!-- /.col -->
-                        <div class="links">Don't have an account?<a href="register.php"> Register</button>
+                        <div
+                            style="border: 1px solid transparent; padding: .375rem .75rem; border-right: 0; display: block; width: 100%;">
+                            Don't have an account?
+                            <a href="register.php"> Register</button>
                         </div>
                         <!-- /.col -->
                     </div>

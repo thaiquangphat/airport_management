@@ -42,7 +42,6 @@
                                 <a class="dropdown-item view_airline"
                                     href="./index.php?page=view_airline&id=<?php echo $row['AirlineID'] ?>"
                                     data-id="<?php echo $row['AirlineID'] ?>">View</a>
-
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item"
                                     href="./index.php?page=edit_airline&airlineid=<?php echo $row["AirlineID"]; ?>">Edit</a>

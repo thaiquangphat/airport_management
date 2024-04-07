@@ -81,7 +81,8 @@ ob_end_flush();
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" name="confirmpassword" required placeholder="Confirm Password">
+                        <input type="password" class="form-control" name="confirmpassword" required
+                            placeholder="Confirm Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -97,7 +98,10 @@ ob_end_flush();
                     </div>
                     <div class="row">
                         <!-- /.col -->
-                        <div class="links">Already have an account?<a href="login.php"> Login</button>
+                        <div
+                            style="border: 1px solid transparent; padding: .375rem .75rem; border-right: 0; display: block; width: 100%;">
+                            Already have an account?
+                            <a href="login.php"> Login</button>
                         </div>
                         <!-- /.col -->
                     </div>
