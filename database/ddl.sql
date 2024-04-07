@@ -1,11 +1,13 @@
 -- Note:
 -- In this version, I have set "ON DELETE CASCADE" to all the referential integrity constraints
-DROP SCHEMA IF EXISTS BTL_24_04_07;
-CREATE SCHEMA BTL_24_04_07;
+DROP SCHEMA IF EXISTS AMS;
+CREATE SCHEMA AMS;
+
+USE AMS;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Employee
+CREATE TABLE AMS.Employee
 (
     SSN    CHAR(10),
     Fname  VARCHAR(50),
@@ -18,7 +20,7 @@ CREATE TABLE BTL_24_04_07.Employee
     PRIMARY KEY (SSN)
 );
 
-CREATE TABLE BTL_24_04_07.Supervision
+CREATE TABLE AMS.Supervision
 (
     SSN      CHAR(10),
     SuperSSN CHAR(10),
@@ -27,7 +29,7 @@ CREATE TABLE BTL_24_04_07.Supervision
     FOREIGN KEY (SuperSSN) REFERENCES Employee (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Employee_Address
+CREATE TABLE AMS.Employee_Address
 (
     SSN      CHAR(10),
     Street   VARCHAR(50),
@@ -37,7 +39,7 @@ CREATE TABLE BTL_24_04_07.Employee_Address
     FOREIGN KEY (SSN) REFERENCES Employee (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Administrative_Support
+CREATE TABLE AMS.Administrative_Support
 (
     SSN    CHAR(10),
     ASType ENUM ('Secretary', 'Data Entry', 'Receptionist', 'Communications', 'PR', 'Security', 'Ground Service', 'HR', 'Emergency Service'),
@@ -45,7 +47,7 @@ CREATE TABLE BTL_24_04_07.Administrative_Support
     FOREIGN KEY (SSN) REFERENCES Employee (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Engineer
+CREATE TABLE AMS.Engineer
 (
     SSN   CHAR(10),
     EType ENUM ('Avionic Engineer', 'Mechanical Engineer', 'Electric Engineer'),
@@ -53,14 +55,14 @@ CREATE TABLE BTL_24_04_07.Engineer
     FOREIGN KEY (SSN) REFERENCES Employee (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Traffic_Controller
+CREATE TABLE AMS.Traffic_Controller
 (
     SSN CHAR(10),
     PRIMARY KEY (SSN),
     FOREIGN KEY (SSN) REFERENCES Employee (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.TCShift
+CREATE TABLE AMS.TCShift
 (
     TCSSN CHAR(10),
     Shift ENUM ('Morning', 'Afternoon', 'Evening', 'Night'),
@@ -68,14 +70,14 @@ CREATE TABLE BTL_24_04_07.TCShift
     FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Flight_Employee
+CREATE TABLE AMS.Flight_Employee
 (
     FESSN CHAR(10),
     PRIMARY KEY (FESSN),
     FOREIGN KEY (FESSN) REFERENCES Employee (SSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Pilot
+CREATE TABLE AMS.Pilot
 (
     SSN     CHAR(10),
     License CHAR(12),
@@ -83,7 +85,7 @@ CREATE TABLE BTL_24_04_07.Pilot
     FOREIGN KEY (SSN) REFERENCES Flight_Employee (FESSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Flight_Attendant
+CREATE TABLE AMS.Flight_Attendant
 (
     SSN             CHAR(10),
     Year_experience FLOAT,
@@ -91,7 +93,7 @@ CREATE TABLE BTL_24_04_07.Flight_Attendant
     FOREIGN KEY (SSN) REFERENCES Flight_Employee (FESSN) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Route
+CREATE TABLE AMS.Route
 (
     ID INT AUTO_INCREMENT,
     RName CHAR(7),
@@ -99,7 +101,7 @@ CREATE TABLE BTL_24_04_07.Route
     PRIMARY KEY (ID)
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Passenger
+CREATE TABLE AMS.Passenger
 (
     PID         INT(4) ZEROFILL AUTO_INCREMENT,
     PID_Decode 	VARCHAR(25),
@@ -113,7 +115,7 @@ CREATE TABLE BTL_24_04_07.Passenger
     PRIMARY KEY (PID)
 );
 
-CREATE TABLE BTL_24_04_07.Passenger_Phone
+CREATE TABLE AMS.Passenger_Phone
 (
     PID   INT(4) ZEROFILL,
     Phone CHAR(10),
@@ -121,14 +123,14 @@ CREATE TABLE BTL_24_04_07.Passenger_Phone
     FOREIGN KEY (PID) REFERENCES Passenger (PID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Owner
+CREATE TABLE AMS.Owner
 (
     OwnerID INT AUTO_INCREMENT,
     Phone   CHAR(10),
     PRIMARY KEY (OwnerID)
 );
 
-CREATE TABLE BTL_24_04_07.Cooperation
+CREATE TABLE AMS.Cooperation
 (
     Name    VARCHAR(50),
     Address VARCHAR(50),
@@ -137,7 +139,7 @@ CREATE TABLE BTL_24_04_07.Cooperation
     FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.Person
+CREATE TABLE AMS.Person
 (
     SSN     CHAR(10),
     Name    VARCHAR(50),
@@ -147,7 +149,7 @@ CREATE TABLE BTL_24_04_07.Person
     FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Airport
+CREATE TABLE AMS.Airport
 (
     APCode              CHAR(3),
     APName              VARCHAR(50),
@@ -157,7 +159,7 @@ CREATE TABLE BTL_24_04_07.Airport
     PRIMARY KEY (APCode)
 );
 
-CREATE TABLE BTL_24_04_07.Airline
+CREATE TABLE AMS.Airline
 (
     AirlineID      CHAR(3),
     IATADesignator CHAR(2) UNIQUE NOT NULL,
@@ -166,7 +168,7 @@ CREATE TABLE BTL_24_04_07.Airline
     PRIMARY KEY (AirlineID)
 );
 
-CREATE TABLE BTL_24_04_07.Model
+CREATE TABLE AMS.Model
 (
     ID        INT AUTO_INCREMENT,
     MName     VARCHAR(20),
@@ -175,7 +177,7 @@ CREATE TABLE BTL_24_04_07.Model
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE BTL_24_04_07.Airplane
+CREATE TABLE AMS.Airplane
 (
     AirplaneID        INT AUTO_INCREMENT,
     License_plate_num VARCHAR(7) UNIQUE NOT NULL,
@@ -189,14 +191,14 @@ CREATE TABLE BTL_24_04_07.Airplane
     FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Consultant
+CREATE TABLE AMS.Consultant
 (
     ID INT AUTO_INCREMENT,
     Name    VARCHAR(50),
     PRIMARY KEY (ID)
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.is_Destination
+CREATE TABLE AMS.is_Destination
 (
     RID INT,
     APCode  CHAR(3),
@@ -205,7 +207,7 @@ CREATE TABLE BTL_24_04_07.is_Destination
     FOREIGN KEY (APCode) REFERENCES Airport (APCode) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE BTL_24_04_07.is_Source
+CREATE TABLE AMS.is_Source
 (
     RID INT,
     APCode  CHAR(3),
@@ -214,7 +216,7 @@ CREATE TABLE BTL_24_04_07.is_Source
     FOREIGN KEY (APCode) REFERENCES Airport (APCode) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Flight
+CREATE TABLE AMS.Flight
 (
     FlightID        INT AUTO_INCREMENT,
     RID             INT,
@@ -243,7 +245,7 @@ CREATE TABLE BTL_24_04_07.Flight
 -- Case 4: Passenger check-in on-time at the airport and certainly fly: CheckInStatus = 'Yes', Seat.Status = 'Unavailable'.
 -- Every passenger must check-in their flight [at least 15 minutes and at most 24 hours] in advance of Flight.EDT.
 
-CREATE TABLE BTL_24_04_07.Seat
+CREATE TABLE AMS.Seat
 (
     FlightID INT,
     SeatNum  VARCHAR(3),           -- Trigger SeatNum < ROUND(0.9*Model.Capacity), format: <row><[A-E]> e.g. 1A, 11E
@@ -253,11 +255,11 @@ CREATE TABLE BTL_24_04_07.Seat
     FOREIGN KEY (FlightID) REFERENCES Flight (FlightID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-ALTER TABLE BTL_24_04_07.Seat
+ALTER TABLE AMS.Seat
 ADD INDEX idx_SeatNum (SeatNum),
 ADD INDEX idx_FlightID (FlightID);
 
-CREATE TABLE BTL_24_04_07.Ticket
+CREATE TABLE AMS.Ticket
 (
     TicketID      INT AUTO_INCREMENT,
     PID           INT(4) ZEROFILL,
@@ -276,7 +278,7 @@ CREATE TABLE BTL_24_04_07.Ticket
 
 -- --------------------------------------------------------------------
 
-CREATE TABLE BTL_24_04_07.Expert_At
+CREATE TABLE AMS.Expert_At
 (
     ConsultID INT,
     APCode    CHAR(3),
@@ -288,7 +290,7 @@ CREATE TABLE BTL_24_04_07.Expert_At
 );
 
 -- --------------------------------------------------------------------
-CREATE TABLE BTL_24_04_07.Experience
+CREATE TABLE AMS.Experience
 (
     PilotSSN      CHAR(10),
     ModelID       INT,
@@ -297,11 +299,11 @@ CREATE TABLE BTL_24_04_07.Experience
     FOREIGN KEY (PilotSSN) REFERENCES Pilot (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
-DROP TABLE BTL_24_04_07.Experience;
+DROP TABLE AMS.Experience;
 
 -- --------------------------------------------------------------------
 
-CREATE TABLE BTL_24_04_07.Expertise
+CREATE TABLE AMS.Expertise
 (
     ESSN    CHAR(10),
     ModelID INT,
@@ -312,7 +314,7 @@ CREATE TABLE BTL_24_04_07.Expertise
 
 -- --------------------------------------------------------------------
 
-CREATE TABLE BTL_24_04_07.Airport_Contains_Airplane
+CREATE TABLE AMS.Airport_Contains_Airplane
 (
     APCode     CHAR(3),
     AirplaneID INT,
@@ -323,7 +325,7 @@ CREATE TABLE BTL_24_04_07.Airport_Contains_Airplane
 
 -- --------------------------------------------------------------------
 
-CREATE TABLE BTL_24_04_07.Airport_Includes_Employee
+CREATE TABLE AMS.Airport_Includes_Employee
 (
     APCode CHAR(3),
     SSN    CHAR(10),
@@ -334,7 +336,7 @@ CREATE TABLE BTL_24_04_07.Airport_Includes_Employee
 );
 -- --------------------------------------------------------------------
 
-CREATE TABLE BTL_24_04_07.Operates
+CREATE TABLE AMS.Operates
 (
     FSSN     CHAR(10),
     FlightID INT,
@@ -348,7 +350,7 @@ CREATE TABLE BTL_24_04_07.Operates
 -- Start function
 -- --------------------------------------------------------------------
 delimiter //
-CREATE FUNCTION BTL_24_04_07.getDuration (fid INT)
+CREATE FUNCTION AMS.getDuration (fid INT)
 RETURNS VARCHAR(255) DETERMINISTIC
 BEGIN
 	DECLARE aAT TIMESTAMP; 
@@ -356,7 +358,7 @@ BEGIN
     
 	SELECT AAT, ADT
     INTO aAT, aDT
-    FROM BTL_24_04_07.flight AS f
+    FROM AMS.flight AS f
     WHERE f.FlightID = fid;
     
     IF ISNULL(aAT) OR ISNULL(aDT) THEN
@@ -371,13 +373,13 @@ END
 
 -- ----------------------------------------------------------------------------------------------------------- 
 delimiter //
-CREATE FUNCTION BTL_24_04_07.getNoFEmployees (fid INT)
+CREATE FUNCTION AMS.getNoFEmployees (fid INT)
 RETURNS INT DETERMINISTIC
 BEGIN
 	DECLARE countFE INT;
     
 	SELECT COUNT(*) INTO countFE
-    FROM BTL_24_04_07.Operates AS o
+    FROM AMS.Operates AS o
     WHERE o.FSSN = fid;
     
     RETURN countFE;
@@ -386,13 +388,13 @@ END
 
 -- ----------------------------------------------------------------------------------------------------------- 
 delimiter //
-CREATE FUNCTION BTL_24_04_07.getNoPassenger (fid INT)
+CREATE FUNCTION AMS.getNoPassenger (fid INT)
 RETURNS INT DETERMINISTIC
 BEGIN
 	DECLARE countP INT;
     
 	SELECT COUNT(*) INTO countP
-    FROM BTL_24_04_07.Seat AS s
+    FROM AMS.Seat AS s
     WHERE s.FlightID = fid AND s.status = 'Unavailable';
     
     RETURN countP;
@@ -402,13 +404,13 @@ END
 -- ----------------------------------------------------------------------------------------------------------- 
 
 delimiter //
-CREATE FUNCTION BTL_24_04_07.getAge (pid INT)
+CREATE FUNCTION AMS.getAge (pid INT)
 RETURNS INT DETERMINISTIC
 BEGIN
 	DECLARE age INT;
     
 	SELECT TIMESTAMPDIFF(YEAR, NOW(), dob) INTO age
-    FROM BTL_24_04_07.passenger AS p
+    FROM AMS.passenger AS p
     WHERE p.pid = pid;
     
     RETURN age;
@@ -418,12 +420,12 @@ END
 -- ----------------------------------------------------------------------------------------------------------- 
 
 delimiter //
-CREATE PROCEDURE BTL_24_04_07.getPassengerOnFlight(fid INT)
+CREATE PROCEDURE AMS.getPassengerOnFlight(fid INT)
 BEGIN
 	SELECT p.pid, CONCAT(p.fname, ' ', p.minit, ' ', p.lname) AS name, p.Nationality, p.PassportNo, p.DOB, p.Sex
-    FROM BTL_24_04_07.passenger AS p
-    JOIN BTL_24_04_07.ticket AS t ON t.PID = p.PID
-    JOIN BTL_24_04_07.seat AS s ON s.ticketid = t.ticketid
+    FROM AMS.passenger AS p
+    JOIN AMS.ticket AS t ON t.PID = p.PID
+    JOIN AMS.seat AS s ON s.ticketid = t.ticketid
     WHERE s.FlightID = fid AND s.status = 'Unavailable';
 END
 //
@@ -431,11 +433,11 @@ END
 -- ----------------------------------------------------------------------------------------------------------- 
 
 delimiter //
-CREATE PROCEDURE BTL_24_04_07.getEmployeeOnFlight(fid INT)
+CREATE PROCEDURE AMS.getEmployeeOnFlight(fid INT)
 BEGIN
 	SELECT e.ssn, CONCAT(e.fname, ' ', e.minit, ' ', e.lname) AS name, p.phone, p.dob, p.sex, o.role
-    FROM BTL_24_04_07.employee AS e
-    JOIN BTL_24_04_07.operates AS o ON o.fssn = e.ssn
+    FROM AMS.employee AS e
+    JOIN AMS.operates AS o ON o.fssn = e.ssn
     WHERE o.FlightID = fid;
 END
 //
@@ -446,14 +448,14 @@ END
 -- Trigger of EXPERT_AT: total side CONSULTANT (ID)
 -- This check before delete the last record in EXPERT_AT of a Consultant
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Expert_At_BD BEFORE DELETE
-ON BTL_24_04_07.Expert_At
+CREATE TRIGGER AMS.Expert_At_BD BEFORE DELETE
+ON AMS.Expert_At
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordConsult INT;
     
     SELECT COUNT(*) INTO numRecordConsult
-    FROM BTL_24_04_07.Expert_At
+    FROM AMS.Expert_At
     WHERE ConsultID = OLD.ConsultID;
     
     IF numRecordConsult = 1 THEN
@@ -464,14 +466,14 @@ delimiter ;
 
 -- This check before delete the update record in EXPERT_AT of a Consultant
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Expert_At_BU BEFORE UPDATE
-ON BTL_24_04_07.Expert_At
+CREATE TRIGGER AMS.Expert_At_BU BEFORE UPDATE
+ON AMS.Expert_At
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordConsult INT;
     
     SELECT COUNT(*) INTO numRecordConsult
-    FROM BTL_24_04_07.Expert_At
+    FROM AMS.Expert_At
     WHERE ConsultID = OLD.ConsultID;
     
     IF NEW.ConsultID <> OLD.ConsultID AND numRecordConsult = 1 THEN
@@ -483,14 +485,14 @@ delimiter ;
 -- --------------------------------------------------------------------
 -- This check before delete the last record in Airport_Includes_Employee of an Airport
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airport_Includes_Employee_BD BEFORE DELETE
-ON BTL_24_04_07.Airport_Includes_Employee
+CREATE TRIGGER AMS.Airport_Includes_Employee_BD BEFORE DELETE
+ON AMS.Airport_Includes_Employee
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordAirport INT;
     
     SELECT COUNT(*) INTO numRecordAirport
-    FROM BTL_24_04_07.Airport_Includes_Employee
+    FROM AMS.Airport_Includes_Employee
     WHERE APCode = OLD.APCode;
     
     IF numRecordAirport = 1 THEN
@@ -501,14 +503,14 @@ delimiter ;
 
 -- This check before update the last record in Airport_Includes_Employee of an Airport
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airport_Includes_Employee_BU BEFORE UPDATE
-ON BTL_24_04_07.Airport_Includes_Employee
+CREATE TRIGGER AMS.Airport_Includes_Employee_BU BEFORE UPDATE
+ON AMS.Airport_Includes_Employee
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordAirport INT;
     
     SELECT COUNT(*) INTO numRecordAirport
-    FROM BTL_24_04_07.Airport_Includes_Employee
+    FROM AMS.Airport_Includes_Employee
     WHERE APCode = OLD.APCode;
     
     IF NEW.APCode <> OLD.APCode AND numRecordAirport = 1 THEN
@@ -520,14 +522,14 @@ delimiter ;
 -- --------------------------------------------------------------------
 -- This check before delete the last record in Airport_Contains_Airplane of an Airplane
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airport_Contains_Airplane_BD BEFORE DELETE
-ON BTL_24_04_07.Airport_Contains_Airplane
+CREATE TRIGGER AMS.Airport_Contains_Airplane_BD BEFORE DELETE
+ON AMS.Airport_Contains_Airplane
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordAirplane INT;
     
     SELECT COUNT(*) INTO numRecordAirplane
-    FROM BTL_24_04_07.Airport_Contains_Airplane
+    FROM AMS.Airport_Contains_Airplane
     WHERE AirplaneID = OLD.AirplaneID;
     
     IF numRecordAirplane = 1 THEN
@@ -538,14 +540,14 @@ delimiter ;
 
 -- This check before update the last record in Airport_Contains_Airplane of an Airplane
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airport_Contains_Airplane_BU BEFORE UPDATE
-ON BTL_24_04_07.Airport_Contains_Airplane
+CREATE TRIGGER AMS.Airport_Contains_Airplane_BU BEFORE UPDATE
+ON AMS.Airport_Contains_Airplane
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordAirplane INT;
     
     SELECT COUNT(*) INTO numRecordAirplane
-    FROM BTL_24_04_07.Airport_Contains_Airplane
+    FROM AMS.Airport_Contains_Airplane
     WHERE AirplaneID = OLD.AirplaneID;
     
     IF NEW.AirplaneID <> OLD.AirplaneID AND numRecordAirplane = 1 THEN
@@ -558,14 +560,14 @@ delimiter ;
 -- Note: insert Owner before insert his/her airplanes
 -- This check before delete the last airplane in Airplane of an Owner
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airplane_Owner_BD BEFORE DELETE
-ON BTL_24_04_07.Airplane
+CREATE TRIGGER AMS.Airplane_Owner_BD BEFORE DELETE
+ON AMS.Airplane
 FOR EACH ROW
 BEGIN
 	DECLARE numAirplaneOfOwner INT;
     
     SELECT COUNT(*) INTO numAirplaneOfOwner
-    FROM BTL_24_04_07.Airplane
+    FROM AMS.Airplane
     WHERE OwnerID = OLD.OwnerID;
     
     IF numAirplaneOfOwner = 1 THEN
@@ -577,14 +579,14 @@ delimiter ;
 -- In case we change the owner of an airplane
 -- This check before udpate the last airplane in Airplane of an Owner
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airplane_Owner_BU BEFORE UPDATE
-ON BTL_24_04_07.Airplane
+CREATE TRIGGER AMS.Airplane_Owner_BU BEFORE UPDATE
+ON AMS.Airplane
 FOR EACH ROW
 BEGIN
 	DECLARE numAirplaneOfOwner INT;
     
     SELECT COUNT(*) INTO numAirplaneOfOwner
-    FROM BTL_24_04_07.Airplane
+    FROM AMS.Airplane
     WHERE OwnerID = OLD.OwnerID;
     
     IF NEW.OwnerID <> OLD.OwnerID AND numAirplaneOfOwner = 1 THEN
@@ -596,14 +598,14 @@ delimiter ;
 -- --------------------------------------------------------------------
 -- This check before delete the last record in Expertise of an Model
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Expertise_BD BEFORE DELETE
-ON BTL_24_04_07.Expertise
+CREATE TRIGGER AMS.Expertise_BD BEFORE DELETE
+ON AMS.Expertise
 FOR EACH ROW
 BEGIN
 	DECLARE numModelInExpertise INT;
     
     SELECT COUNT(*) INTO numModelInExpertise
-    FROM BTL_24_04_07.Expertise 
+    FROM AMS.Expertise 
     WHERE ModelID = OLD.ModelID;
     
     IF numModelInExpertise = 1 THEN
@@ -614,14 +616,14 @@ delimiter ;
 
 -- This check before update the last record in Expertise of an Model
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Expertise_BU BEFORE UPDATE
-ON BTL_24_04_07.Expertise
+CREATE TRIGGER AMS.Expertise_BU BEFORE UPDATE
+ON AMS.Expertise
 FOR EACH ROW
 BEGIN
 	DECLARE numModelInExpertise INT;
     
     SELECT COUNT(*) INTO numModelInExpertise
-    FROM BTL_24_04_07.Expertise 
+    FROM AMS.Expertise 
     WHERE ModelID = OLD.ModelID;
     
     IF NEW.ModelID <> OLD.ModelID AND numModelInExpertise = 1 THEN
@@ -635,19 +637,19 @@ delimiter ;
 -- Now define the trigger:
 -- A flight must have at least 2 pilots and 2 flight attendants
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Operate_2_Pilot_FA_AD AFTER DELETE
-ON BTL_24_04_07.Operates
+CREATE TRIGGER AMS.Operate_2_Pilot_FA_AD AFTER DELETE
+ON AMS.Operates
 FOR EACH ROW
 BEGIN
 	DECLARE numFAOfFlight INT;
     DECLARE numPilotOfFlight INT;
     
     SELECT COUNT(*) INTO numFAOfFlight
-    FROM BTL_24_04_07.Operates JOIN BTL_24_04_07.Flight_Attendant ON FSSN = SSN
+    FROM AMS.Operates JOIN AMS.Flight_Attendant ON FSSN = SSN
     WHERE FlightID = OLD.FlightID;
     
     SELECT COUNT(*) INTO numPilotOfFlight
-    FROM BTL_24_04_07.Operates JOIN BTL_24_04_07.Pilot ON FSSN = SSN
+    FROM AMS.Operates JOIN AMS.Pilot ON FSSN = SSN
     WHERE FlightID = OLD.FlightID;
     
     IF numPilotOfFlight < 2 OR numFAOfFlight < 2 THEN
@@ -658,19 +660,19 @@ delimiter ;
 
 -- A flight must have at least 2 pilots and 2 flight attendants
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Operate_2_Pilot_FA_AU AFTER UPDATE
-ON BTL_24_04_07.Operates
+CREATE TRIGGER AMS.Operate_2_Pilot_FA_AU AFTER UPDATE
+ON AMS.Operates
 FOR EACH ROW
 BEGIN
 	DECLARE numFAOfFlight INT;
     DECLARE numPilotOfFlight INT;
     
     SELECT COUNT(*) INTO numFAOfFlight
-    FROM BTL_24_04_07.Operates JOIN BTL_24_04_07.Flight_Attendant ON FSSN = SSN
+    FROM AMS.Operates JOIN AMS.Flight_Attendant ON FSSN = SSN
     WHERE FlightID = OLD.FlightID;
     
     SELECT COUNT(*) INTO numPilotOfFlight
-    FROM BTL_24_04_07.Operates JOIN BTL_24_04_07.Pilot ON FSSN = SSN
+    FROM AMS.Operates JOIN AMS.Pilot ON FSSN = SSN
     WHERE FlightID = OLD.FlightID;
     
     IF numPilotOfFlight < 2 OR numFAOfFlight < 2 THEN
@@ -683,14 +685,14 @@ delimiter ;
 -- --------------------------------------------------------------------
 -- This check before delete the last record in Airplane of a Airline
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airplane_Airline_BD BEFORE DELETE
-ON BTL_24_04_07.Airplane
+CREATE TRIGGER AMS.Airplane_Airline_BD BEFORE DELETE
+ON AMS.Airplane
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordOfAirline INT;
     
     SELECT COUNT(*) INTO numRecordOfAirline
-    FROM BTL_24_04_07.Airplane 
+    FROM AMS.Airplane 
     WHERE AirlineID = OLD.AirlineID;
     
     IF numRecordOfAirline = 1 THEN
@@ -701,14 +703,14 @@ delimiter ;
 
 -- This check before update the last record in Airplane of a Airline
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Airplane_Airline_BU BEFORE UPDATE
-ON BTL_24_04_07.Airplane
+CREATE TRIGGER AMS.Airplane_Airline_BU BEFORE UPDATE
+ON AMS.Airplane
 FOR EACH ROW
 BEGIN
 	DECLARE numRecordOfAirline INT;
     
     SELECT COUNT(*) INTO numRecordOfAirline
-    FROM BTL_24_04_07.Airplane 
+    FROM AMS.Airplane 
     WHERE AirlineID = OLD.AirlineID;
     
     IF numRecordOfAirline = 1 THEN
@@ -722,8 +724,8 @@ delimiter ;
 -- A flight must have at least 2 pilots and 2 flight attendants
 delimiter //
 
-CREATE TRIGGER BTL_24_04_07.Ticket_Before_Insert BEFORE INSERT
-ON BTL_24_04_07.Ticket
+CREATE TRIGGER AMS.Ticket_Before_Insert BEFORE INSERT
+ON AMS.Ticket
 FOR EACH ROW
 BEGIN
     DECLARE flight_count INT;
@@ -731,20 +733,20 @@ BEGIN
     DECLARE EDT1 TIMESTAMP;
     
     SELECT (EDT) INTO EDT1
-    FROM BTL_24_04_07.Seat AS s 
-    JOIN BTL_24_04_07.Flight AS f ON s.FlightID = f.FlightID
+    FROM AMS.Seat AS s 
+    JOIN AMS.Flight AS f ON s.FlightID = f.FlightID
     WHERE NEW.TicketID = s.TicketID;
     
     SELECT (EAT) INTO EAT1
-    FROM BTL_24_04_07.Seat AS s 
-    JOIN BTL_24_04_07.Flight AS f ON s.FlightID = f.FlightID
+    FROM AMS.Seat AS s 
+    JOIN AMS.Flight AS f ON s.FlightID = f.FlightID
     WHERE NEW.TicketID = s.TicketID;
 
     -- Count the number of overlapping flights for the given passenger
     SELECT COUNT(*) INTO flight_count
-    FROM BTL_24_04_07.Ticket AS t
-    JOIN BTL_24_04_07.Seat AS s ON t.TicketID = s.TicketID AND t.SeatNum = s.SeatNum
-    JOIN BTL_24_04_07.Flight AS f ON s.FlightID = f.FlightID
+    FROM AMS.Ticket AS t
+    JOIN AMS.Seat AS s ON t.TicketID = s.TicketID AND t.SeatNum = s.SeatNum
+    JOIN AMS.Flight AS f ON s.FlightID = f.FlightID
     WHERE t.PID = NEW.PID
         AND (
             (f.EAT BETWEEN EAT1 AND EDT1)
@@ -763,8 +765,8 @@ delimiter ;
 -- --------------------------------------------------------------------
 -- This check the age of employee >= 18
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Employee_BI BEFORE INSERT
-ON BTL_24_04_07.Employee
+CREATE TRIGGER AMS.Employee_BI BEFORE INSERT
+ON AMS.Employee
 FOR EACH ROW
 BEGIN
 	IF TIMESTAMPDIFF(YEAR, NOW(), NEW.DOB) < 18 THEN
@@ -776,14 +778,14 @@ delimiter ;
 -- SSN of Person, SSN of Employee must not be overlapped
 -- insert person must not have ssn overlapped with emp
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Employee_SSN_BI BEFORE INSERT
-ON BTL_24_04_07.Employee
+CREATE TRIGGER AMS.Employee_SSN_BI BEFORE INSERT
+ON AMS.Employee
 FOR EACH ROW
 BEGIN
 	DECLARE c INT;
     
     SELECT COUNT(*) INTO c
-    FROM BTL_24_04_07.Person AS p
+    FROM AMS.Person AS p
     WHERE p.SSN = NEW.SSN;
     
     IF c = 1 THEN
@@ -794,14 +796,14 @@ delimiter ;
 
 -- insert person must not have ssn overlapped with emp
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Person_SSN_BI BEFORE INSERT
-ON BTL_24_04_07.Person
+CREATE TRIGGER AMS.Person_SSN_BI BEFORE INSERT
+ON AMS.Person
 FOR EACH ROW
 BEGIN
 	DECLARE c INT;
     
     SELECT COUNT(*) INTO c
-    FROM BTL_24_04_07.Employee AS e
+    FROM AMS.Employee AS e
     WHERE e.SSN = NEW.SSN;
     
     IF c = 1 THEN
@@ -819,8 +821,8 @@ delimiter ;
 -- Model PK: ID
 -- 'Avionic Engineer', 'Mechanical Engineer', 'Electric Engineer'
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Engineer_BD BEFORE DELETE
-ON BTL_24_04_07.Expertise
+CREATE TRIGGER AMS.Engineer_BD BEFORE DELETE
+ON AMS.Expertise
 FOR EACH ROW
 BEGIN
 	DECLARE type1 INT;
@@ -828,15 +830,15 @@ BEGIN
     DECLARE type3 INT;
     
     SELECT COUNT(*) INTO type1
-    FROM BTL_24_04_07.Engineer AS engi JOIN BTL_24_04_07.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
+    FROM AMS.Engineer AS engi JOIN AMS.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
     WHERE OLD.ModelID = ex.ModelID AND engi.EType = 'Avionic Engineer';
     
     SELECT COUNT(*) INTO type2
-    FROM BTL_24_04_07.Engineer AS engi JOIN BTL_24_04_07.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
+    FROM AMS.Engineer AS engi JOIN AMS.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
     WHERE OLD.ModelID = ex.ModelID AND engi.EType = 'Mechanical Engineer';
     
     SELECT COUNT(*) INTO type3
-    FROM BTL_24_04_07.Engineer AS engi JOIN BTL_24_04_07.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
+    FROM AMS.Engineer AS engi JOIN AMS.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
     WHERE OLD.ModelID = ex.ModelID AND engi.EType = 'Electric Engineer';
     
     IF type1 = 0 OR type2 = 0 OR type3 = 0 THEN
@@ -846,8 +848,8 @@ END //
 delimiter ;
 
 delimiter //
-CREATE TRIGGER BTL_24_04_07.Engineer_BU BEFORE UPDATE
-ON BTL_24_04_07.Expertise
+CREATE TRIGGER AMS.Engineer_BU BEFORE UPDATE
+ON AMS.Expertise
 FOR EACH ROW
 BEGIN
 	DECLARE type1 INT;
@@ -855,15 +857,15 @@ BEGIN
     DECLARE type3 INT;
     
     SELECT COUNT(*) INTO type1
-    FROM BTL_24_04_07.Engineer AS engi JOIN BTL_24_04_07.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
+    FROM AMS.Engineer AS engi JOIN AMS.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
     WHERE OLD.ModelID = ex.ModelID AND engi.EType = 'Avionic Engineer';
     
     SELECT COUNT(*) INTO type2
-    FROM BTL_24_04_07.Engineer AS engi JOIN BTL_24_04_07.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
+    FROM AMS.Engineer AS engi JOIN AMS.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
     WHERE OLD.ModelID = ex.ModelID AND engi.EType = 'Mechanical Engineer';
     
     SELECT COUNT(*) INTO type3
-    FROM BTL_24_04_07.Engineer AS engi JOIN BTL_24_04_07.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
+    FROM AMS.Engineer AS engi JOIN AMS.Expertise AS ex ON engi.SSN = ex.ESSN AND ex.ESSN <> OLD.ESSN
     WHERE OLD.ModelID = ex.ModelID AND engi.EType = 'Electric Engineer';
     
     IF NEW.ESSN <> OLD.ESSN AND type1 = 0 OR type2 = 0 or type3 = 0 THEN
@@ -873,8 +875,8 @@ END //
 delimiter ;
 
 DELIMITER //
-CREATE TRIGGER BTL_24_04_07.passenger_pid BEFORE INSERT
-ON BTL_24_04_07.Passenger
+CREATE TRIGGER AMS.passenger_pid BEFORE INSERT
+ON AMS.Passenger
 FOR EACH ROW
 BEGIN
     DECLARE pass_pid VARCHAR(25);
@@ -886,8 +888,6 @@ END;
 DELIMITER ;
 -- --------------------------------------------------------------------
 -- Airport includes all types of emp
-
-USE BTL_24_04_07;
 
 DELIMITER //
 CREATE TRIGGER update_seat_status AFTER INSERT
@@ -915,9 +915,28 @@ BEGIN
     RETURN cnt;
 END;
 //
-DELIMITER ;
+DELIMITER ; 
 
 -- --------------------------------------------------------------------
+-- TRIGGER TO MAKE SURE AN OWNER ISN'T AN AIRPORT EMPLOYEE
+DELIMITER //
+CREATE TRIGGER Owner_Employee_BI BEFORE INSERT
+ON Person
+FOR EACH ROW
+BEGIN 
+	DECLARE cntEmp INT;
+    
+    SELECT COUNT(*) INTO cntEmp
+    FROM Employee
+    WHERE SSN = NEW.SSN;
+    
+    IF cntEmp > 0 THEN
+		SIGNAL SQLSTATE '50001' SET MESSAGE_TEXT = 'Oner cannot be employee';
+	END IF;
+END;
+//
+DELIMITER ;
+
 
 -- --------------------------------------------------------------------
 
