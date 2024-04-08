@@ -80,14 +80,6 @@ ob_end_flush();
                         <!-- /.col -->
                     </div>
                     <div class="row">
-                        <!-- <div class="col-12">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div> -->
                         <!-- /.col -->
                         <div
                             style="border: 1px solid transparent; padding: .375rem .75rem; border-right: 0; display: block; width: 100%;">
