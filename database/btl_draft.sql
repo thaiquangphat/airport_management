@@ -330,8 +330,7 @@ CREATE TABLE Ticket
     FlightID      INT,
     PRIMARY KEY (TicketID),
     FOREIGN KEY (PID) REFERENCES Passenger (PID) ON DELETE SET NULL ON UPDATE CASCADE,
-    FOREIGN KEY (SeatNum) REFERENCES Seat (SeatNum) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (FlightID) REFERENCES Seat (FlightID) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (FlightID, SeatNum) REFERENCES Seat (FlightID, SeatNum) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- --------------------------------------------------------------------
@@ -348,16 +347,7 @@ CREATE TABLE Expert_At
 );
 
 -- --------------------------------------------------------------------
-CREATE TABLE Experience
-(
-    PilotSSN      CHAR(10),
-    ModelID       INT,
-    HoursOfFlying FLOAT,
-    PRIMARY KEY (PilotSSN, ModelID),
-    FOREIGN KEY (PilotSSN) REFERENCES Pilot (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-DROP TABLE Experience;
+
 
 -- --------------------------------------------------------------------
 
