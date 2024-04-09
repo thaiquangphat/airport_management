@@ -114,6 +114,9 @@ CREATE TABLE Airplane
                                     <td class="">
                                         <p class="truncate"><?php echo strip_tags($row['OwnerID']) ?></p>
                                     </td>
+                                    <td class="">
+                                        <p class="truncate"><?php echo strip_tags($row['ModelID']) ?></p>
+                                    </td>
                                     <td>
                                         <p><?php echo date("F d, Y",strtotime($row['LeasedDate'])) ?></p>
                                     </td>

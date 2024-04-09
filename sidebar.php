@@ -87,16 +87,9 @@
                     <ul class="nav nav-treeview">
                         <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
-                            <a href="./index.php?page=new_owner_person" class="nav-link nav-new_owner_person tree-item">
+                            <a href="./index.php?page=new_owner" class="nav-link nav-new_owner tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Add Person</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index.php?page=new_owner_cooperation"
-                                class="nav-link nav-new_owner_cooperation tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Add Cooperation</p>
+                                <p>Add Owner</p>
                             </a>
                         </li>
                         <?php endif; ?>

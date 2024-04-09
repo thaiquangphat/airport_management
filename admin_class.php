@@ -779,6 +779,23 @@ class Action
         }
     }
 
+    function save_owner() {
+        extract($_POST);
+        $_SESSION['id'] = '1';
+
+        $save = $this->db->query("INSERT INTO Owner SET Phone = '" . $Phone ."'");
+        if ($save) {
+            $qry = $this->db->query("SELECT * FROM Owner WHERE Phone = '" . $Phone . "'");
+            $row = $qry->fetch_assoc();
+            $_SESSION['id'] = $row['id'];
+
+            if ($Type == 'Person') return 2;
+            else if ($Type == 'Cooperation') return 3;
+            return 1;
+        }
+        return 0;
+    }
+
     function update_employee() {
         extract($_POST);
         $data = "";
@@ -1130,13 +1147,13 @@ class Action
             exit();
         }
         // Construct the SQL query string
-    $sql = "INSERT INTO Passenger SET $data";
+        $sql = "INSERT INTO Passenger SET $data";
 
-    // Print the SQL query string to the console
-    // Print the SQL query string
-    
-    // Execute the SQL query
-    $save = $this->db->query($sql);
+        // Print the SQL query string to the console
+        // Print the SQL query string
+        
+        // Execute the SQL query
+        $save = $this->db->query($sql);
         if ($save) {
             return 1; // Return 1 if data is successfully saved
         } else {
