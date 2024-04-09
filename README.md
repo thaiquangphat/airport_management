@@ -31,3 +31,4 @@
     - Just View, Not check update delete on that view
 - [08/04/24]
     - Update flight to add operator (pilots, flight attendants)
+    - Update view for flight
