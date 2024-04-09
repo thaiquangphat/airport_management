@@ -708,6 +708,36 @@ class Action
         }
     }
 
+    function save_operate() {
+        extract($_POST);
+        $fid = $_SESSION['fid'];
+        // Wrap the APCode value in single quotes
+        $check = $this->db->query("SELECT * FROM Pilot WHERE SSN = '" . $ssn . "'")->num_rows;
+
+        if ($check > 0) {
+            $save = $this->db->query("INSERT INTO Operates SET FlightID = '" . $fid . "', FSSN = '" . $ssn . "', Role = 'Pilot'");
+            if ($save) {
+                return 1;
+            }
+        }
+        else {
+            $save = $this->db->query("INSERT INTO Operates SET FlightID = '" . $fid . "', FSSN = '" . $ssn . "', Role = 'FA'");
+            if ($save) {
+                return 1;
+            }
+        }
+    }
+
+    function delete_operate() {
+        extract($_POST);
+        $fid = $_SESSION['fid'];
+        // Wrap the APCode value in single quotes
+        $delete = $this->db->query("DELETE FROM Operates WHERE FlightID = '" . $fid . "' AND FSSN = '" . $fssn . "'");
+        if ($delete) {
+            return 1;
+        }
+    }
+
     function delete_route() {
         extract($_POST);
         // Wrap the APCode value in single quotes

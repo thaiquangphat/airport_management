@@ -136,6 +136,21 @@ if($action == 'delete_flight'){
 	if($save)
 		echo $save;
 }
+if($action == 'save_operate'){
+	$save = $crud->save_operate();
+	if($save)
+		echo $save;
+}
+if($action == 'update_operate'){
+	$save = $crud->update_operate();
+	if($save)
+		echo $save;
+}
+if($action == 'delete_operate'){
+	$save = $crud->delete_operate();
+	if($save)
+		echo $save;
+}
 if($action == 'save_employee'){
 	$save = $crud->save_employee();
 	if($save)

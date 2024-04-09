@@ -20,6 +20,15 @@ SSN Name Role -->
 
 <div class="col-lg-12">
     <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="hidden" name="SSN" class="form-control form-control-sm" required
+                    value="<?php echo isset($fid) ? $fid : '' ?>" readonly>
+                <small id="#msg"></small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-4">
             <div class="card card-outline card-primary">
                 <div class="card-header">
@@ -137,11 +146,11 @@ SSN Name Role -->
                                         </button>
                                         <div class="dropdown-menu" style="">
                                             <a class="dropdown-item view_employee"
-                                                href="./index.php?page=view_employee&id=<?php echo $row['fssn'] ?>"
-                                                data-id="<?php echo $row['fssn'] ?>">View</a>
+                                                href="./index.php?page=view_employee&id=<?php echo $row['ssn'] ?>"
+                                                data-id="<?php echo $row['ssn'] ?>">View</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item add_operate" href="javascript:void(0)"
-                                                data-id="<?php echo $row['fssn'] ?>">Remove</a>
+                                            <a class="dropdown-item save_operate" href="javascript:void(0)"
+                                                data-id="<?php echo $row['ssn'] ?>">Add</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -157,7 +166,7 @@ SSN Name Role -->
     </div>
     <hr>
         <div class="col-lg-12 text-right justify-content-center d-flex">
-            <button class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-primary mr-2" onclick="location.href = 'index.php?page=list_flight'">Save</button>
             <button class="btn btn-secondary" type="button"
                 onclick="location.href = 'index.php?page=list_flight'">Cancel</button>
         </div>
@@ -171,32 +180,24 @@ SSN Name Role -->
     $(document).ready(function() {
         $('#list').dataTable()
 
-        // NOTE HONG XOA
-        // $('.view_airplane').click(function() {
-        //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-        // })
-
-        // $('.delete_airplane').click(function() {
-        //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-        //         'data-id')])
-        // })
-        $(document).on('click', '.view_airplane', function() {
-            window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
+        $(document).on('click', '.save_operate', function() {
+            _conf_str("Are you sure to add this flight employee?", "save_operate", [$(this).attr(
+                'data-id')]);
         });
 
-        $(document).on('click', '.delete_airplane', function() {
-            _conf_str("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
+        $(document).on('click', '.delete_operate', function() {
+            _conf_str("Are you sure to delete this flight employee?", "delete_operate", [$(this).attr(
                 'data-id')]);
         });
     })
 
-    function delete_airplane($airplaneid) {
+    function delete_operate($fssn) {
         start_load()
         $.ajax({
-            url: 'ajax.php?action=delete_airplane',
+            url: 'ajax.php?action=delete_operate',
             method: 'POST',
             data: {
-                airplaneid: $airplaneid
+                fssn: $fssn
             },
             success: function(resp) {
                 if (resp == 1) {
@@ -208,7 +209,32 @@ SSN Name Role -->
                     alert_toast('Data failed to delete.', "error");
                     setTimeout(function() {
                         // location.replace('index.php?page=list_airplane')
-                        location.replace('index.php?page=view_airplane&id='.$_GET['id'])
+                        location.reload();
+                    }, 750)
+                }
+            }
+        })
+    }
+
+    function save_operate($ssn) {
+        start_load()
+        $.ajax({
+            url: 'ajax.php?action=save_operate',
+            method: 'POST',
+            data: {
+                ssn: $ssn
+            },
+            success: function(resp) {
+                if (resp == 1) {
+                    alert_toast("Data successfully added", 'success')
+                    setTimeout(function() {
+                        location.reload()
+                    }, 1500)
+                } else {
+                    alert_toast('Data failed to add.', "error");
+                    setTimeout(function() {
+                        // location.replace('index.php?page=list_airplane')
+                        location.reload();
                     }, 750)
                 }
             }
