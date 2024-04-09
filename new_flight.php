@@ -220,7 +220,7 @@ $('#manage_flight').submit(function(e) {
             } else if (resp == 1) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_flight')
+                    location.replace('index.php?page=new_operate')
                 }, 750)
             } else if (resp == 2) {
                 $('#msg').html(

@@ -623,6 +623,8 @@ class Action
     
     function save_flight() {
         extract($_POST);
+        $_SESSION['fid'] = '1';
+
         $data = "";
         foreach ($_POST as $k => $v) {
             if (!in_array($k, ["FlightID"]) && !is_numeric($k)) {
@@ -639,6 +641,7 @@ class Action
             $save = $this->db->query("UPDATE Flight SET $data WHERE FlightID = " . $FlightID);
             if ($save) {
                 // Return 1 indicating success
+                $_SESSION['fid'] = $FlightID;
                 return 1;
             } else {
                 // Return 0 or error message indicating failure
@@ -660,6 +663,9 @@ class Action
         // Execute the SQL query
         $save = $this->db->query($sql);
             if ($save) {
+                $qry = $this->db->query("SELECT * FROM Flight WHERE FlightCode = '" . $FlightCode . "'");
+                $row = $qry->fetch_assoc();
+                $_SESSION['fid'] = $row['FlightID'];
                 return 1; // Return 1 if data is successfully saved
             } else {
                 return 4; // Return 4 if data failed to save
