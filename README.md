@@ -29,3 +29,5 @@
     - Update view of Airport, Airline, Owner, Model
     - Model still not add or edit
     - Just View, Not check update delete on that view
+- [08/04/24]
+    - Update flight to add operator (pilots, flight attendants)
