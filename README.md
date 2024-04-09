@@ -32,3 +32,4 @@
 - [08/04/24]
     - Update flight to add operator (pilots, flight attendants)
     - Update view for flight
+    - Owner add to Owner table only, not add to Person or Cooperation. Not able to edit.
