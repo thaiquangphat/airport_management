@@ -114,7 +114,7 @@ $fid =  $_GET['id'];
                                 <?php 
                                 $i = 1;
                                 $feinfo = $conn->query("
-                                    SELECT Employee.SSN, Employee.Phone, CONCAT(Employee.Fname, ' ', Employee.Lname) as Name, Employee.DOB, Employee.Sex,
+                                    SELECT Employee.SSN AS ssn, Employee.Phone, CONCAT(Employee.Fname, ' ', Employee.Lname) as Name, Employee.DOB, Employee.Sex,
                                     CASE 
                                         WHEN Operates.Role = 'Pilot' THEN 'Pilot'
                                         WHEN Operates.Role = 'FA' THEN 'Flight Attendant'
@@ -127,7 +127,7 @@ $fid =  $_GET['id'];
                                 while ($row = $feinfo->fetch_assoc()):
                                 ?>
                                 <tr>
-                                    <td class=""><?php echo $row['SSN'] ?></td>
+                                    <td class=""><?php echo $row['ssn'] ?></td>
                                     <td class=""><?php echo $row['Name'] ?></td>
                                     <td class=""><?php echo $row['Phone'] ?></td>
                                     <td class=""><?php echo $row['DOB'] ?></td>
@@ -140,16 +140,17 @@ $fid =  $_GET['id'];
                                             Action
                                         </button>
                                         <div class="dropdown-menu" style="">
-                                            <a class="dropdown-item view_flight"
-                                                href="./index.php?page=view_flight&id=<?php echo $row['FlightID'] ?>"
-                                                data-id="<?php echo $row['FlightID'] ?>">View</a>
+                                            <a class="dropdown-item view_employee"
+                                                href="./index.php?page=view_employee&id=<?php echo $row['ssn'] ?>"
+                                                data-id="<?php echo $row['ssn'] ?>">View</a>
 
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item"
-                                                href="./index.php?page=edit_flight&id=<?php echo $row["FlightID"]; ?>">Edit</a>
+                                                href="./index.php?page=edit_employee&ssn=<?php echo $row["ssn"]; ?>"
+                                                data-id="<?php echo $row['ssn'] ?>">Edit</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item delete_flight" href="javascript:void(0)"
-                                                data-id="<?php echo $row['FlightID'] ?>">Delete</a>
+                                            <a class="dropdown-item delete_operate" href="javascript:void(0)"
+                                                data-id="<?php echo $row['ssn'] ?>">Delete</a>
                                         </div>
                                     </td>
                                 </tr>
