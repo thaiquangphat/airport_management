@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <input type="hidden" name="ownerid" class="form-control form-control-sm" required
+                <input name="ownerid" class="form-control form-control-sm" required
                     value="<?php echo isset($ownerid) ? $ownerid : $OwnerID ?>" readonly>
                 <small id="#msg"></small>
             </div>
@@ -27,8 +27,8 @@
                             <label for="" class="control-label">Type</label>
                             <?php 
                                 $type = 0;
-                                if (isset($ownerid)) {
-                                    $qry = $conn->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $ownerid . "'");
+                                if (isset($OwnerID)) {
+                                    $qry = $conn->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $OwnerID . "'");
                                     $num = $qry->fetch_assoc();
                                     if ($num > 0) $type = 1;
                                 }
@@ -79,7 +79,7 @@ $('#manage_owner').submit(function(e) {
     $('#msg').html('');
 
     $.ajax({
-        url: 'ajax.php?action=save_owner',
+        url: 'ajax.php?action=update_owner',
         data: new FormData($(this)[0]),
         cache: false,
         contentType: false,

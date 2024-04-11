@@ -86,13 +86,23 @@ if($action == 'delete_owner'){
 	if($save)
 		echo $save;
 }
-if($action == 'delete_person'){
-	$save = $crud->delete_person();
+if($action == 'save_owner_person'){
+	$save = $crud->save_owner_person();
 	if($save)
 		echo $save;
 }
-if($action == 'delete_cooperation'){
-	$save = $crud->delete_cooperation();
+if($action == 'save_owner_cooperation'){
+	$save = $crud->save_owner_cooperation();
+	if($save)
+		echo $save;
+}
+if($action == 'delete_owner_person'){
+	$save = $crud->delete_owner_person();
+	if($save)
+		echo $save;
+}
+if($action == 'delete_owner_cooperation'){
+	$save = $crud->delete_owner_cooperation();
 	if($save)
 		echo $save;
 }

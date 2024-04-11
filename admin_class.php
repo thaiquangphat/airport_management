@@ -781,18 +781,133 @@ class Action
 
     function save_owner() {
         extract($_POST);
-        $_SESSION['id'] = '1';
-
+        $_SESSION['ID'] = '1';
+        
         $save = $this->db->query("INSERT INTO Owner SET Phone = '" . $Phone ."'");
         if ($save) {
             $qry = $this->db->query("SELECT * FROM Owner WHERE Phone = '" . $Phone . "'");
             $row = $qry->fetch_assoc();
-            $_SESSION['id'] = $row['id'];
+            $_SESSION['ID'] = $row['OwnerID'];
 
             if ($Type == 'Person') return 2;
             else if ($Type == 'Cooperation') return 3;
             return 1;
         }
+        return 0;
+    }
+
+    function update_owner() {
+        extract($_POST);
+
+        //update
+        $update = $this->db->query("UPDATE Owner SET Phone = '" . $Phone . "' WHERE OwnerID = '" . $OwnerID . "'");
+
+        // $personcheck = $this->db->query("SELECT * FROM Person WHERE OwnerID = '" . $ownerid . "'")->num_rows;
+        // // edit person
+        // if ($personcheck > 0 && $Type == 'Person') return 4;
+        // else if ($personcheck > 0 && $Type == 'Cooperation') {
+        //     $delete = $this->db->query("DELETE FROM Person WHERE OwnerID = '" . $ownerid . "'");
+        //     // new cooperation
+        //     return 3;
+        // }
+
+        // $coopcheck = $this->db->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $ownerid . "'")->num_rows;
+        // // edit cooperation
+        // if ($coopcheck > 0 && $Type == 'Cooperation') return 5;
+        // else if ($coopcheck > 0 && $Type == 'Person') {
+        //     $delete = $this->db->query("DELETE FROM Cooperation WHERE OwnerID = '" . $ownerid . "'");
+        //     // new person
+        //     return 2;
+        // }
+
+        // return 10;
+
+        return 1;
+    }
+
+    function save_owner_person() {
+        extract($_POST);
+
+        $check = $this->db->query("SELECT * FROM Person WHERE OwnerID = '" . $OwnerID . "'")->num_rows;
+
+        // update
+        if ($check > 0) {
+            $holdID = $OwnerID;
+            $qry = $this->db->query("SELECT * FROM Person WHERE OwnerID = '" . $OwnerID . "'");
+            $row = $qry->fetch_assoc();
+            $holdSSN = $row['SSN'];
+            
+            // only update name and address
+            if ($SSN == $row['SSN']) {
+                $save = $this->db->query("UPDATE Person SET Name = '" . $Name . "', Address = '" . $Address . "' WHERE SSN = '" . $holdSSN . "'");
+                if ($save) return 1;
+            }
+            else {
+                // first check for duplicate SSN
+                $check = $this->db->query("SELECT * FROM Person WHERE SSN = '" . $SSN . "'")->num_rows;
+                if ($check > 0) return 3;
+
+                // else delete then reinsert 
+                else {
+                    $delete = $this->db->query("DELETE FROM Person WHERE SSN = '" . $holdSSN . "'");
+                    $save = $this->db->query("INSERT INTO Person SET OwnerID = '" . $holdID . "', SSN = '" . $SSN . "', Name = '" . $Name . "', Address = '" . $Address . "'");
+                    if ($save) return 1;
+                }
+            }
+        }
+        else {
+            // insert
+            $check = $this->db->query("SELECT * FROM Person WHERE SSN = '" . $SSN . "'")->num_rows;
+            if ($check > 0) return 4;
+
+            $save = $this->db->query("INSERT INTO Person SET OwnerID = '" . $OwnerID . "', SSN = '" . $SSN . "', Name = '" . $Name . "', Address = '" . $Address . "'");
+            if ($save)
+                return 1;
+        }
+
+        return 0;
+    }
+
+    function save_owner_cooperation() {
+        extract($_POST);
+
+        $check = $this->db->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $OwnerID . "'")->num_rows;
+
+        // update
+        if ($check > 0) {
+            $holdID = $OwnerID;
+            $qry = $this->db->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $OwnerID . "'");
+            $row = $qry->fetch_assoc();
+            $holdName = $row['Name'];
+            
+            // only update address
+            if ($Name == $row['Name']) {
+                $save = $this->db->query("UPDATE Cooperation SET Address = '" . $Address . "' WHERE OwnerID = '" . $OwnerID . "'");
+                if ($save) return 1;
+            }
+            else {
+                // first check for duplicate SSN
+                $check = $this->db->query("SELECT * FROM Cooperation WHERE Name = '" . $Name . "'")->num_rows;
+                if ($check > 0) return 3;
+
+                // else delete then reinsert 
+                else {
+                    $delete = $this->db->query("DELETE FROM Cooperation WHERE OwnerID = '" . $OwnerID . "'");
+                    $save = $this->db->query("INSERT INTO Cooperation SET OwnerID = '" . $holdID . "', Name = '" . $Name . "', Address = '" . $Address . "'");
+                    if ($save) return 1;
+                }
+            }
+        }
+        else {
+            // insert
+            $check = $this->db->query("SELECT * FROM Cooperation WHERE SSN = '" . $SSN . "'")->num_rows;
+            if ($check > 0) return 4;
+
+            $save = $this->db->query("INSERT INTO Cooperation SET OwnerID = '" . $OwnerID . ", Name = '" . $Name . "', Address = '" . $Address . "'");
+            if ($save)
+                return 1;
+        }
+        
         return 0;
     }
 

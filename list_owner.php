@@ -12,7 +12,7 @@
             <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
-                    href="./index.php?page=new_owner_person"><i class="fa fa-plus"></i> Add New Owner-Person</a>
+                    href="./index.php?page=new_owner"><i class="fa fa-plus"></i> Add New Owner-Person</a>
             </div>
             <?php endif; ?>
         </div>
@@ -58,7 +58,7 @@
                                     data-id="<?php echo $row['OwnerID'] ?>">View</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item"
-                                    href="./index.php?page=edit_person&ownerid=<?php echo $row["OwnerID"]; ?>">Edit</a>
+                                    href="./index.php?page=edit_owner&ownerid=<?php echo $row["OwnerID"]; ?>">Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete_person" href="javascript:void(0)"
                                     data-id="<?php echo $row['OwnerID'] ?>">Delete</a>
@@ -122,7 +122,7 @@
                                     data-id="<?php echo $row['OwnerID'] ?>">View</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item"
-                                    href="./index.php?page=edit_cooperation&ownerid=<?php echo $row["OwnerID"]; ?>">Edit</a>
+                                    href="./index.php?page=edit_owner&ownerid=<?php echo $row["OwnerID"]; ?>">Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete_cooperation" href="javascript:void(0)"
                                     data-id="<?php echo $row['OwnerID'] ?>">Delete</a>
