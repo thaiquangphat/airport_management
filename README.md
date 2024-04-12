@@ -36,4 +36,8 @@
 - [11/04/24]
     - Owner is able to add for Person and Cooperation.
     - Edit for Person and Cooperation is enable.
-    - Add is still fine, can't edit person and cooperation directly from owner (via person or  cooperation is fine).
+    - Add is still fine, can't edit person and cooperation directly from owner (via person or cooperation is fine).
+- [12/04/24]
+    - Enable edit person and cooperation from owner, enable switching roles.
+    - Enable delete owner.
+    - Leave view owner for later.

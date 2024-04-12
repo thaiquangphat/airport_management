@@ -452,7 +452,7 @@ class Action
     function delete_owner() {
         extract($_POST);
         // Wrap the APCode value in single quotes
-        $delete = $this->db->query("DELETE FROM Owner WHERE OwnerID = " . $ownerid);
+        $delete = $this->db->query("DELETE FROM Owner WHERE OwnerID = '" . $ownerid . "'");
         if ($delete) {
             return 1;
         }
@@ -798,29 +798,31 @@ class Action
 
     function update_owner() {
         extract($_POST);
-
+        $_SESSION['ownerid'] = $OwnerID;
         //update
         $update = $this->db->query("UPDATE Owner SET Phone = '" . $Phone . "' WHERE OwnerID = '" . $OwnerID . "'");
 
-        // $personcheck = $this->db->query("SELECT * FROM Person WHERE OwnerID = '" . $ownerid . "'")->num_rows;
-        // // edit person
-        // if ($personcheck > 0 && $Type == 'Person') return 4;
-        // else if ($personcheck > 0 && $Type == 'Cooperation') {
-        //     $delete = $this->db->query("DELETE FROM Person WHERE OwnerID = '" . $ownerid . "'");
-        //     // new cooperation
-        //     return 3;
-        // }
+        $personcheck = $this->db->query("SELECT * FROM Person WHERE OwnerID = '" . $OwnerID . "'")->num_rows;
+        // edit person
+        if ($personcheck > 0 && $Type == 'Person') return 4;
+        else if ($personcheck > 0 && $Type == 'Cooperation') {
+            $delete = $this->db->query("DELETE FROM Person WHERE OwnerID = '" . $OwnerID . "'");
 
-        // $coopcheck = $this->db->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $ownerid . "'")->num_rows;
-        // // edit cooperation
-        // if ($coopcheck > 0 && $Type == 'Cooperation') return 5;
-        // else if ($coopcheck > 0 && $Type == 'Person') {
-        //     $delete = $this->db->query("DELETE FROM Cooperation WHERE OwnerID = '" . $ownerid . "'");
-        //     // new person
-        //     return 2;
-        // }
+            $save = $this->db->query("INSERT INTO Cooperation SET OwnerID = '" . $OwnerID . "'");
+            // new cooperation
+            return 3;
+        }
 
-        // return 10;
+        $coopcheck = $this->db->query("SELECT * FROM Cooperation WHERE OwnerID = '" . $OwnerID . "'")->num_rows;
+        // edit cooperation
+        if ($coopcheck > 0 && $Type == 'Cooperation') return 5;
+        else if ($coopcheck > 0 && $Type == 'Person') {
+            $delete = $this->db->query("DELETE FROM Cooperation WHERE OwnerID = '" . $OwnerID . "'");
+
+            $save = $this->db->query("INSERT INTO Person SET OwnerID = '" . $OwnerID . "'");
+            // new person
+            return 2;
+        }
 
         return 1;
     }

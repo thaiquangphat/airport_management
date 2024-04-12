@@ -1,18 +1,18 @@
 <?php
 ?>
 <div class="col-lg-12">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="form-group">
-                <input name="ownerid" class="form-control form-control-sm" required
-                    value="<?php echo isset($ownerid) ? $ownerid : $OwnerID ?>" readonly>
-                <small id="#msg"></small>
-            </div>
-        </div>
-    </div>
     <div class="card">
         <div class="card-body">
             <form action="" id="manage_owner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input name="OwnerID" class="form-control form-control-sm" required
+                                value="<?php echo isset($OwnerID) ? $OwnerID : '' ?>" readonly>
+                            <small id="#msg"></small>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

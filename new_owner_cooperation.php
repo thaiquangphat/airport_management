@@ -1,5 +1,5 @@
 <?php 
-    $ownerid = $_SESSION['ID'];
+    $ownerid = $_SESSION['ownerid'];
     // echo 'Person';
     // echo $ownerid;
 ?>
