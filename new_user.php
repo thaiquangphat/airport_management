@@ -9,39 +9,40 @@
                     <div class="col-md-6 border-right">
                         <div class="form-group">
                             <label for="" class="control-label">First Name</label>
-                            <input type="text" name="FirstName" class="form-control form-control-sm" required
-                                value="<?php echo isset($FirstName) ? $FirstName : '' ?>">
+                            <input type="text" name="firstname" class="form-control form-control-sm" required
+                                value="<?php echo isset($firstname) ? $firstname : '' ?>">
                         </div>
                         <div class="form-group">
                             <label for="" class="control-label">Last Name</label>
-                            <input type="text" name="Lastname" class="form-control form-control-sm" required
-                                value="<?php echo isset($LastName) ? $LastName : '' ?>">
+                            <input type="text" name="lastname" class="form-control form-control-sm" required
+                                value="<?php echo isset($lastname) ? $lastname : '' ?>">
                         </div>
                         <?php if($_SESSION['login_type'] == 1): ?>
                         <div class="form-group">
                             <label for="" class="control-label">User Role</label>
-                            <select name="Type" id="type" class="custom-select custom-select-sm">
-                                <option value="3" <?php echo isset($Type) && $Type == 3 ? 'selected' : '' ?>>Employee
+                            <select name="type" id="type" class="custom-select custom-select-sm">
+                                <option value="3" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Employee
                                 </option>
-                                <option value="2" <?php echo isset($Type) && $Type == 2 ? 'selected' : '' ?>>Project
-                                    Manager</option>
-                                <option value="1" <?php echo isset($Type) && $Type == 1 ? 'selected' : '' ?>>Admin
+                                <option value="2" <?php echo isset($type) && $type == 2 ? 'selected' : '' ?>>Project
+                                    Manage
+                                </option>
+                                <option value="1" <?php echo isset($type) && $type == 1 ? 'selected' : '' ?>>Admin
                                 </option>
                             </select>
                         </div>
                         <?php else: ?>
-                        <input type="hidden" name="Type" value="3">
+                        <input type="hidden" name="type" value="3">
                         <?php endif; ?>
                         <div class="form-group">
                             <label for="" class="control-label">Avatar</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile" name="Img"
+                                <input type="file" class="custom-file-input" id="customFile" name="img"
                                     onchange="displayImg(this,$(this))">
                                 <label class="custom-file-label" for="customFile">Choose file</label>
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center">
-                            <img src="<?php echo isset($Avatar) ? 'assets/uploads/'.$Avatar :'' ?>" alt="Avatar"
+                            <img src="<?php echo isset($avatar) ? 'assets/uploads/'.$avatar :'' ?>" alt="avatar"
                                 id="cimg" class="img-fluid img-thumbnail ">
                         </div>
                     </div>
@@ -49,13 +50,13 @@
 
                         <div class="form-group">
                             <label class="control-label">Email</label>
-                            <input type="email" class="form-control form-control-sm" name="Email" required
-                                value="<?php echo isset($Email) ? $Email : '' ?>">
+                            <input type="email" class="form-control form-control-sm" name="email" required
+                                value="<?php echo isset($email) ? $email : '' ?>">
                             <small id="#msg"></small>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Password</label>
-                            <input type="password" class="form-control form-control-sm" name="Password"
+                            <input type="password" class="form-control form-control-sm" name="password"
                                 <?php echo !isset($id) ? "required":'' ?>>
                             <small><i><?php echo isset($id) ? "Leave this blank if you dont want to change you password":'' ?></i></small>
                         </div>
