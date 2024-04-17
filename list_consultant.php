@@ -20,6 +20,7 @@
                     <tr>
                         <th>Consultant ID</th>
                         <th>Consultant Name</th>
+                        <th>No Airport Expert At</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -33,6 +34,10 @@
                     <tr>
                         <td><b><?php echo $row['ID'] ?></b></td>
                         <td><b><?php echo $row['Name'] ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Expert_At where ConsultID = ".$row['ID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

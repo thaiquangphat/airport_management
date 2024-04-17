@@ -2,7 +2,7 @@
 <?php
 if(isset($_GET['id'])){
 	$type_arr = array('',"Admin","Project Manager","Employee");
-	$qry = $conn->query("SELECT *,concat(firstname,' ',lastname) as name FROM users where id = ".$_GET['id'])->fetch_array();
+	$qry = $conn->query("SELECT *,concat(Firstname,' ',Lastname) as name FROM Users where ID = ".$_GET['id'])->fetch_array();
     foreach($qry as $k => $v){
         $$k = $v;
     }
@@ -12,17 +12,17 @@ if(isset($_GET['id'])){
     <div class="card card-widget widget-user shadow">
         <div class="widget-user-header bg-dark">
             <h3 class="widget-user-username"><?php echo ucwords($name) ?></h3>
-            <h5 class="widget-user-desc"><?php echo $email ?></h5>
+            <h5 class="widget-user-desc"><?php echo $Email ?></h5>
         </div>
         <div class="widget-user-image">
-            <?php if(empty($avatar) || (!empty($avatar) && !is_file('assets/uploads/'.$avatar))): ?>
+            <?php if(empty($Avatar) || (!empty($Avatar) && !is_file('assets/uploads/'.$Avatar))): ?>
             <span
                 class="brand-image img-circle elevation-2 d-flex justify-content-center align-items-center bg-primary text-white font-weight-500"
                 style="width: 90px;height:90px">
-                <h4><?php echo strtoupper(substr($firstname, 0,1).substr($lastname, 0,1)) ?></h4>
+                <h4><?php echo strtoupper(substr($Firstname, 0,1).substr($Lastname, 0,1)) ?></h4>
             </span>
             <?php else: ?>
-            <img class="img-circle elevation-2" src="assets/uploads/<?php echo $avatar ?>" alt="User Avatar"
+            <img class="img-circle elevation-2" src="assets/uploads/<?php echo $Avatar ?>" alt="User Avatar"
                 style="width: 90px;height:90px;object-fit: cover">
             <?php endif ?>
         </div>
@@ -30,7 +30,7 @@ if(isset($_GET['id'])){
             <div class="container-fluid">
                 <dl>
                     <dt>Role</dt>
-                    <dd><?php echo $type_arr[$type] ?></dd>
+                    <dd><?php echo $type_arr[$Type] ?></dd>
                 </dl>
             </div>
         </div>

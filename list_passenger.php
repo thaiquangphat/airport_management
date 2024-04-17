@@ -8,6 +8,12 @@
         ModelID INT,
         LeasedDate TIMESTAMP NOT NULL,
         MName VARCHAR(50), -->
+        <div class="card-header">
+            <div class="card-tools">
+                <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
+                    href="./index.php?page=new_passenger"><i class="fa fa-plus"></i> Add New Passenger</a>
+            </div>
+        </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
                 <thead>
@@ -18,23 +24,33 @@
                         <th>Date of Birth</th>
                         <th>Passport Number</th>
                         <th>Nationality</th>
+                        <th>Total Spent</th>
+                        <th>User Created</th>
+                        <th>User Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
 					$i = 1;
-					$qry = $conn->query("SELECT *, concat(Fname,' ',Minit, ' ', Lname) as name FROM Passenger order by PID asc");
+					$qry = $conn->query("SELECT *, concat(Fname,' ',Minit, ' ', Lname) as pname, concat(FirstName, ' ', LastName) as uname
+                                        FROM Passenger JOIN Users ON Passenger.UserID = Users.ID order by PID asc");
                     $i++;
 					while($row= $qry->fetch_assoc()):
 					?>
                     <tr>
                         <td><b><?php echo $row['PID'] ?></b></td>
-                        <td><b><?php echo $row['name'] ?></b></td>
+                        <td><b><?php echo $row['pname'] ?></b></td>
                         <td><b><?php echo $row['Sex'] ?></b></td>
                         <td><b><?php echo $row['DOB'] ?></b></td>
                         <td><b><?php echo $row['PassportNo'] ?></b></td>
                         <td><b><?php echo $row['Nationality'] ?></b></td>
+                        <td><b><?php 
+                            $qry2 = $conn->query("SELECT COALESCE(CalculateTotalSpent({$row['PID']}), 0) as total")->fetch_assoc();
+                            echo $qry2['total']; 
+                        ?></b></td>
+                        <td><b><?php echo $row['UserID'] ?></b></td>
+                        <td><b><?php echo $row['uname'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
@@ -74,7 +90,7 @@ $(document).ready(function() {
     //         'data-id')])
     // })
     $(document).on('click', '.view_passenger', function() {
-        window.location.href = "view_passenger.php?ssn=" + $(this).attr('data-id');
+        window.location.href = "view_passenger.php?pid=" + $(this).attr('data-id');
     });
 
     $(document).on('click', '.delete_passenger', function() {

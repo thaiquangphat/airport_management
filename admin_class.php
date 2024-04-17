@@ -1241,40 +1241,36 @@ class Action
 
     function save_passenger() {
         extract($_POST);
-        $data = "";
-        foreach ($_POST as $k => $v) {
-            if (!in_array($k, ["PID"]) && !is_numeric($k)) {
-                if (empty($data)) {
-                    $data .= " $k='$v' ";
-                } else {
-                    $data .= ", $k='$v' ";
-                }
-            }
+    
+        // Check if all required fields are received
+        if (!isset($PID) || !isset($PassportNo) || !isset($Sex) || !isset($DOB) || !isset($Nationality) || !isset($DOB) || !isset($UserID)) {
+            return 0; // Return 0 if any required field is missing
         }
-        $check = $this->db->query(
-            "SELECT * FROM Passenger where PID = $PID")->num_rows;
-        if ($check > 0) {
-            return 2;
-            exit();
-        }
-        $check = $this->db->query(
-            "SELECT * FROM Passenger where PassportNo = '" . $PassportNo . "'")->num_rows;
-        if ($check > 0) {
-            return 3;
-            exit();
-        }
-        // Construct the SQL query string
-        $sql = "INSERT INTO Passenger SET $data";
-
-        // Print the SQL query string to the console
-        // Print the SQL query string
-        
-        // Execute the SQL query
-        $save = $this->db->query($sql);
-        if ($save) {
-            return 1; // Return 1 if data is successfully saved
+    
+        // Check for existing AirplaneID
+        // if (empty($PID)) {
+        //     $checkPassengerID = $this->db->query("SELECT * FROM Passenger WHERE PID = '$PID'");
+        //     if ($checkModelID->num_rows > 0) {
+        //         return 2; // Airplane ID already exists
+        //     }
+        // }
+    
+        if (empty($PID)) {
+            // Construct the SQL query for insertion
+            $sql = "INSERT INTO Passenger (PID, PassportNo, Sex, DOB, Nationality, Fname, Minit, Lname, UserID) 
+                    VALUES ('$PID', '$PassportNo', '$Sex', '$DOB', '$Nationality', '$Fname', '$Minit', '$Lname', '$UserID')";
         } else {
-            return 4; // Return 4 if data failed to save
+            // Construct the SQL query for update
+            $sql = 
+            "UPDATE Passenger 
+            SET PassportNo = '$PassportNo', Sex = '$Sex', DOB = '$DOB', Nationality = '$Nationality', Fname = '$Fname', Minit = '$Minit', Lname = '$Lname' WHERE PID = '$PID'";
+        }
+    
+        // Execute the SQL query
+        if ($this->db->query($sql)) {
+            return 1; // Data successfully saved
+        } else {
+            return 4; // Data failed to save
         }
     }
 
@@ -1308,6 +1304,15 @@ class Action
         extract($_POST);
         // Wrap the APCode value in single quotes
         $delete = $this->db->query("DELETE FROM Passenger WHERE PID = " . $pid);
+        if ($delete) {
+            return 1;
+        }
+    }
+
+    function delete_ticket() {
+        extract($_POST);
+        // Wrap the APCode value in single quotes
+        $delete = $this->db->query("DELETE FROM Ticket WHERE TicketID = " . $ticketid);
         if ($delete) {
             return 1;
         }

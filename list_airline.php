@@ -17,6 +17,7 @@
                         <th>IATA Designator</th>
                         <th>Airline Name</th>
                         <th>Country</th>
+                        <th>No Airplane</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -32,6 +33,10 @@
                         <td><b><?php echo $row['IATADesignator'] ?></b></td>
                         <td><b><?php echo $row['Name'] ?></b></td>
                         <td><b><?php echo $row['Country'] ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Airplane where AirlineID = ".$row['AirlineID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

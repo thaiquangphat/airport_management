@@ -65,7 +65,8 @@ SSN Name Role -->
         <div class="col-md-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <span><b>Flight Using This Airplane:</b></span>
+                    <span><b>Flight List:</b></span>
+                    <div><small>Flights using this Airplane</small></div>
                     <?php if($_SESSION['login_type'] != 3): ?>
                     <!-- <div class="card-tools">
                         <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
@@ -76,7 +77,7 @@ SSN Name Role -->
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <colgroup>
+                            <!-- <colgroup>
                                 <col width="10%">
                                 <col width="10%">
                                 <col width="10%">
@@ -87,16 +88,15 @@ SSN Name Role -->
                                 <col width="10%">
                                 <col width="10%">
                                 <col width="10%">
-                            </colgroup>
+                            </colgroup> -->
                             <thead>
                                 <th>Flight ID</th>
                                 <th>Route ID</th>
+                                <th>Route Name</th>
                                 <th>Status</th>
                                 <th>Traffic Controller SSN</th>
                                 <th>AAT</th>
-                                <th>EAT</th>
                                 <th>ADT</th>
-                                <th>EDT</th>
                                 <th>Base Price</th>
                                 <th>Action</th>
                             </thead>
@@ -107,7 +107,7 @@ SSN Name Role -->
                                 // Select employees from Airport_Includes_Employee table for the specified APCode
                                 $flights = $conn->query("
                                     SELECT *
-                                    FROM Flight
+                                    FROM Flight JOIN Route ON Flight.RID = Route.ID
                                     WHERE AirplaneID = '".$_GET['id']."'
                                 ");
 
@@ -117,12 +117,11 @@ SSN Name Role -->
                                 <tr>
                                     <td class=""><?php echo $row['FlightID'] ?></td>
                                     <td class=""><?php echo $row['RID'] ?></td>
+                                    <td class=""><?php echo $row['RName'] ?></td>
                                     <td class=""><?php echo $row['Status'] ?></td>
                                     <td class=""><?php echo $row['TCSSN'] ?></td>
                                     <td class=""><?php echo $row['AAT'] ?></td>
-                                    <td class=""><?php echo $row['EAT'] ?></td>
                                     <td class=""><?php echo $row['ADT'] ?></td>
-                                    <td class=""><?php echo $row['EDT'] ?></td>
                                     <td class=""><?php echo $row['BasePrice'] ?></td>
                                     <td class="">
                                         <button type="button"
@@ -147,42 +146,6 @@ SSN Name Role -->
                                 <?php 
                                 endwhile;
                                 ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <span><b>Route List:</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-condensed m-0 table-hover">
-                            <colgroup>
-                                <col width="25%">
-                                <col width="25%">
-                                <col width="25%">
-                                <col width="25%">
-                            </colgroup>
-                            <thead>
-                                <th>Route ID</th>
-                                <th>Route Name</th>
-                                <th>Distance</th>
-                                <th>Action</th>
-                            </thead>
-                            <tbody>
-                                <?php ?>
-
-                                <?php ?>
                             </tbody>
                         </table>
                     </div>
@@ -220,7 +183,7 @@ $(document).ready(function() {
     });
 })
 
-function delete_flight($airplaneid) {
+function delete_flight($flightid) {
     start_load()
     $.ajax({
         url: 'ajax.php?action=delete_flight',

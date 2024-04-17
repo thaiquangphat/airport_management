@@ -11,8 +11,8 @@
         <div class="card-header">
             <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
-                <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
-                    href="./index.php?page=new_owner"><i class="fa fa-plus"></i> Add New Owner-Person</a>
+                <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_owner"><i
+                        class="fa fa-plus"></i> Add New Owner-Person</a>
             </div>
             <?php endif; ?>
         </div>
@@ -29,6 +29,7 @@
                         <th>Person Name</th>
                         <th>Person Phone</th>
                         <th>Person Address</th>
+                        <th>No Airplane</th>
                         <th>Owner ID</th>
                         <th>Action</th>
                     </tr>
@@ -45,6 +46,10 @@
                         <td><b><?php echo $row['Name'] ?></b></td>
                         <td><b><?php echo $row['Phone'] ?></b></td>
                         <td><b><?php echo $row['Address'] ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Airplane where OwnerID = ".$row['OwnerID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td><b><?php echo $row['OwnerID'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
@@ -94,6 +99,7 @@
                         <th>Cooperation Name</th>
                         <th>Cooperation Address</th>
                         <th>Cooperation Phone</th>
+                        <th>No Airplane</th>
                         <th>Owner ID</th>
                         <th>Action</th>
                     </tr>
@@ -109,6 +115,10 @@
                         <td><b><?php echo $row['Name'] ?></b></td>
                         <td><b><?php echo $row['Address'] ?></b></td>
                         <td><b><?php echo $row['Phone'] ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Airplane where OwnerID = ".$row['OwnerID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td><b><?php echo $row['OwnerID'] ?></b></td>
                         <td class="text-center">
                             <button type="button"

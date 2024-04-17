@@ -241,5 +241,10 @@ if($action == 'delete_passenger'){
 	if($save)
 		echo $save;
 }
+if($action == 'delete_ticket'){
+	$save = $crud->delete_ticket();
+	if($save)
+		echo $save;
+}
 ob_end_flush();
 ?>
