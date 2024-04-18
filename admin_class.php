@@ -1380,10 +1380,14 @@ class Action
 
         $qry = "DELETE FROM Expert_At WHERE ConsultID = '" . $id . "' AND APCode = '" . $apcode . "' AND ModelID = '" . $modelid . "'";
 
-        if ($this->db->query($qry)) return 1;
+        try {
+            $this->db->query($qry);
+        }
+        catch(mysqli_sql_exception) {
+            return 3;
+        }
 
-        return 0;
-
+        return 1;
     }
 
     function new_expert() {
