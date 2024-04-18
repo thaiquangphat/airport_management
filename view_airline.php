@@ -67,6 +67,7 @@ CREATE TABLE Airplane
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
+                    <div><small>Airplanes which belong to this Airline</small></div>
                     <?php if($_SESSION['login_type'] != 3): ?>
                     <!-- <div class="card-tools">
                         <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
@@ -112,10 +113,10 @@ CREATE TABLE Airplane
                                     <td class=""><?php echo $row['AirplaneID'] ?></td>
                                     <td class=""><b><?php echo ucwords($row['License_plate_num']) ?></b></td>
                                     <td class="">
-                                        <p class="truncate"><?php echo strip_tags($row['OwnerID']) ?></p>
+                                        <p class="truncate"><?php echo ($row['OwnerID']) ?></p>
                                     </td>
                                     <td class="">
-                                        <p class="truncate"><?php echo strip_tags($row['ModelID']) ?></p>
+                                        <p class="truncate"><?php echo ($row['ModelID']) ?></p>
                                     </td>
                                     <td>
                                         <p><?php echo date("F d, Y",strtotime($row['LeasedDate'])) ?></p>

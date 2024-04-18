@@ -9,6 +9,7 @@
                     <tr>
                         <th class="text-center">Route ID</th>
                         <th>Route Name</th>
+                        <th>No Flight</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -21,6 +22,10 @@
                     <tr>
                         <th class="text-center"><?php echo $row['ID'] ?></th>
                         <td><b><?php echo ucwords($row['RName']) ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Flight where RID = ".$row['ID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

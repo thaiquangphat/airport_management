@@ -268,10 +268,33 @@
 
                 <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
-                    <a href="./index.php?page=list_passenger" class="nav-link nav-list_passenger">
+                    <!-- <a href="./index.php?page=list_passenger" class="nav-link nav-list_passenger">
                         <i class="fas fa-calendar-check nav-icon"></i>
                         <p>Passenger</p>
+                    </a> -->
+                    <a href="#" class="nav-link nav-edit_passenger nav-view_passenger">
+                        <i class="nav-icon fas fa-user-tie"></i>
+                        <p>
+                            Passenger
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <?php if($_SESSION['login_type'] != 3): ?>
+                        <li class="nav-item">
+                            <a href="./index.php?page=new_passenger" class="nav-link nav-new_passenger tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Add New</p>
+                            </a>
+                        </li>
+                        <?php endif?>
+                        <li class="nav-item">
+                            <a href="./index.php?page=list_passenger" class="nav-link nav-list_passenger tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>List</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <?php endif; ?>
 

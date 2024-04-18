@@ -26,6 +26,7 @@
                         <th>Owner ID</th>
                         <th>Model ID</th>
                         <th>Leased Date</th>
+                        <th>No Flight</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -43,6 +44,10 @@
                         <td><b><?php echo $row['OwnerID'] ?></b></td>
                         <td><b><?php echo $row['ModelID'] ?></b></td>
                         <td><b><?php echo $row['LeasedDate'] ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Flight where AirplaneID = ".$row['AirplaneID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

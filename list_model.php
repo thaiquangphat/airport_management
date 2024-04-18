@@ -17,6 +17,7 @@
                         <th>Model Name</th>
                         <th>Capacity</th>
                         <th>Max Speed</th>
+                        <th>No Engineer Expertise</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -32,6 +33,10 @@
                         <td><b><?php echo $row['MName'] ?></b></td>
                         <td><b><?php echo $row['Capacity'] ?></b></td>
                         <td><b><?php echo $row['MaxSpeed'] ?></b></td>
+                        <td><b><?php 
+                                $qry2 = $conn->query("SELECT count(*) as total FROM Model JOIN Expertise ON Model.ID = Expertise.ModelID where ID = ".$row['ID'])->fetch_assoc();
+                                echo $qry2['total'] 
+                        ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"

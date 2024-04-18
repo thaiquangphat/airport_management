@@ -4,7 +4,7 @@
         <div class="card-header">
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_user"><i
-                        class="fa fa-plus"></i> Add New User</a>
+                        class="fa fa-plus"></i>Add New User</a>
             </div>
         </div>
         <div class="card-body">
@@ -22,14 +22,14 @@
                     <?php
 					$i = 1;
 					$type = array('',"Admin","Project Manager","Employee");
-					$qry = $conn->query("SELECT *,concat(firstname,' ',lastname) as name FROM users order by concat(firstname,' ',lastname) asc");
+					$qry = $conn->query("SELECT *,concat(Firstname,' ',Lastname) as name FROM Users order by concat(Firstname,' ',Lastname) asc");
 					while($row= $qry->fetch_assoc()):
 					?>
                     <tr>
-                        <th class="text-center"><?php echo $row['id'] ?></th>
+                        <th class="text-center"><?php echo $row['ID'] ?></th>
                         <td><b><?php echo ucwords($row['name']) ?></b></td>
-                        <td><b><?php echo $row['email'] ?></b></td>
-                        <td><b><?php echo $type[$row['type']] ?></b></td>
+                        <td><b><?php echo $row['Email'] ?></b></td>
+                        <td><b><?php echo $type[$row['Type']] ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
@@ -38,13 +38,13 @@
                             </button>
                             <div class="dropdown-menu" style="">
                                 <a class="dropdown-item view_user" href="javascript:void(0)"
-                                    data-id="<?php echo $row['id'] ?>">View</a>
+                                    data-id="<?php echo $row['ID'] ?>">View</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item"
-                                    href="./index.php?page=edit_user&id=<?php echo $row['id'] ?>">Edit</a>
+                                    href="./index.php?page=edit_user&id=<?php echo $row['ID'] ?>">Edit</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item delete_user" href="javascript:void(0)"
-                                    data-id="<?php echo $row['id'] ?>">Delete</a>
+                                    data-id="<?php echo $row['ID'] ?>">Delete</a>
                             </div>
                         </td>
                     </tr>

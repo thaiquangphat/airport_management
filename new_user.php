@@ -24,7 +24,8 @@
                                 <option value="3" <?php echo isset($type) && $type == 3 ? 'selected' : '' ?>>Employee
                                 </option>
                                 <option value="2" <?php echo isset($type) && $type == 2 ? 'selected' : '' ?>>Project
-                                    Manager</option>
+                                    Manage
+                                </option>
                                 <option value="1" <?php echo isset($type) && $type == 1 ? 'selected' : '' ?>>Admin
                                 </option>
                             </select>
@@ -41,7 +42,7 @@
                             </div>
                         </div>
                         <div class="form-group d-flex justify-content-center align-items-center">
-                            <img src="<?php echo isset($avatar) ? 'assets/uploads/'.$avatar :'' ?>" alt="Avatar"
+                            <img src="<?php echo isset($avatar) ? 'assets/uploads/'.$avatar :'' ?>" alt="avatar"
                                 id="cimg" class="img-fluid img-thumbnail ">
                         </div>
                     </div>
@@ -86,8 +87,8 @@ img#cimg {
 }
 </style>
 <script>
-$('[name="password"],[name="cpass"]').keyup(function() {
-    var pass = $('[name="password"]').val()
+$('[name="Password"],[name="cpass"]').keyup(function() {
+    var pass = $('[name="Password"]').val()
     var cpass = $('[name="cpass"]').val()
     if (cpass == '' || pass == '') {
         $('#pass_match').attr('data-status', '')
@@ -116,10 +117,10 @@ $('#manage_user').submit(function(e) {
     $('input').removeClass("border-danger")
     start_load()
     $('#msg').html('')
-    if ($('[name="password"]').val() != '' && $('[name="cpass"]').val() != '') {
+    if ($('[name="Password"]').val() != '' && $('[name="cpass"]').val() != '') {
         if ($('#pass_match').attr('data-status') != 1) {
-            if ($("[name='password']").val() != '') {
-                $('[name="password"],[name="cpass"]').addClass("border-danger")
+            if ($("[name='Password']").val() != '') {
+                $('[name="Password"],[name="cpass"]').addClass("border-danger")
                 end_load()
                 return false;
             }
@@ -141,8 +142,13 @@ $('#manage_user').submit(function(e) {
                 }, 750)
             } else if (resp == 2) {
                 $('#msg').html("<div class='alert alert-danger'>Email already exist.</div>");
-                $('[name="email"]').addClass("border-danger")
+                $('[name="Email"]').addClass("border-danger")
                 end_load()
+            } else {
+                alert_toast('Data failed to save.', "failed");
+                setTimeout(function() {
+                    location.replace('index.php?page=list_user')
+                }, 750)
             }
         }
     })

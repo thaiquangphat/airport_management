@@ -147,6 +147,7 @@ SSN Name Role -->
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
+                    <div><small>An Airplane is of this model type.</small></div>
                     <?php if($_SESSION['login_type'] != 3): ?>
                     <!-- <div class="card-tools">
                         <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i

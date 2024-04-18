@@ -23,6 +23,9 @@
                         <th>Flight Code</th>
                         <th>Expected Arrive Time</th>
                         <th>Expected Depart Time</th>
+                        <th>Revenue</th>
+                        <th>No Pilot</th>
+                        <th>No Flight Attendant</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -39,6 +42,18 @@
                         <td><b><?php echo $row['FlightCode'] ?></b></td>
                         <td><b><?php echo $row['EAT'] ?></b></td>
                         <td><b><?php echo $row['EDT'] ?></b></td>
+                        <td><b><?php 
+                            $qry2 = $conn->query("SELECT COALESCE(revenue_flights({$row['FlightID']}), 0) as total")->fetch_assoc();
+                            echo $qry2['total']; 
+                        ?></b></td>
+                        <td><b><?php 
+                            $qry2 = $conn->query("SELECT COALESCE(getNoPilots({$row['FlightID']}), 0) as numpilot")->fetch_assoc();
+                            echo $qry2['numpilot']; 
+                        ?></b></td>
+                        <td><b><?php 
+                            $qry2 = $conn->query("SELECT COALESCE(getNoFlightAttendants({$row['FlightID']}), 0) as numfa")->fetch_assoc();
+                            echo $qry2['numfa']; 
+                        ?></b></td>
                         <td class="text-center">
                             <button type="button"
                                 class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
@@ -105,7 +120,7 @@ function delete_flight($flightid) {
                 alert_toast('Data failed to delete.', "fail");
                 setTimeout(function() {
                     location.replace('index.php?page=list_flight')
-                }, 75000)
+                }, 750)
             }
         }
     })
