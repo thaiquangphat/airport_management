@@ -6,7 +6,7 @@ CREATE SCHEMA Test_New;
 USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
-SET GLOBAL log_bin_trust_function_creators = 1;		# ko them thi loi :)))
+SET GLOBAL log_bin_trust_function_creators = 1;		
 -- --------------------------------------------------------------------
 CREATE TABLE `system_settings` (
   `id` INT NOT NULL,
