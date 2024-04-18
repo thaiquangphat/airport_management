@@ -256,5 +256,15 @@ if($action == 'delete_consultant'){
 	if($save)
 		echo $save;
 }
+if ($action == 'new_expert'){
+	$save = $crud->new_expert();
+	if ($save)
+		echo $save;
+}
+if ($action == 'delete_expert'){
+	$save = $crud->delete_expert();
+	if ($save)
+		echo $save;
+}
 ob_end_flush();
 ?>

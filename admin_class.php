@@ -1320,9 +1320,9 @@ class Action
 
     function save_consultant() {
         extract($_POST);
-    
+        $_SESSION['cid'] = '1';
         // Check if all required fields are received
-        if (!isset($Name) || !isset($APCode) || !isset($ModelID)) {
+        if (!isset($Name)) {
             return 0; // Return 0 if any required field is missing
         }
     
@@ -1336,23 +1336,25 @@ class Action
         }
     
         if ($this->db->query($sql)) {
+            $_SESSION['cid'] = $ID ? $ID : mysqli_insert_id($this->db);
             // Get the ID of the newly inserted or updated consultant
-            $consultantId = $ID ? $ID : mysqli_insert_id($this->db);
+            // $consultantId = $ID ? $ID : mysqli_insert_id($this->db);
     
-            $sql1 = '';
-            if (empty($ID)) {
-                // Construct the SQL query for insertion into Expert_At
-                $sql1 = "INSERT INTO Expert_At (ConsultID, APCode, ModelID) VALUES ('$consultantId', '$APCode', '$ModelID')";
-            } else {
-                // Construct the SQL query for update of Expert_At
-                $sql1 = "UPDATE Expert_At SET APCode = '$APCode', ModelID = '$ModelID' WHERE ConsultID = '$consultantId'";
-            }
+            // $sql1 = '';
+            // if (empty($ID)) {
+            //     // Construct the SQL query for insertion into Expert_At
+            //     $sql1 = "INSERT INTO Expert_At (ConsultID, APCode, ModelID) VALUES ('$consultantId', '$APCode', '$ModelID')";
+            // } else {
+            //     // Construct the SQL query for update of Expert_At
+            //     $sql1 = "UPDATE Expert_At SET APCode = '$APCode', ModelID = '$ModelID' WHERE ConsultID = '$consultantId'";
+            // }
     
-            if ($this->db->query($sql1)) {
-                return 1; // Data successfully saved
-            } else {
-                return 4; // Data failed to save
-            }
+            // if ($this->db->query($sql1)) {
+            //     return 1; // Data successfully saved
+            // } else {
+            //     return 4; // Data failed to save
+            // }
+            return 1;
         } else {
             return 4; // Data failed to save
         }
@@ -1365,5 +1367,38 @@ class Action
         if ($delete) {
             return 1;
         }
+    }
+
+    function delete_expert() {
+        extract($_POST);
+
+        $array = explode("-", $data);
+
+        $id = $array[0];
+        $apcode = $array[1];
+        $modelid = $array[2];
+
+        $qry = "DELETE FROM Expert_At WHERE ConsultID = '" . $id . "' AND APCode = '" . $apcode . "' AND ModelID = '" . $modelid . "'";
+
+        if ($this->db->query($qry)) return 1;
+
+        return 0;
+
+    }
+
+    function new_expert() {
+        extract($_POST);
+
+        if (!isset($APCode) || !isset($ModelID))
+            return 0;
+
+        $check = $this->db->query("SELECT * FROM Expert_At WHERE ConsultID = '" . $ID . "' AND APCode = '" . $APCode . "' AND ModelID = '" . $ModelID . "'")->num_rows;
+        if ($check > 0) return 2;
+        
+        $qry = "INSERT INTO Expert_At SET ConsultID = '" . $ID . "', APCode = '" . $APCode . "', ModelID = '" . $ModelID . "'";
+        
+        if ($this->db->query($qry)) return 1;
+
+        return 3;
     }
 }

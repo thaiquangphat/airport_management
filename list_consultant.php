@@ -102,7 +102,7 @@ function delete_consultant($consultantid) {
                     location.reload()
                 }, 1500)
             } else {
-                alert_toast('Data failed to delete.', "fail");
+                alert_toast('Data failed to delete.', "error");
                 setTimeout(function() {
                     location.replace('index.php?page=list_consultant')
                 }, 750)

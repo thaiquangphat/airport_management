@@ -15,42 +15,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">Airport Code</label>
-                            <select class="form-control form-control-sm select2" name="APCode">
-                                <option></option>
-                                <?php 
-                                    $airports = $conn->query("SELECT * FROM Airport order by APCode asc ");
-                                    while($row= $airports->fetch_assoc()):
-                                ?>
-                                <option value="<?php echo $row['APCode'] ?>"
-                                    <?php echo isset($APCode) && $APCode == $row['APCode'] ? "selected" : '' ?>>
-                                    <?php echo ucwords($row['APCode'] . ': ' . $row['APName']) ?>
-                                </option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">Model ID</label>
-                            <select class="form-control form-control-sm select2" name="ModelID" id="modelIDSelect">
-                                <option></option>
-                                <?php 
-                                    $models = $conn->query("SELECT * FROM Model order by ID asc ");
-                                    while($row= $models->fetch_assoc()):
-                                ?>
-                                <option value="<?php echo $row['ID'] ?>"
-                                    <?php echo isset($ModelID) && $ModelID == $row['ID'] ? "selected" : '' ?>>
-                                    <?php echo ucwords($row['ID'] . ': ' . $row['MName']) ?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <hr>
                 <div class="col-lg-12 text-right justify-content-center d-flex">
                     <button class="btn btn-primary mr-2">Save</button>
@@ -81,17 +45,17 @@ $(document).ready(function() {
     // });
 
     // Function to handle change event of the select element for OwnerID
-    $('#manage_consultant select[name="APCode"]').change(function() {
-        var selectedAPCode = $(this).val();
-        // var selectedOwnerID = parseInt($(this).val());
-        $('#manage_consultant input[name="APCode"]').val(selectedAPCode);
-    });
+    // $('#manage_consultant select[name="APCode"]').change(function() {
+    //     var selectedAPCode = $(this).val();
+    //     // var selectedOwnerID = parseInt($(this).val());
+    //     $('#manage_consultant input[name="APCode"]').val(selectedAPCode);
+    // });
 
-    // Function to handle change event of the select element for ModelID
-    $('#manage_consultant select[name="ModelID"]').change(function() {
-        var selectedModelID = $(this).val();
-        $('#manage_consultant input[name="ModelID"]').val(selectedModelID);
-    });
+    // // Function to handle change event of the select element for ModelID
+    // $('#manage_consultant select[name="ModelID"]').change(function() {
+    //     var selectedModelID = $(this).val();
+    //     $('#manage_consultant input[name="ModelID"]').val(selectedModelID);
+    // });
 })
 
 $('#manage_consultant').submit(function(e) {
@@ -109,19 +73,19 @@ $('#manage_consultant').submit(function(e) {
         type: 'POST',
         success: function(resp) {
             if (resp == 0) {
-                alert_toast('Some field missing.', "fail");
+                alert_toast('Some field missing.', "error");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_consultant')
+                    location.reload()
                 }, 750)
             } else if (resp == 1) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_consultant')
+                    location.replace('index.php?page=expert_at')
                 }, 750)
             } else {
-                alert_toast('Data failed to saved.', "fail");
+                alert_toast('Data failed to saved.', "error");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_consultant')
+                    location.reload()
                 }, 750)
             }
         }

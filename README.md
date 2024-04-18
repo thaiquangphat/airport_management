@@ -41,3 +41,10 @@
     - Enable edit person and cooperation from owner, enable switching roles.
     - Enable delete owner.
     - Leave view owner for later.
+- [18/04/24]
+    - COMEBACK AFTER A LONG BREAK.
+    - Update consultant to add multiple expertise.
+    - Update handle trigger.
+    - New DDL added.
+    - View Owner finished.
+    - Haven't add supervisor for employee. Suggest employee have only 1 address.
