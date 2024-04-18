@@ -92,7 +92,7 @@ class Action
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, ["id", "cpass", "password"]) && !is_numeric($k)) {
+            if (!in_array($k, ["ID", "cpass", "Password"]) && !is_numeric($k)) {
                 if (empty($data)) {
                     $data .= " $k='$v' ";
                 } else {
@@ -100,12 +100,12 @@ class Action
                 }
             }
         }
-        if (!empty($password)) {
-            $data .= ", password=md5('$password') ";
+        if (!empty($Password)) {
+            $data .= ", Password=md5('$Password') ";
         }
         $check = $this->db->query(
-            "SELECT * FROM users where email ='$email' " .
-                (!empty($id) ? " and id != {$id} " : "")
+            "SELECT * FROM Users where Email ='$Email' " .
+                (!empty($ID) ? " and ID != {$ID} " : "")
         )->num_rows;
         if ($check > 0) {
             return 2;
@@ -118,12 +118,12 @@ class Action
                 $_FILES["img"]["tmp_name"],
                 "assets/uploads/" . $fname
             );
-            $data .= ", avatar = '$fname' ";
+            $data .= ", Avatar = '$fname' ";
         }
         if (empty($id)) {
-            $save = $this->db->query("INSERT INTO users set $data");
+            $save = $this->db->query("INSERT INTO Users set $data");
         } else {
-            $save = $this->db->query("UPDATE users set $data where id = $id");
+            $save = $this->db->query("UPDATE Users set $data where ID = $ID");
         }
 
         if ($save) {
@@ -1313,6 +1313,55 @@ class Action
         extract($_POST);
         // Wrap the APCode value in single quotes
         $delete = $this->db->query("DELETE FROM Ticket WHERE TicketID = " . $ticketid);
+        if ($delete) {
+            return 1;
+        }
+    }
+
+    function save_consultant() {
+        extract($_POST);
+    
+        // Check if all required fields are received
+        if (!isset($Name) || !isset($APCode) || !isset($ModelID)) {
+            return 0; // Return 0 if any required field is missing
+        }
+    
+        $sql = '';
+        if (empty($ID)) {
+            // Construct the SQL query for insertion
+            $sql = "INSERT INTO Consultant (Name) VALUES ('$Name')";
+        } else {
+            // Construct the SQL query for update
+            $sql = "UPDATE Consultant SET Name = '$Name' WHERE ID = '$ID'";
+        }
+    
+        if ($this->db->query($sql)) {
+            // Get the ID of the newly inserted or updated consultant
+            $consultantId = $ID ? $ID : mysqli_insert_id($this->db);
+    
+            $sql1 = '';
+            if (empty($ID)) {
+                // Construct the SQL query for insertion into Expert_At
+                $sql1 = "INSERT INTO Expert_At (ConsultID, APCode, ModelID) VALUES ('$consultantId', '$APCode', '$ModelID')";
+            } else {
+                // Construct the SQL query for update of Expert_At
+                $sql1 = "UPDATE Expert_At SET APCode = '$APCode', ModelID = '$ModelID' WHERE ConsultID = '$consultantId'";
+            }
+    
+            if ($this->db->query($sql1)) {
+                return 1; // Data successfully saved
+            } else {
+                return 4; // Data failed to save
+            }
+        } else {
+            return 4; // Data failed to save
+        }
+    }    
+
+    function delete_consultant() {
+        extract($_POST);
+        // Wrap the APCode value in single quotes
+        $delete = $this->db->query("DELETE FROM Consultant WHERE ID = " . $consultantid);
         if ($delete) {
             return 1;
         }

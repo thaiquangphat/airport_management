@@ -15,7 +15,8 @@ Lname varchar(50)
 UserID int(11) -->
             <form action="" id="manage_passenger">
                 <input type="hidden" name="PID" value="<?php echo isset($PID) ? $PID : '' ?>">
-                <input type="hidden" name="UserID" value="<?php echo isset($UserID) ? $UserID : '' ?>">
+                <input type="hidden" name="UserID"
+                    value="<?php echo isset($UserID) ? $UserID : $_SESSION["login_id"] ?>">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">

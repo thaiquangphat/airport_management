@@ -12,9 +12,11 @@
                             <select class="form-control form-control-sm select2" name="Status" required>
                                 <option></option>
                                 <option value="On Air"
-                                    <?php echo isset($Status) && $Status == 'On Air' ? 'selected' : ''?>>On Air</option>
+                                    <?php echo isset($Status) && $Status == 'On Air' ? 'selected' : ''?>>On Air
+                                </option>
                                 <option value="Landed"
-                                    <?php echo isset($Status) && $Status == 'Landed' ? 'selected' : ''?>>Landed</option>
+                                    <?php echo isset($Status) && $Status == 'Landed' ? 'selected' : ''?>>Landed
+                                </option>
                                 <option value="Unassigned"
                                     <?php echo isset($Status) && $Status == 'Unassigned' ? 'selected' : ''?>>Unassigned
                                 </option>

@@ -246,5 +246,15 @@ if($action == 'delete_ticket'){
 	if($save)
 		echo $save;
 }
+if($action == 'save_consultant'){
+	$save = $crud->save_consultant();
+	if($save)
+		echo $save;
+}
+if($action == 'delete_consultant'){
+	$save = $crud->delete_consultant();
+	if($save)
+		echo $save;
+}
 ob_end_flush();
 ?>

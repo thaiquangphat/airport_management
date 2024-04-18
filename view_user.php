@@ -2,7 +2,7 @@
 <?php
 if(isset($_GET['id'])){
 	$type_arr = array('',"Admin","Project Manager","Employee");
-	$qry = $conn->query("SELECT *,concat(Firstname,' ',Lastname) as name FROM Users where ID = ".$_GET['id'])->fetch_array();
+	$qry = $conn->query("SELECT *,concat(FirstName,' ',LastName) as name FROM Users where ID = ".$_GET['id'])->fetch_array();
     foreach($qry as $k => $v){
         $$k = $v;
     }
@@ -19,7 +19,7 @@ if(isset($_GET['id'])){
             <span
                 class="brand-image img-circle elevation-2 d-flex justify-content-center align-items-center bg-primary text-white font-weight-500"
                 style="width: 90px;height:90px">
-                <h4><?php echo strtoupper(substr($Firstname, 0,1).substr($Lastname, 0,1)) ?></h4>
+                <h4><?php echo strtoupper(substr($FirstName, 0,1).substr($LastName, 0,1)) ?></h4>
             </span>
             <?php else: ?>
             <img class="img-circle elevation-2" src="assets/uploads/<?php echo $Avatar ?>" alt="User Avatar"

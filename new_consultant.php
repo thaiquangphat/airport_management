@@ -3,82 +3,50 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
-            <form action="" id="manage_airplane">
-                <input type="hidden" name="AirplaneID" value="<?php echo isset($AirplaneID) ? $AirplaneID : '' ?>">
+            <form action="" id="manage_consultant">
+                <input type="hidden" name="ID" value="<?php echo isset($ID) ? $ID : '' ?>">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label for="" class="control-label">License Plate Number</label>
-                            <input type="text" name="License_plate_num" class="form-control form-control-sm" required
-                                value="<?php echo isset($License_plate_num) ? $License_plate_num : '' ?>">
+                            <label for="" class="control-label">Consultant Name</label>
+                            <input type="text" name="Name" class="form-control form-control-sm" required
+                                value="<?php echo isset($Name) ? $Name : '' ?>">
                             <small id="#msg"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">Airline ID</label>
-                            <select class="form-control form-control-sm select2" name="AirlineID">
-                                <option></option>
-                                <?php 
-                                    $airlines = $conn->query("SELECT * FROM Airline order by Name asc ");
-                                    while($row= $airlines->fetch_assoc()):
-                                ?>
-                                <option value="<?php echo $row['AirlineID'] ?>"
-                                    <?php echo isset($AirlineID) && $AirlineID == $row['AirlineID'] ? "selected" : '' ?>>
-                                    <?php echo ucwords($row['Name']) ?></option>
-                                <?php endwhile; ?>
-                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="" class="control-label">Airport Code</label>
+                            <select class="form-control form-control-sm select2" name="APCode">
+                                <option></option>
+                                <?php 
+                                    $airports = $conn->query("SELECT * FROM Airport order by APCode asc ");
+                                    while($row= $airports->fetch_assoc()):
+                                ?>
+                                <option value="<?php echo $row['APCode'] ?>"
+                                    <?php echo isset($APCode) && $APCode == $row['APCode'] ? "selected" : '' ?>>
+                                    <?php echo ucwords($row['APCode'] . ': ' . $row['APName']) ?>
+                                </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">Model ID</label>
                             <select class="form-control form-control-sm select2" name="ModelID" id="modelIDSelect">
                                 <option></option>
                                 <?php 
-                                    $models = $conn->query("SELECT * FROM Model order by MName asc ");
+                                    $models = $conn->query("SELECT * FROM Model order by ID asc ");
                                     while($row= $models->fetch_assoc()):
                                 ?>
                                 <option value="<?php echo $row['ID'] ?>"
                                     <?php echo isset($ModelID) && $ModelID == $row['ID'] ? "selected" : '' ?>>
-                                    <?php echo ucwords($row['MName']) ?></option>
+                                    <?php echo ucwords($row['ID'] . ': ' . $row['MName']) ?></option>
                                 <?php endwhile; ?>
                             </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">Model Name</label>
-                            <input type="text" name="MName" id="modelNameInput" class="form-control form-control-sm"
-                                readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div style="" class="form-group">
-                            <label for="" class="control-label">Owner Name</label>
-                            <select class="form-control form-control-sm select2" name="OwnerID">
-                                <option></option>
-                                <?php 
-                                    $persons = $conn->query("SELECT Name, OwnerID FROM Person UNION SELECT Name, OwnerID FROM Cooperation;");
-                                    while($row= $persons->fetch_assoc()):
-                                ?>
-                                <option value="<?php echo $row['OwnerID'] ?>"
-                                    <?php echo isset($OwnerID) && $OwnerID == $row['OwnerID'] ? "selected" : '' ?>>
-                                    <?php echo ucwords($row['Name']) ?></option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="" class="control-label">Leased Date</label>
-                            <input type="date" class="form-control form-control-sm" autocomplete="off" name="LeasedDate"
-                                value="<?php echo isset($LeasedDate) ? date("Y-m-d",strtotime($LeasedDate)) : '' ?>">
                         </div>
                     </div>
                 </div>
@@ -112,39 +80,27 @@ $(document).ready(function() {
     //     document.getElementById(selectedOption + '-choose').style.display = 'block';
     // });
 
-    // Function to handle change event of the select element for AirlineID
-    $('#manage_airplane select[name="AirlineID"]').change(function() {
-        var selectedAirlineID = $(this).val();
-        $('#manage_airplane input[name="AirlineID"]').val(selectedAirlineID);
-    });
-
     // Function to handle change event of the select element for OwnerID
-    $('#manage_airplane select[name="OwnerID"]').change(function() {
-        var selectedOwnerID = $(this).val();
+    $('#manage_consultant select[name="APCode"]').change(function() {
+        var selectedAPCode = $(this).val();
         // var selectedOwnerID = parseInt($(this).val());
-        $('#manage_airplane input[name="OwnerID"]').val(selectedOwnerID);
+        $('#manage_consultant input[name="APCode"]').val(selectedAPCode);
     });
 
     // Function to handle change event of the select element for ModelID
-    $('#manage_airplane select[name="ModelID"]').change(function() {
+    $('#manage_consultant select[name="ModelID"]').change(function() {
         var selectedModelID = $(this).val();
-        $('#manage_airplane input[name="ModelID"]').val(selectedModelID);
-    });
-
-    // Function to handle change event of the input element for LeasedDate
-    $('#manage_airplane input[name="LeasedDate"]').change(function() {
-        var selectedLeasedDate = $(this).val();
-        $('#manage_airplane input[name="LeasedDate"]').val(selectedLeasedDate);
+        $('#manage_consultant input[name="ModelID"]').val(selectedModelID);
     });
 })
 
-$('#manage_airplane').submit(function(e) {
+$('#manage_consultant').submit(function(e) {
     e.preventDefault()
     start_load()
     $('#msg').html('');
 
     $.ajax({
-        url: 'ajax.php?action=save_airplane',
+        url: 'ajax.php?action=save_consultant',
         data: new FormData($(this)[0]),
         cache: false,
         contentType: false,
@@ -155,28 +111,17 @@ $('#manage_airplane').submit(function(e) {
             if (resp == 0) {
                 alert_toast('Some field missing.', "fail");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_airplane')
+                    location.replace('index.php?page=list_consultant')
                 }, 750)
             } else if (resp == 1) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_airplane')
+                    location.replace('index.php?page=list_consultant')
                 }, 750)
-            } else if (resp == 2) {
-                $('#msg').html(
-                    "<div class='alert alert-danger'>Airplane ID already exist.</div>");
-                $('[name="AirplaneID"]').addClass("border-danger")
-                end_load()
-            } else if (resp == 3) {
-                $('#msg').html(
-                    "<div class='alert alert-danger'>License Plate Number already exist.</div>"
-                );
-                $('[name="License_plate_num"]').addClass("border-danger")
-                end_load()
             } else {
                 alert_toast('Data failed to saved.', "fail");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_airplane')
+                    location.replace('index.php?page=list_consultant')
                 }, 750)
             }
         }
