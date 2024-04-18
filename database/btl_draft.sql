@@ -30,15 +30,15 @@ ALTER TABLE `system_settings`
   ADD PRIMARY KEY (`id`);
 -- --------------------------------------------------------------------
 CREATE TABLE `users` (
-  `ID` int(30) AUTO_INCREMENT,
-  `FirstName` varchar(200) NOT NULL,
-  `LastName` varchar(200) NOT NULL,
-  `Email` varchar(200) NOT NULL,
-  `Password` text NOT NULL,
-  `Type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1 = admin, 2 = manager, 3 = employee',
-  `Avatar` text DEFAULT NULL,
-  `Date_Created` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`ID`)
+  `id` int(30) AUTO_INCREMENT,
+  `firstname` varchar(200) NOT NULL,
+  `lastname` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `password` text NOT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1 = admin, 2 = staff',
+  `avatar` text NOT NULL DEFAULT 'no-image-available.png',
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
