@@ -92,7 +92,7 @@ class Action
         extract($_POST);
         $data = "";
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, ["ID", "cpass", "Password"]) && !is_numeric($k)) {
+            if (!in_array($k, ["id", "cpass", "password"]) && !is_numeric($k)) {
                 if (empty($data)) {
                     $data .= " $k='$v' ";
                 } else {
@@ -100,12 +100,12 @@ class Action
                 }
             }
         }
-        if (!empty($Password)) {
-            $data .= ", Password=md5('$Password') ";
+        if (!empty($password)) {
+            $data .= ", password=md5('$password') ";
         }
         $check = $this->db->query(
-            "SELECT * FROM Users where Email ='$Email' " .
-                (!empty($ID) ? " and ID != {$ID} " : "")
+            "SELECT * FROM users where email ='$email' " .
+                (!empty($id) ? " and id != {$id} " : "")
         )->num_rows;
         if ($check > 0) {
             return 2;
@@ -118,12 +118,12 @@ class Action
                 $_FILES["img"]["tmp_name"],
                 "assets/uploads/" . $fname
             );
-            $data .= ", Avatar = '$fname' ";
+            $data .= ", avatar = '$fname' ";
         }
         if (empty($id)) {
-            $save = $this->db->query("INSERT INTO Users set $data");
+            $save = $this->db->query("INSERT INTO users set $data");
         } else {
-            $save = $this->db->query("UPDATE Users set $data where ID = $ID");
+            $save = $this->db->query("UPDATE users set $data where id = $id");
         }
 
         if ($save) {
