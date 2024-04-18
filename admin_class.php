@@ -1317,4 +1317,53 @@ class Action
             return 1;
         }
     }
+
+    function save_consultant() {
+        extract($_POST);
+    
+        // Check if all required fields are received
+        if (!isset($Name) || !isset($APCode) || !isset($ModelID)) {
+            return 0; // Return 0 if any required field is missing
+        }
+    
+        $sql = '';
+        if (empty($ID)) {
+            // Construct the SQL query for insertion
+            $sql = "INSERT INTO Consultant (Name) VALUES ('$Name')";
+        } else {
+            // Construct the SQL query for update
+            $sql = "UPDATE Consultant SET Name = '$Name' WHERE ID = '$ID'";
+        }
+    
+        if ($this->db->query($sql)) {
+            // Get the ID of the newly inserted or updated consultant
+            $consultantId = $ID ? $ID : mysqli_insert_id($this->db);
+    
+            $sql1 = '';
+            if (empty($ID)) {
+                // Construct the SQL query for insertion into Expert_At
+                $sql1 = "INSERT INTO Expert_At (ConsultID, APCode, ModelID) VALUES ('$consultantId', '$APCode', '$ModelID')";
+            } else {
+                // Construct the SQL query for update of Expert_At
+                $sql1 = "UPDATE Expert_At SET APCode = '$APCode', ModelID = '$ModelID' WHERE ConsultID = '$consultantId'";
+            }
+    
+            if ($this->db->query($sql1)) {
+                return 1; // Data successfully saved
+            } else {
+                return 4; // Data failed to save
+            }
+        } else {
+            return 4; // Data failed to save
+        }
+    }    
+
+    function delete_consultant() {
+        extract($_POST);
+        // Wrap the APCode value in single quotes
+        $delete = $this->db->query("DELETE FROM Consultant WHERE ID = " . $consultantid);
+        if ($delete) {
+            return 1;
+        }
+    }
 }

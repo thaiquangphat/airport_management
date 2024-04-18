@@ -66,22 +66,6 @@
 <script>
 $(document).ready(function() {
     $('#list').dataTable()
-    // NOTE HONG XOA
-    // $('.view_airport').click(function() {
-    //     window.location.href = "view_airport.php?id=" + $(this).attr('data-apcode');
-    // })
-
-    // // $('.view_airport').click(function() {
-    // //     uni_modal("<i class='fa fa-id-card'></i> Airport Details", "view_airport.php?id=" + $(this)
-    // //         .attr(
-    // //             'data-apcode'))
-    // // })
-    // $('.delete_airport').click(function() {
-    //     _conf_str("Are you sure to delete this Airport?", "delete_airport", [$(this).attr(
-    //         'data-apcode')])
-    // })
-    // Use event delegation for the click event
-    // NOTE HONG XOA
     $(document).on('click', '.view_airport', function() {
         window.location.href = "view_airport.php?id=" + $(this).attr('data-apcode');
     });

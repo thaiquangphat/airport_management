@@ -61,25 +61,10 @@ SSN Name Role -->
                 <div class="card-header">
                     <span><b>Flight List:</b></span>
                     <div><small>A Flight on the Route which has this Airport as Source or Destination</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- <colgroup>
-                                <col width="10%">
-                                <col width="25%">
-                                <col width="10%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="10%">
-                            </colgroup> -->
                             <thead>
                                 <th>Flight ID</th>
                                 <th>Route ID</th>
@@ -127,16 +112,20 @@ SSN Name Role -->
                                             Action
                                         </button>
                                         <div class="dropdown-menu" style="">
+                                            <?php if($_SESSION['login_type'] != 3): ?>
                                             <a class="dropdown-item view_airplane"
                                                 href="./index.php?page=view_flight&id=<?php echo $row['FlightID'] ?>"
                                                 data-id="<?php echo $row['FlightID'] ?>">View</a>
 
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item"
-                                                href="./index.php?page=edit_flight&flighid=<?php echo $row["FlightID"]; ?>">Edit</a>
+                                                href="./index.php?page=edit_flight&flighid=<?php echo $row["FlightID"]; ?>">Edit
+                                            </a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item delete_flight" href="javascript:void(0)"
-                                                data-id="<?php echo $row['FlightID'] ?>">Delete</a>
+                                                data-id="<?php echo $row['FlightID'] ?>">Delete
+                                            </a>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -156,39 +145,10 @@ SSN Name Role -->
                 <div class="card-header">
                     <span><b>Consultant List</b></span>
                     <div><small>A Consultant is an expert of a Model at this Airport</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- <colgroup>
-                                <col width="30%">
-                                <col width="30%">
-                                <col width="20%">
-                                <col width="20%">
-                            </colgroup> -->
-                            <!-- CREATE TABLE Expert_At
-                            (
-                                ConsultID INT,
-                                APCode    CHAR(3),
-                                ModelID   INT,
-                                PRIMARY KEY (ConsultID, APCode, ModelID),
-                                FOREIGN KEY (ConsultID) REFERENCES Consultant (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                                FOREIGN KEY (APCode) REFERENCES Airport (APCode) ON DELETE CASCADE ON UPDATE CASCADE,
-                                FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
-                            ); 
-                            CREATE TABLE Consultant
-                            (
-                                ID INT AUTO_INCREMENT,
-                                Name    VARCHAR(50),
-                                PRIMARY KEY (ID)
-                            );
-                            -->
                             <thead>
                                 <th>Consultant ID</th>
                                 <th>Consultant Name</th>
@@ -220,16 +180,6 @@ SSN Name Role -->
                                             Action
                                         </button>
                                         <div class="dropdown-menu" style="">
-                                            <a class="dropdown-item view_airplane"
-                                                href="./index.php?page=view_airplane&id=<?php echo $row['AirplaneID'] ?>"
-                                                data-id="<?php echo $row['AirplaneID'] ?>">View</a>
-
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item"
-                                                href="./index.php?page=edit_airplane&airplaneid=<?php echo $row["AirplaneID"]; ?>">Edit</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item delete_airplane" href="javascript:void(0)"
-                                                data-id="<?php echo $row['AirplaneID'] ?>">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

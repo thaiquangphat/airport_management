@@ -66,21 +66,6 @@
 <script>
 $(document).ready(function() {
     $('#list').dataTable()
-
-    // NOTE HONG XOA
-    // $('.view_airline').click(function() {
-    //     window.location.href = "view_airline.php?id=" + $(this).attr('data-id');
-    // })
-
-    // // $('.view_airline').click(function() {
-    // //     uni_modal("<i class='fa fa-id-card'></i> Airport Details", "view_airline.php?id=" + $(this)
-    // //         .attr(
-    // //             'data-apcode'))
-    // // })
-    // $('.delete_airline').click(function() {
-    //     _conf_str("Are you sure to delete this Airline?", "delete_airline", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_airline', function() {
         window.location.href = "view_airline.php?id=" + $(this).attr('data-id');
     });

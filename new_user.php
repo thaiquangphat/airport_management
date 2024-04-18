@@ -87,8 +87,8 @@ img#cimg {
 }
 </style>
 <script>
-$('[name="Password"],[name="cpass"]').keyup(function() {
-    var pass = $('[name="Password"]').val()
+$('[name="password"],[name="cpass"]').keyup(function() {
+    var pass = $('[name="password"]').val()
     var cpass = $('[name="cpass"]').val()
     if (cpass == '' || pass == '') {
         $('#pass_match').attr('data-status', '')
