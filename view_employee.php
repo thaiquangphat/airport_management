@@ -86,6 +86,21 @@ APCode char(3)
                                 <dt><b class="border-bottom border-primary">Salary</b></dt>
                                 <dd><?php echo ucwords($Salary) ?></dd>
                             </dl>
+                            <dl>
+                                <dt><b class="border-bottom border-primary">Supervisor</b></dt>
+                                <?php
+                                    $supname = '';
+
+                                    $check = $conn->query("SELECT *, concat(Employee.fname, ' ', Employee.minit, ' ', Employee.lname) AS SuperName FROM Supervision JOIN Employee ON Supervision.SuperSSN = Employee.SSN WHERE Supervision.SSN = '" . $SSN . "'")->num_rows;
+                                    if ($check == 0) $supname = 'NULL';
+                                    else {
+                                        $sup = $conn->query("SELECT *, concat(Employee.fname, ' ', Employee.minit, ' ', Employee.lname) AS SuperName FROM Supervision JOIN Employee ON Supervision.SuperSSN = Employee.SSN WHERE Supervision.SSN = '" . $SSN . "'");
+                                        $row = $sup->fetch_assoc();
+                                        $supname = $row['SuperName'];
+                                    }
+                                ?>
+                                <dd><?php echo ucwords($supname) ?></dd>
+                            </dl>
                         </div>
                         <div class="col-md-6">
                             <dl>
@@ -107,6 +122,103 @@ APCode char(3)
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <span><b>Supervising list:</b></span>
+            <div><small>Employees that this employee supervise</small></div>
+            <?php if($_SESSION['login_type'] != 3): ?>
+            <!-- <div class="card-tools">
+                <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
+                        class="fa fa-plus"></i> New Task</button>
+            </div> -->
+            <?php endif; ?>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-condensed m-0 table-hover">
+                    <!-- <colgroup>
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                    </colgroup> -->
+                    <thead>
+                    <th>SSN</th>
+                        <th>Name</th>
+                        <th>Sex</th>
+                        <th>Salary</th>
+                        <th>Phone</th>
+                        <th>Date of Birth</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $i = 1;
+                        $qry = $conn->query("WITH SUB AS (SELECT E.SSN AS emp_SSN, Sex, Salary, Phone, DOB, concat(Fname,' ',Minit, ' ', Lname) as name,
+                                                CASE
+                                                    WHEN Engineer.SSN IS NOT NULL THEN 'Engineer'
+                                                    WHEN FA.SSN IS NOT NULL THEN 'Flight Attendant'
+                                                    WHEN P.SSN IS NOT NULL THEN 'Pilot'
+                                                    WHEN TC.SSN IS NOT NULL THEN 'Traffic Controller'
+                                                    WHEN ASup.SSN IS NOT NULL THEN 'Administrative Support'
+                                                    ELSE 'Unknown'
+                                                END as role
+                                                FROM Employee E
+                                                LEFT JOIN Engineer ON E.SSN = Engineer.SSN
+                                                LEFT JOIN Flight_Attendant FA ON E.SSN = FA.SSN
+                                                LEFT JOIN Pilot P ON E.SSN = P.SSN
+                                                LEFT JOIN Traffic_Controller TC ON E.SSN = TC.SSN
+                                                LEFT JOIN Administrative_Support ASup ON E.SSN = ASup.SSN
+                                                ORDER BY E.SSN ASC)
+                                            SELECT *
+                                            FROM SUB, Supervision
+                                            WHERE Supervision.SSN = SUB.emp_SSN AND Supervision.SuperSSN = $SSN"
+                                            );
+                        $i++;
+                        while($row= $qry->fetch_assoc()):
+                        ?>
+                        <tr>
+                            <td class=""><?php echo $row['emp_SSN'] ?></td>
+                            <td class=""><?php echo $row['name'] ?></td>
+                            <td class=""><?php echo $row['Sex'] ?></td>
+                            <td class=""><?php echo $row['Salary'] ?></td>
+                            <td class=""><?php echo $row['Phone'] ?></td>
+                            <td class=""><?php echo $row['DOB'] ?></td>
+                            <td class=""><?php echo $row['role'] ?></td>
+                            <td class="">
+                                <button type="button"
+                                    class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
+                                    data-toggle="dropdown" aria-expanded="true">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu" style="">
+                                    <a class="dropdown-item view_employee"
+                                        href="./index.php?page=view_employee&id=<?php echo $row['emp_SSN'] ?>"
+                                        data-id="<?php echo $row['emp_SSN'] ?>">View</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item"
+                                        href="./index.php?page=edit_employee&id=<?php echo $row["emp_SSN"]; ?>">Edit</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item delete_super" href="javascript:void(0)"
+                                        data-id="<?php echo $row['emp_SSN']. '-' .$SSN ?>">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php 
+                        endwhile;
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -450,6 +562,11 @@ $(document).ready(function() {
         _conf_str("Are you sure to delete this Model?", "delete_model", [$(this).attr(
             'data-id')]);
     });
+
+    $(document).on('click', '.delete_super', function() {
+        _conf_str("Are you sure to delete this supervisee[" + $(this).attr('data-id') + "] ?" , "delete_super", [$(this).attr(
+            'data-id')]);
+    });
 })
 
 function delete_flight($flightid) {
@@ -495,6 +612,30 @@ function delete_model($id) {
                 alert_toast('Data failed to delete.', "fail");
                 setTimeout(function() {
                     location.replace('index.php?page=list_model')
+                }, 750)
+            }
+        }
+    })
+}
+
+function delete_super($data) {
+    start_load()
+    $.ajax({
+        url: 'ajax.php?action=delete_super',
+        method: 'POST',
+        data: {
+            data: $data
+        },
+        success: function(resp) {
+            if (resp == 1) {
+                alert_toast("Data successfully deleted", 'success')
+                setTimeout(function() {
+                    location.reload()
+                }, 1500)
+            } else {
+                alert_toast('Data failed to delete.', "fail");
+                setTimeout(function() {
+                    location.reload()
                 }, 750)
             }
         }

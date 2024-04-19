@@ -266,5 +266,10 @@ if ($action == 'delete_expert'){
 	if ($save)
 		echo $save;
 }
+if ($action == 'delete_super'){
+	$save = $crud->delete_super();
+	if ($save)
+		echo $save;
+}
 ob_end_flush();
 ?>

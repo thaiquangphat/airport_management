@@ -6,18 +6,38 @@
             <form action="" id="manage_employee">
             <input type="hidden" name="SSN" value="<?php echo isset($SSN) ? $SSN : '' ?>">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">New SSN</label>
                             <input type="text" name="NewSSN" class="form-control form-control-sm" placeholder="Leave this section blank if no change in SSN"
                                 value="<?php echo isset($NewSSN) ? $NewSSN : '' ?>">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required
                                 value="<?php echo isset($Phone) ? $Phone : '' ?>">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="" class="control-label">Supervisor</label>
+                            <select class="form-control form-control-sm select2" name="super">
+                                <option></option>
+                                <?php
+                                    $oldsup = $conn->query("SELECT * FROM Supervision WHERE SSN = '" . $SSN . "'");
+                                    $supssn = $oldsup->fetch_assoc();
+
+                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee order by SSN asc ");
+                                    while($row= $sup->fetch_assoc()):
+                                ?>
+                                <option value="<?php echo $row['SSN'] ?>"
+                                    <?php echo $supssn['SuperSSN'] == $row['SSN']  ? "selected" : '' ?>>
+                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>
+                                </option>
+                                <?php endwhile; ?>
+                            </select>
                         </div>
                     </div>
                 </div>

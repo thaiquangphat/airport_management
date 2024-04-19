@@ -753,7 +753,7 @@ class Action
         $_SESSION['saveSSN'] = $SSN;
 
         foreach ($_POST as $k => $v) {
-            if (!is_numeric($k) && $k != 'EmpType') {
+            if (!is_numeric($k) && $k != 'EmpType' && $k != 'super') {
                 if (empty($data)) {
                     $data .= " $k='$v' ";
                 } else {
@@ -769,6 +769,11 @@ class Action
         }
         $save = $this->db->query("INSERT INTO Employee set $data");
         if ($save) {
+            if (isset($super)) {
+                $sup = $this->db->query("INSERT INTO Supervision SET SSN = '" .$SSN. "', SuperSSN = '" . $super . "'");
+                if (!$sup) return 0;
+            }
+
             if ($EmpType == 'ADSupport') return 3;
             else if ($EmpType == 'FlightEmployee') return 4;
             else if ($EmpType == 'Engineer') return 5;
@@ -928,7 +933,7 @@ class Action
 
         foreach ($_POST as $k => $v) {
             // Exclude numeric indices and certain parameters
-            if (!is_numeric($k) && $k != 'SSN' && $k != 'EmpType' && $k != 'NewSSN' && $k != 'NewEmpType') {
+            if (!is_numeric($k) && $k != 'SSN' && $k != 'EmpType' && $k != 'NewSSN' && $k != 'NewEmpType' && $k != 'super') {
                 // Append each key-value pair to the $data string
                 if (empty($data)) {
                     $data .= " $k='$v' ";
@@ -938,10 +943,17 @@ class Action
             }
         }
 
+        $ssn = (isset($NewSSN) && !empty($NewSSN)) ? $NewSSN : $SSN;
+
         if ($EmpType == $NewEmpType || $NewEmpType == 'No change') {
             // Execute the SQL update query
             $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
             if ($save) {
+                if (isset($super)) {
+                    $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$ssn."'");
+                    if (!$update_super) return 0;
+                }
+
                 if ($EmpType == 'ADSupport') return 3;
                 else if ($EmpType == 'FlightEmployee') return 4;
                 else if ($EmpType == 'Engineer') return 5;
@@ -955,6 +967,11 @@ class Action
         else {
             $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
             if ($save) {
+                if (isset($super)) {
+                    $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$ssn."'");
+                    if (!$update_super) return 0;
+                }
+
                 $delete="";
                 if ($EmpType == 'ADSupport') {
                     $delete = $this->db->query("DELETE FROM Administrative_Support WHERE SSN = '" . $SSN . "'");
@@ -985,6 +1002,26 @@ class Action
         if ($delete) {
             return 1;
         }
+    }
+
+    function delete_super() {
+        extract($_POST);
+
+        $array = explode("-", $data);
+
+        $ssn = $array[0];
+        $superssn = $array[1];
+
+        $qry = "DELETE FROM Supervision WHERE SSN = '" . $ssn . "' AND SuperSSN = '" . $superssn . "'";
+
+        try {
+            $this->db->query($qry);
+        }
+        catch(mysqli_sql_exception) {
+            return 3;
+        }
+
+        return 1;
     }
 
     function save_administrative_support() {

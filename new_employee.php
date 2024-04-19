@@ -13,12 +13,29 @@
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required
                                 value="<?php echo isset($Phone) ? $Phone : '' ?>">
                             <small id="#msg"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="" class="control-label">Supervisor</label>
+                            <select class="form-control form-control-sm select2" name="super">
+                                <option></option>
+                                <?php
+                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee order by SSN asc ");
+                                    while($row= $sup->fetch_assoc()):
+                                ?>
+                                <option value="<?php echo $row['SSN'] ?>"
+                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>>
+                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>
+                                </option>
+                                <?php endwhile; ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -126,6 +143,11 @@ $(document).ready(function() {
     $('#manage_employee select[name="EmpType"]').change(function() {
         var selectedEmpType = $(this).val();
         $('#manage_employee select[name="EmpType"]').val(selectedEmpType);
+    });
+
+    $('#manage_employee select[name="super"]').change(function() {
+        var selectedsuper = $(this).val();
+        $('#manage_employee select[name="super"]').val(selectedsuper);
     });
 })
 
