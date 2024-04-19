@@ -48,3 +48,6 @@
     - New DDL added.
     - View Owner finished.
     - Haven't add supervisor for employee. Suggest employee have only 1 address.
+- [19/04/24]
+    - Update employee to add supervisor, view of employee can view supervisees.
+    - Consider not to add address for employee (too complex, not necessary).
