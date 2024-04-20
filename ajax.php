@@ -269,7 +269,7 @@ if($action == 'save_employee'){
 if($action == 'update_employee'){
 	$test_err = ""; // Initialize $test_err
 	$save = $crud->update_employee($test_err);
-	if($save == 1) {
+	if($save == 1 || $save == 3 || $save == 4 || $save == 5 || $save == 6) {
         echo $save;
     } else {
         echo $test_err; // Return the error message

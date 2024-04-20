@@ -1688,26 +1688,28 @@ class Action
             $save = $this->db->query("INSERT INTO Employee SET $data");
             
             if ($save) {
-                if (isset($super)) {
+                if (isset($super) && !empty($super)) {
                     $qry = $this->db->query("SELECT * FROM Employee WHERE SSN = '" . $super . "'");
-                    $row = $qry->fetch_assoc();
+                    if ($qry) {
+                        $row = $qry->fetch_assoc();
 
-                    // PHP trigger for price
-                    if ($Salary > $row['Salary']) {
-                        $test_err = "Employee must have salary less than its supervisor";
-                        $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $SSN ."'");
-                        if (!$delete) {
-                            $test_err = "Failed to delete";
+                        // PHP trigger for price
+                        if ($Salary > $row['Salary']) {
+                            $test_err = "Employee must have salary less than its supervisor";
+                            $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $SSN ."'");
+                            if (!$delete) {
+                                $test_err = "Failed to delete";
+                                return 0;
+                            }
+
                             return 0;
                         }
 
-                        return 0;
-                    }
-
-                    $sup = $this->db->query("INSERT INTO Supervision SET SSN = '" .$SSN. "', SuperSSN = '" . $super . "'");
-                    if (!$sup) {
-                        $test_err = "Error saving employee here, sup false";
-                        return 0;
+                        $sup = $this->db->query("INSERT INTO Supervision SET SSN = '" .$SSN. "', SuperSSN = '" . $super . "'");
+                        if (!$sup) {
+                            $test_err = "Error saving employee here, sup false";
+                            return 0;
+                        }
                     }
                 }
                 
@@ -2183,7 +2185,7 @@ class Action
                 $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
                 if ($save) {
                     if (isset($super)) {
-                        $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$ssn."'");
+                        $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$SSN."'");
                         if (!$update_super) {
                             return 0;
                         }
@@ -2209,7 +2211,7 @@ class Action
                 
                 if ($save) {
                     if (isset($super)) {
-                        $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$ssn."'");
+                        $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$SSN."'");
                         if (!$update_super) return 0;
                     }
                     
@@ -2597,18 +2599,34 @@ class Action
         extract($_POST);
     
         try {
+            // $check = $this->db->query("SELECT * FROM Traffic_Controller WHERE SSN = '" . $SSN . "'")->num_rows;
+            // if ($check > 0) {
+            //     $delete = $this->db->query("DELETE FROM Traffic_Controller WHERE SSN = '" . $SSN . "'");
+            //     $test_err = "SSN already exists";
+            //     return 2; // Return 2 if SSN already exists
+            // }
+            
+            // $save = $this->db->query("INSERT INTO Traffic_Controller SET SSN = '" . $SSN . "'");
+            // if (!$save) {
+            //     $test_err = "Fail 1";
+            //     return 0; // Return 0 indicating failure
+            // }
+
             $check = $this->db->query("SELECT * FROM Traffic_Controller WHERE SSN = '" . $SSN . "'")->num_rows;
-            if ($check > 0) {
-                $test_err = "SSN already exists";
-                return 2; // Return 2 if SSN already exists
+            if ($check == 0) {
+                $save = $this->db->query("INSERT INTO Traffic_Controller SET SSN = '" . $SSN . "'");
+                if (!$save) {
+                    $test_err = "Fail 1";
+                    return 0; // Return 0 indicating failure
+                }
+            }
+
+            if (($Afternoon == 'Pick' && $Morning == 'Pick') || ($Afternoon == 'Pick' && $Evening == 'Pick') || ($Night == 'Pick' && $Evening == 'Pick')) {
+                $test_err = "Can't have two consecutive shifts";
+                return 0;
             }
     
-            $save = $this->db->query("INSERT INTO Traffic_Controller SET SSN = '" . $SSN . "'");
-            if (!$save) {
-                $test_err = "Fail 1";
-                return 0; // Return 0 indicating failure
-            }
-    
+
             if ($Morning == 'Pick') {
                 $morning = $this->db->query("INSERT INTO TCShift SET TCSSN = '" . $SSN . "', Shift = 'Morning'");
                 if (!$morning) {
@@ -2616,7 +2634,7 @@ class Action
                     return 0; // Return 0 indicating failure
                 }
             }
-    
+
             if ($Afternoon == 'Pick') {
                 $afternoon = $this->db->query("INSERT INTO TCShift SET TCSSN = '" . $SSN . "', Shift = 'Afternoon'");
                 if (!$afternoon) {

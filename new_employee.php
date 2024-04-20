@@ -78,7 +78,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">Date Of Birth</label>
                             <input type="date" class="form-control form-control-sm" autocomplete="off" name="DOB"
-                                value="<?php echo isset($DOB) ? date("Y-m-d",strtotime($DOB)) : '' ?>">
+                                value="<?php echo isset($DOB) ? date("Y-m-d",strtotime($DOB)) : '' ?>" required>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -213,7 +213,7 @@ $('#manage_employee').submit(function(e) {
                     "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750);
+                }, 2000);
             }
         }.bind(this) // Bind this to the AJAX context
     })
