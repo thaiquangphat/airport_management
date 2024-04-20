@@ -26,9 +26,20 @@ class Action
 	// authenticate a user by querying tha DB for a matching email and password
 	// combination. It successful, stores user info in session and return 1
 	// otherwise return 2
-    function login()
+    function login_user() {
+        extract($_POST);
+        $_SESSION['user-db'] = $user;
+        $_SESSION['pass-db'] = $password;
+
+        include "db_connect.php";
+        
+        return 1;
+    }
+    
+    function login1()
     {
         extract($_POST);
+        
         $qry = $this->db->query(
             "SELECT *,concat(firstname,' ',lastname) as name FROM users where email = '" .
                 $email .
@@ -36,6 +47,28 @@ class Action
                 md5($password) .
                 "'  "
         );
+        if ($qry->num_rows > 0) {
+            foreach ($qry->fetch_array() as $key => $value) {
+                if ($key != "password" && !is_numeric($key)) {
+                    $_SESSION["login_" . $key] = $value;
+                }
+            }
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    function login()
+    {
+        extract($_POST);
+        $_SESSION['user-db'] = $user;
+        $_SESSION['pass-db'] = $password;
+
+        include("db_connect.php");
+
+        $qry = $this->db->query("SELECT *,concat(firstname,' ',lastname) as name FROM users where email = 'admin@admin.com' and password = '0192023a7bbd73250516f069df18b500'");
+
         if ($qry->num_rows > 0) {
             foreach ($qry->fetch_array() as $key => $value) {
                 if ($key != "password" && !is_numeric($key)) {

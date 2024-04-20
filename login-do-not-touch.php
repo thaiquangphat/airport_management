@@ -20,7 +20,7 @@ ob_end_flush();
 
 <style>
 #intro {
-    background-image: url(https://www.wallpaperuse.com/wallp/73-736441_m.jpg);
+    background-image: url(https://lms.hcmut.edu.vn/pluginfile.php/3/theme_academi/slide1image/1711678871/slbk.jpg);
     height: 100vh;
     background-size: auto 100%;
 }
@@ -49,10 +49,10 @@ ob_end_flush();
             <div class="card-body login-card-body" style="">
                 <form action="" id="login-form">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="user" required placeholder="Username">
+                        <input type="email" class="form-control" name="email" required placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-user"></span>
+                                <span class="fas fa-envelope"></span>
                             </div>
                         </div>
                     </div>
