@@ -6,7 +6,7 @@ CREATE SCHEMA Test_New;
 USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
-SET GLOBAL log_bin_trust_function_creators = 1;		
+SET GLOBAL log_bin_trust_function_creators = 1;		# ko them thi loi :)))
 -- --------------------------------------------------------------------
 CREATE TABLE `system_settings` (
   `id` INT NOT NULL,
@@ -29,17 +29,17 @@ INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cov
 ALTER TABLE `system_settings`
   ADD PRIMARY KEY (`id`);
 -- --------------------------------------------------------------------
-CREATE TABLE `users` (
-  `id` int(30) AUTO_INCREMENT,
-  `firstname` varchar(200) NOT NULL,
-  `lastname` varchar(200) NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `password` text NOT NULL,
-  `type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1 = admin, 2 = staff',
-  `avatar` text NOT NULL DEFAULT 'no-image-available.png',
-  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- CREATE TABLE `users` (
+--   `id` int(30) AUTO_INCREMENT,
+--   `firstname` varchar(200) NOT NULL,
+--   `lastname` varchar(200) NOT NULL,
+--   `email` varchar(200) NOT NULL,
+--   `password` text NOT NULL,
+--   `type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1 = admin, 2 = staff',
+--   `avatar` text NOT NULL DEFAULT 'no-image-available.png',
+--   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+--   PRIMARY KEY (`id`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -55,13 +55,13 @@ CREATE TABLE `users` (
 -- Khoi generate data cua thg Passenger thi attribute userid cua passenger lay random
 -- trong set 3 so (4 or 5 or 6) thoi
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `type`, `avatar`, `date_created`) VALUES
-(1, 'Administrator', '', 'admin@admin.com', '0192023a7bbd73250516f069df18b500', 1, 'no-image-available.png', '2024-04-12 09:09:09'),
-(2, 'Pau', 'Thai', 'pauthai@pauthai.com', '00e4d823dc5548d4b65cd958fe787828', 2, '1606978560_avatar.jpg', '2024-04-12 09:09:09'),
-(3, 'Khoi', 'Nguyen', 'khoinguyen@khoinguyen.com', '349dc27260635ac9bfed779848d25ab0', 2, '1606978560_avatar.jpg', '2024-04-12 09:09:09'),
-(4, 'abc', 'abc', 'abc@abc.com', 'e99a18c428cb38d5f260853678922e03', 3, 'no-image-available.png', '2024-04-12 09:09:09'),
-(5, 'def', 'def', 'def@def.com', 'e88ebfe1ae982a6da01436e48af6eb74', 3, 'no-image-available.png', '2024-04-12 09:09:09'),
-(6, 'ghi', 'ghi', 'ghi@ghi.com', '118e0bfeafaae5544f3f486533cf56db', 3, 'no-image-available.png', '2024-04-12 09:09:09');
+-- INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `type`, `avatar`, `date_created`) VALUES
+-- (1, 'Administrator', '', 'admin@admin.com', '0192023a7bbd73250516f069df18b500', 1, 'no-image-available.png', '2024-04-12 09:09:09'),
+-- (2, 'Pau', 'Thai', 'pauthai@pauthai.com', '00e4d823dc5548d4b65cd958fe787828', 2, '1606978560_avatar.jpg', '2024-04-12 09:09:09'),
+-- (3, 'Khoi', 'Nguyen', 'khoinguyen@khoinguyen.com', '349dc27260635ac9bfed779848d25ab0', 2, '1606978560_avatar.jpg', '2024-04-12 09:09:09'),
+-- (4, 'abc', 'abc', 'abc@abc.com', 'e99a18c428cb38d5f260853678922e03', 3, 'no-image-available.png', '2024-04-12 09:09:09'),
+-- (5, 'def', 'def', 'def@def.com', 'e88ebfe1ae982a6da01436e48af6eb74', 3, 'no-image-available.png', '2024-04-12 09:09:09'),
+-- (6, 'ghi', 'ghi', 'ghi@ghi.com', '118e0bfeafaae5544f3f486533cf56db', 3, 'no-image-available.png', '2024-04-12 09:09:09');
 
 CREATE TABLE Employee
 (
@@ -174,11 +174,11 @@ CREATE TABLE Passenger
     Minit       CHAR(2),
     Lname       VARCHAR(50),
     -- Tao nghi la phai them 1 attribute de biet thg user (type 3: emp/user) nao` tao.
-    UserID 		INT		NOT NULL,
+    UserID 		INT,
     
     -- Nay la tao them vao` tao nghi la can nen cu tao data co no di
-    PRIMARY KEY (PID),
-    FOREIGN KEY (UserID) REFERENCES users (ID) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (PID)
+    -- FOREIGN KEY (UserID) REFERENCES users (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Passenger_Phone
@@ -371,8 +371,37 @@ CREATE TABLE Operates
     FOREIGN KEY (FlightID) REFERENCES Flight (FlightID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+DROP USER IF EXISTS 'sManager'@'localhost';
+DROP USER IF EXISTS 'rUser'@'localhost';
+-- SELECT User, Host FROM mysql.user WHERE User='sManager' AND Host='localhost';
+CREATE USER 'sManager'@'localhost' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON Test_New.* TO 'sManager'@'localhost';
+CREATE USER 'rUser'@'localhost' IDENTIFIED BY '123456';
+GRANT SELECT ON Test_new.* TO 'rUser'@'localhost';
+
 -- --------------------------------------------------------------------
 -- Start function
+-- --------------------------------------------------------------------
+-- --------------------------------------------------------------------
+DELIMITER //
+
+CREATE FUNCTION CalculateAgeBySSN(employeeSSN CHAR(10))
+RETURNS INT
+BEGIN
+    DECLARE birthDate DATE;
+    DECLARE age INT;
+    
+    -- Retrieve the DOB of the employee using the provided SSN
+    SELECT DOB INTO birthDate FROM Employee WHERE SSN = employeeSSN;
+    
+    -- Calculate the age based on the retrieved DOB
+    SET age = TIMESTAMPDIFF(YEAR, birthDate, CURDATE());
+    
+    RETURN age;
+END //
+
+DELIMITER ;
+
 -- --------------------------------------------------------------------
 -- Function for getting the duration of a FLight 
 delimiter //
@@ -513,6 +542,18 @@ END;
 //
 -- ----------------------------------------------------------------------------------------------------------- 
 -- ----------------------------------------------------------------------------------------------------------- 
+DELIMITER //
+
+CREATE FUNCTION CalculateAge(birthDate DATE)
+RETURNS INT
+BEGIN
+    DECLARE age INT;
+    SET age = TIMESTAMPDIFF(YEAR, birthDate, CURDATE());
+    RETURN age;
+END //
+
+DELIMITER ;
+
 -- ----------------------------------------------------------------------------------------------------------- 
 -- Get the age of the Passenger
 delimiter //
@@ -549,6 +590,249 @@ ADD CONSTRAINT CheckAge CHECK (CheckEmployeeAge(DOB));
 -- ----------------------------------------------------------------------------------------------------------- 
 -- Trigger
 -- ----------------------------------------------------------------------------------------------------------- 
+DELIMITER //
+
+CREATE TRIGGER EnsureEmployeeAge
+BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    DECLARE employeeAge INT;
+    SET employeeAge = CalculateAge(NEW.DOB);
+    
+    IF employeeAge < 18 OR employeeAge > 75 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Employee must be between 18 and 75 years old.';
+    END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER CheckSalaryAgainstSupervisor
+BEFORE INSERT ON Supervision
+FOR EACH ROW
+BEGIN
+    DECLARE supervisorSalary FLOAT;
+    DECLARE empSalary FLOAT;
+    
+    -- Get the salary of the supervisor
+    SELECT Salary INTO supervisorSalary
+    FROM Employee
+    WHERE SSN = NEW.SuperSSN;
+    
+    SELECT Salary INTO empSalary
+    FROM Employee
+    WHERE SSN = NEW.SSN;
+    
+    -- Check if the new employee's salary is greater than or equal to the supervisor's salary
+    IF empSalary >= supervisorSalary THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Employee salary must be less than supervisor salary; Cannot let this Employee be Supervise by the Supervisor';
+    END IF;
+END //
+
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------- 
+-- A flight must have at least 2 pilots and 2 flight attendants
+delimiter //
+CREATE TRIGGER Operate_2_Pilot_FA_AU AFTER UPDATE
+ON Flight_Employee
+FOR EACH ROW
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE FlightID INT; -- Define FlightID variable
+    DECLARE numPilots INT;
+    DECLARE numFlightAttendants INT;
+    DECLARE curFlight CURSOR FOR
+        SELECT DISTINCT FlightID
+        FROM Operates
+        WHERE FSSN = OLD.FESSN;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    OPEN curFlight;
+    read_loop: LOOP
+        FETCH curFlight INTO FlightID;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        -- Count the number of pilots for the current flight
+        SELECT COUNT(*) INTO numPilots
+        FROM Operates o
+        JOIN Pilot p ON o.FSSN = p.SSN
+        WHERE o.FlightID = FlightID;
+
+        -- Count the number of flight attendants for the current flight
+        SELECT COUNT(*) INTO numFlightAttendants
+        FROM Operates o
+        JOIN Flight_Attendant fa ON o.FSSN = fa.SSN
+        WHERE o.FlightID = FlightID;
+
+        -- Check if the current flight violates the constraint
+        IF numPilots < 2 OR numFlightAttendants < 2 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Each flight must have at least 2 pilots and 2 flight attendants.';
+        END IF;
+    END LOOP;
+    CLOSE curFlight;
+END //
+delimiter ;
+-- --------------------------------------------------------------------
+-- ----------------------------------------------------------------------------------------------------------- 
+DELIMITER //
+
+CREATE TRIGGER before_delete_employee
+BEFORE DELETE ON Employee
+FOR EACH ROW
+BEGIN
+    DECLARE tc_count INT;
+    DECLARE engineer_count INT;
+    DECLARE pilot_count INT;
+    DECLARE flight_attendant_count INT;
+
+    -- Check if the employee is a Traffic Controller and controls only one flight
+    IF EXISTS (
+        SELECT 1
+        FROM Traffic_Controller
+        WHERE SSN = OLD.SSN
+    ) THEN
+        SELECT COUNT(*)
+        INTO tc_count
+        FROM Flight
+        WHERE TCSSN = OLD.SSN;
+
+        IF tc_count >= 1 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cannot delete the Traffic Controller. There is a flight controlled by only this Traffic Controller.';
+        END IF;
+    END IF;
+
+    -- Check if the employee is an Engineer and has expertise in only one model
+    IF EXISTS (
+        SELECT 1
+        FROM Engineer
+        WHERE SSN = OLD.SSN
+    ) THEN
+		SELECT COUNT(*) INTO engineer_count
+		FROM Expertise
+		WHERE ESSN = OLD.SSN
+		AND ModelID IN (
+			SELECT ModelID
+			FROM Expertise
+			GROUP BY ModelID
+			HAVING COUNT(ESSN) = 1
+		);
+
+        IF engineer_count = 1 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cannot delete the Engineer. There is a model where the engineer is the only expert.';
+        END IF;
+    END IF;
+
+    -- Check if the employee is a Pilot and is one of only two pilots for a flight
+    IF EXISTS (
+        SELECT 1
+        FROM Pilot
+        WHERE SSN = OLD.SSN
+    ) THEN
+		-- SELECT COUNT(*) INTO engineer_count
+-- 		FROM Expertise
+-- 		WHERE ESSN = OLD.SSN
+-- 		AND ModelID IN (
+-- 			SELECT ModelID
+-- 			FROM Expertise
+-- 			GROUP BY ModelID
+-- 			HAVING COUNT(ESSN) = 1
+-- 		);
+		
+        SELECT COUNT(*)
+        INTO pilot_count
+        FROM Operates
+        WHERE FSSN = OLD.SSN AND Role = 'Pilot' AND FlightID IN (
+			SELECT O.FlightID
+            FROM Operates AS O
+            WHERE O.Role = 'Pilot'
+            GROUP BY O.FlightID
+            HAVING COUNT(O.FSSN) = 2
+        );
+
+        IF pilot_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cannot delete the Pilot. There is a flight with only two pilots.';
+        END IF;
+    END IF;
+
+    -- Check if the employee is a Flight Attendant and is one of only two flight attendants for a flight
+    IF EXISTS (
+        SELECT 1
+        FROM Flight_Attendant
+        WHERE SSN = OLD.SSN
+    ) THEN
+        SELECT COUNT(*)
+        INTO flight_attendant_count
+        FROM Operates
+        WHERE FSSN = OLD.SSN AND Role = 'Flight Attendant' AND FlightID IN (
+			SELECT O.FlightID
+            FROM Operates AS O
+            WHERE O.Role = 'Flight Attendant'
+            GROUP BY O.FlightID
+            HAVING COUNT(O.FSSN) = 2
+        );
+
+        IF flight_attendant_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cannot delete the Flight Attendant. There is a flight with only two flight attendants.';
+        END IF;
+    END IF;
+
+END;
+//
+
+DELIMITER ;
+-- ----------------------------------------------------------------------------------------------------------- 
+DELIMITER //
+
+CREATE TRIGGER check_delete_airline
+BEFORE DELETE ON Airline
+FOR EACH ROW
+BEGIN
+    DECLARE airplane_count INT;
+    DECLARE owner_count INT;
+    
+    -- Check the number of airplanes associated with the airline
+    SELECT COUNT(*) INTO airplane_count
+    FROM Airplane
+    WHERE AirlineID = OLD.AirlineID;
+    
+    -- If there are airplanes associated with the airline
+    IF airplane_count > 0 THEN
+        -- Check the number of airplanes owned by each owner associated with the airline
+        SELECT COUNT(*)
+        INTO owner_count
+        FROM (
+            SELECT OwnerID
+            FROM Airplane
+            WHERE AirlineID = OLD.AirlineID
+            GROUP BY OwnerID
+            HAVING COUNT(*) = 1
+        ) AS owners_with_single_airplane;
+        
+        -- If there is any owner with only one airplane, prevent the deletion
+        IF owner_count > 0 THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cannot delete airline. Some owners have only one airplane.';
+        END IF;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+
+-- ----------------------------------------------------------------------------------------------------------- 
 -- This trigger is for checking EAT EDT AAT ADT of a Flight
 DELIMITER //
 
@@ -556,12 +840,22 @@ CREATE TRIGGER check_flight_constraints
 BEFORE UPDATE ON Flight
 FOR EACH ROW
 BEGIN
-    IF NEW.EAT <= NEW.EDT THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error: EAT must be larger than EDT';
+    DECLARE error_message VARCHAR(255);
+
+    IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
+        SET error_message = 'EAT must be larger than EDT';
+    ELSEIF NEW.EAT <> OLD.EAT AND NEW.EDT = OLD.EDT AND NEW.EAT <= OLD.EDT THEN
+        SET error_message = 'EAT must be larger than EDT';
+    ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
+        SET error_message = 'AAT must be larger than ADT';
+    ELSEIF NEW.AAT <> OLD.AAT AND NEW.AAT <= NEW.ADT THEN
+        SET error_message = 'AAT must be larger than ADT';
+    ELSE
+        SET error_message = NULL; -- No error
     END IF;
-    
-    IF NEW.AAT <= NEW.ADT THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error: AAT must be larger than ADT';
+
+    IF error_message IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
     END IF;
 END;
 //
@@ -646,33 +940,6 @@ END //
 delimiter ;
 -- --------------------------------------------------------------------
 -- --------------------------------------------------------------------
--- This check before delete an Engineer 
--- -It must check the relationship with Model through Expertise
--- -If exists a model that has this Engineer that is the only one expertise
--- that model --> no delete
-delimiter //
-CREATE TRIGGER Expertise_BD BEFORE DELETE
-ON Engineer
-FOR EACH ROW
-BEGIN
-	DECLARE num INT;
-    
-    SELECT COUNT(*) INTO num
-    FROM Expertise AS E1
-    WHERE E1.ESSN = OLD.SSN AND E1.ModelID IN (
-		SELECT E2.ModelID
-        FROM Expertise AS E2
-        WHERE E2.ModelID IN (SELECT E3.ModelID FROM Expertise AS E3 WHERE E3.ESSN = OLD.SSN)
-        GROUP BY E2.ModelID
-        HAVING COUNT(*) = 1
-    );
-    
-    IF num >= 1 THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot delete from Engineer; Exist Model has only be expertized by this Engineer';
-	END IF;
-END //
-delimiter ;
-
 -- This check before update an Engineer 
 -- -It must check the relationship with Model through Expertise
 -- -If exists a model that has this Engineer that is the only one expertise
@@ -699,103 +966,6 @@ BEGIN
 	END IF;
 END //
 delimiter ;
--- --------------------------------------------------------------------
--- --------------------------------------------------------------------
--- NOW HERE
--- This check before delete the record in Operate of a Flight
--- Now define the trigger:
--- A flight must have at least 2 pilots and 2 flight attendants
-DELIMITER //
-
-CREATE TRIGGER checkFlightCrew AFTER DELETE ON Flight_Employee FOR EACH ROW
-BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE FlightID INT; -- Define FlightID variable
-    DECLARE numPilots INT;
-    DECLARE numFlightAttendants INT;
-    DECLARE curFlight CURSOR FOR
-        SELECT DISTINCT FlightID
-        FROM Operates
-        WHERE FSSN = OLD.FESSN;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
-    OPEN curFlight;
-    read_loop: LOOP
-        FETCH curFlight INTO FlightID;
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
-        
-        -- Count the number of pilots for the current flight
-        SELECT COUNT(*) INTO numPilots
-        FROM Operates o
-        JOIN Pilot p ON o.FSSN = p.SSN
-        WHERE o.FlightID = FlightID;
-
-        -- Count the number of flight attendants for the current flight
-        SELECT COUNT(*) INTO numFlightAttendants
-        FROM Operates o
-        JOIN Flight_Attendant fa ON o.FSSN = fa.SSN
-        WHERE o.FlightID = FlightID;
-
-        -- Check if the current flight violates the constraint
-        IF numPilots < 2 OR numFlightAttendants < 2 THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Each flight must have at least 2 pilots and 2 flight attendants.';
-        END IF;
-    END LOOP;
-    CLOSE curFlight;
-END //
-
-DELIMITER ;
-
--- A flight must have at least 2 pilots and 2 flight attendants
-delimiter //
-CREATE TRIGGER Operate_2_Pilot_FA_AU AFTER UPDATE
-ON Flight_Employee
-FOR EACH ROW
-BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE FlightID INT; -- Define FlightID variable
-    DECLARE numPilots INT;
-    DECLARE numFlightAttendants INT;
-    DECLARE curFlight CURSOR FOR
-        SELECT DISTINCT FlightID
-        FROM Operates
-        WHERE FSSN = OLD.FESSN;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
-    OPEN curFlight;
-    read_loop: LOOP
-        FETCH curFlight INTO FlightID;
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
-        
-        -- Count the number of pilots for the current flight
-        SELECT COUNT(*) INTO numPilots
-        FROM Operates o
-        JOIN Pilot p ON o.FSSN = p.SSN
-        WHERE o.FlightID = FlightID;
-
-        -- Count the number of flight attendants for the current flight
-        SELECT COUNT(*) INTO numFlightAttendants
-        FROM Operates o
-        JOIN Flight_Attendant fa ON o.FSSN = fa.SSN
-        WHERE o.FlightID = FlightID;
-
-        -- Check if the current flight violates the constraint
-        IF numPilots < 2 OR numFlightAttendants < 2 THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Each flight must have at least 2 pilots and 2 flight attendants.';
-        END IF;
-    END LOOP;
-    CLOSE curFlight;
-END //
-delimiter ;
-
 -- --------------------------------------------------------------------
 -- --------------------------------------------------------------------
 -- This check before delete the last record in Airplane of a Airline
@@ -828,8 +998,8 @@ BEGIN
     FROM Airplane 
     WHERE AirlineID = OLD.AirlineID;
     
-    IF numRecordOfAirline = 1 THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot delete from Airplane; Num Records Remaining of this Airline of the Airplane is 1';
+    IF OLD.AirlineID <> NEW.AirlineID AND numRecordOfAirline = 1 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot update from Airplane; Num Records Remaining of this Airline of the Airplane is 1';
 	END IF;
 END //
 delimiter ;
@@ -1040,6 +1210,41 @@ END;
 //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER before_insert_ticket
+BEFORE INSERT ON Ticket
+FOR EACH ROW
+BEGIN
+    DECLARE existing_ticket INT;
+
+    -- Check if the FlightID and SeatNum combination already has a ticket
+    SELECT COUNT(*)
+    INTO existing_ticket
+    FROM Ticket
+    WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+
+    IF existing_ticket > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot insert ticket. The seat is already booked.';
+    END IF;
+
+    -- Check if the seat is set to Unavailable
+    SELECT Status
+    INTO @seat_status
+    FROM Seat
+    WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+
+    IF @seat_status = 'Unavailable' THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot insert ticket. The seat is already unavailable.';
+    END IF;
+END;
+//
+
+DELIMITER ;
+
 
 -- --------------------------------------------------------------------
 -- This trigger to modify the value of the base price of the flight
@@ -1334,16 +1539,6 @@ INSERT INTO owner(OwnerID,Phone) VALUES (17,2204761112);
 INSERT INTO owner(OwnerID,Phone) VALUES (18,8989503697);
 INSERT INTO owner(OwnerID,Phone) VALUES (19,6067471103);
 INSERT INTO owner(OwnerID,Phone) VALUES (20,7876419347);
-INSERT INTO owner(OwnerID,Phone) VALUES (21,8913706716);
-INSERT INTO owner(OwnerID,Phone) VALUES (22,2576072185);
-INSERT INTO owner(OwnerID,Phone) VALUES (23,7976561183);
-INSERT INTO owner(OwnerID,Phone) VALUES (24,2925113132);
-INSERT INTO owner(OwnerID,Phone) VALUES (25,8415515209);
-INSERT INTO owner(OwnerID,Phone) VALUES (26,9841912729);
-INSERT INTO owner(OwnerID,Phone) VALUES (27,7636396761);
-INSERT INTO owner(OwnerID,Phone) VALUES (28,6256189781);
-INSERT INTO owner(OwnerID,Phone) VALUES (29,1805897795);
-INSERT INTO owner(OwnerID,Phone) VALUES (30,7336596061);
 
 INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('G & D AVIATION AND MARINE LLC','4900 US HIGHWAY 1 N STE 300',1);
 INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('MORRISON JEFFREY B','1611 JEROME PL',2);
@@ -1360,22 +1555,12 @@ INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('GOLD SEAL AVIATION INC','
 INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('R & C AVIATION INC','293 POLK ROAD 52',13);
 INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('GLOBAL JET AVIATION LLC','6310 LEMMON AVE STE 222',14);
 INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('BRETZ INC','4800 GRANT CREEK RD',15);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('KFLP AIR LLC','999 18TH ST STE 3210',16);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('WAY MAURICE T','1139 INDEPENDENCE TRL APT A',17);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('WEEKS WILLIAM','4652 SPARTA HWY',18);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('HUFFMAN JERALD L','2025 EL RANCHO DR',19);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('ADAMS ALEXANDER BENTLEY','220 SKYLINE DR',20);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('AQUILA AVIATION LLC','4575 CLAIRE CHENNAULT ST',21);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('BEST TRAVEL SERVICES DBA','PO BOX 2369',22);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('GHANBARZADEH MARIA','2980 AIRWAY AVE',23);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('KROGH MICHAEL L','3001 SW COACHLIGHT PL',24);
-INSERT INTO cooperation(Name,Address,OwnerID) VALUES ('CORPORATE HELICOPTERS INC','PO DRAWER 340',25);
 
-INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1097117278,'Bernard Arnold','Philadelphia',26);
-INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1102477589,'Elon Mush','Los Angeles',27);
-INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1139904999,'Jim Walton','Seattle',28);
-INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1826840260,'Wrens Buffet','Palo Alto',29);
-INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (2257396706,'Steve Balls','Phoenix',30);
+INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1097117278,'Bernard Arnold','Philadelphia',16);
+INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1102477589,'Elon Mush','Los Angeles',17);
+INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1139904999,'Jim Walton','Seattle',18);
+INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (1826840260,'Wrens Buffet','Palo Alto',19);
+INSERT INTO person(SSN,Name,Address,OwnerID) VALUES (2257396706,'Steve Balls','Phoenix',20);
 
 INSERT INTO model(ID,MName,Capacity,MaxSpeed) VALUES (1,'DC8-55',50,933);
 INSERT INTO model(ID,MName,Capacity,MaxSpeed) VALUES (2,'DC8-62',45,965);
@@ -1399,33 +1584,33 @@ INSERT INTO model(ID,MName,Capacity,MaxSpeed) VALUES (19,'A350-900',52,945);
 INSERT INTO model(ID,MName,Capacity,MaxSpeed) VALUES (20,'A350-1000',49,945);
 
 
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (1,'PZ-8AT',847,22,'1999-03-06',3);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (1,'PZ-8AT',847,20,'1999-03-06',3);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (2,'JW-XJD',82,10,'2010-07-30',14);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (3,'FR-17A',269,16,'2001-02-22',8);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (4,'UY-6M7',45,5,'1996-09-15',6);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (5,'JE-G55',40,4,'1993-05-17',4);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (6,'OQ-YRJ',140,18,'2022-02-13',10);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (6,'OQ-YRJ',140,19,'2022-02-13',10);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (7,'AE-AJ1',997,1,'2017-06-30',16);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (8,'PW-96Z',881,28,'1994-07-31',16);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (8,'PW-96Z',881,18,'1994-07-31',16);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (9,'UW-XN3',269,17,'1999-06-29',20);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (10,'VW-AW2',957,12,'2023-12-09',10);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (11,'AB-1JD',110,2,'2023-08-31',6);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (12,'YM-6YU',403,25,'2001-12-05',19);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (13,'VP-LSW',80,21,'1997-02-01',4);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (12,'YM-6YU',403,15,'2001-12-05',19);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (13,'VP-LSW',80,11,'1997-02-01',4);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (14,'LR-U7N',910,15,'2007-09-18',9);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (15,'WE-VGP',4,3,'2004-03-21',4);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (16,'YZ-MPZ',988,27,'1996-05-18',15);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (16,'YZ-MPZ',988,17,'1996-05-18',15);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (17,'MH-EZ2',82,6,'1994-05-28',20);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (18,'GA-PRP',847,29,'1999-02-21',17);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (19,'QW-970',40,23,'2006-06-12',7);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (18,'GA-PRP',847,9,'1999-02-21',17);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (19,'QW-970',40,3,'2006-06-12',7);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (20,'PV-1DB',770,11,'2004-09-25',15);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (21,'ZH-78W',186,19,'1994-10-26',5);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (22,'CH-108',978,24,'1990-07-23',14);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (22,'CH-108',978,14,'1990-07-23',14);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (23,'WG-CSJ',577,8,'2004-08-13',15);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (24,'NP-6ZB',82,9,'2008-09-22',15);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (25,'YM-J9T',655,13,'1999-05-17',16);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (26,'IL-76E',120,26,'2014-04-03',19);
-INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (27,'SQ-MY5',86,30,'2003-12-04',8);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (26,'IL-76E',120,16,'2014-04-03',19);
+INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (27,'SQ-MY5',86,10,'2003-12-04',8);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (28,'GD-9G7',703,7,'2002-06-14',5);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (29,'UC-DR5',199,20,'2014-10-09',7);
 INSERT INTO airplane(AirplaneID,License_plate_num,AirlineID,OwnerID,LeasedDate,ModelID) VALUES (30,'IA-IX0',722,14,'1995-05-02',20);
@@ -3932,86 +4117,86 @@ INSERT INTO passenger_phone(PID,Phone) VALUES (318,9768131516);
 INSERT INTO passenger_phone(PID,Phone) VALUES (806,6081323388);
 INSERT INTO passenger_phone(PID,Phone) VALUES (385,3142394732);
 
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073015,'Ned','X.','Martin',8726182,6767209658,'F','1955-01-18','2017-09-15');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1228881547,'Sawyer','L.','Dixon',569249,7233038713,'M','1964-03-30','2017-04-20');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4089035780,'Brianna','C.','Perkins',1577973,6331256894,'M','1981-12-30','2016-11-16');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2596009902,'Mary','K.','Melissa',109394,4399549740,'F','2004-10-05','1998-09-19');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1818624322,'Adrian','X.','Harris',8771319,2389664803,'M','1974-04-08','2017-03-21');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7782466558,'Sharon','O.','Anne',190139,5228516392,'F','1984-06-14','2020-12-11');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6004615448,'Harold','C.','Joe',156194,5055451320,'M','1969-07-21','2018-05-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1071916066,'Cadie','I.','Bailey',5096207,4403095817,'F','1958-04-30','1999-02-14');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9455396887,'Carina','S.','Watson',3056919,4098812342,'M','1967-07-10','2023-03-09');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2552794347,'Edgar','B.','Spencer',7901543,4537002429,'M','1984-09-21','2003-09-13');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5666989915,'Jared','W.','Thomas',1291348,2938654496,'F','1956-04-20','2001-12-21');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6471839288,'Amelia','L.','Moore',4372997,7166539731,'M','1970-03-07','2004-08-09');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4775339493,'James','Q.','Morrison',2444150,4095169758,'F','1991-01-11','2004-10-13');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6839710329,'Donna','S.','Carl',129836,9099145640,'F','1979-05-16','2020-04-22');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6144043210,'Sophia','E.','Andrews',4683408,9749441704,'M','1965-05-10','2019-10-23');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6889127768,'Myra','T.','Harris',5511949,5482141634,'M','2004-10-04','2003-10-30');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6795700315,'Antony','U.','Hawkins',2018854,6266275512,'M','1997-06-15','2004-02-22');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6762227282,'Brenda','K.','Jimmy',51063,8393450665,'F','1965-04-03','2015-04-30');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3253673037,'Kelvin','H.','Ferguson',9774707,6437561662,'F','1974-07-30','1999-12-30');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6979274052,'Tara','K.','Reed',4992011,1811188368,'F','1998-06-05','2006-04-09');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1242581599,'Briony','M.','Anderson',6038985,4947227165,'M','1984-05-17','2009-12-05');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9656325312,'Maximilian','R.','Nelson',5860678,9292327435,'M','1971-04-29','2014-07-26');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5094754453,'Kellan','V.','Elliott',7906473,4907179430,'F','2002-04-30','1996-09-28');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7162241260,'Jared','O.','Robinson',8712302,6781554132,'F','1978-09-21','2004-01-26');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5656436115,'Patrick','L.','Brooks',7974707,9226071227,'M','1978-04-06','1999-02-08');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8660516635,'Chelsea','K.','Evans',9056576,6124892628,'F','1986-08-16','2013-06-27');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6154727188,'Adrian','R.','Ellis',8960481,2702961493,'F','1957-10-10','1999-02-12');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7856451395,'James','K.','Hawkins',9724465,4727527357,'M','1968-02-05','2008-10-15');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7029451799,'Roy','A.','Jason',170895,3081978275,'M','1961-04-09','2019-05-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7514048819,'Tony','I.','Warren',9700166,1766616855,'M','1950-04-24','2013-10-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9993757512,'Michael','J.','Brown',798018,7505374919,'F','1997-11-02','2014-10-22');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6378527201,'Alexia','K.','Perkins',4434445,6706734298,'M','1962-05-27','1997-02-15');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6560444561,'Alan','S.','Hall',3149166,8888419465,'F','1954-10-12','2015-02-02');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9923912715,'Antony','G.','Morrison',7180293,9150128637,'F','1960-02-13','1997-03-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2199130905,'Samantha','U.','Carter',5562681,3632315913,'M','1965-06-28','2015-01-26');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2049569671,'Audrey','U.','Alexander',4954775,3958687192,'M','1952-12-10','2000-12-22');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8235456444,'Ryan','P.','Gray',391443,5162882057,'M','2003-11-28','2005-01-18');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3058929914,'Amanda','B.','Hawkins',8869959,1265125699,'M','1958-02-10','2016-12-19');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6224231677,'Arianna','O.','Mitchell',6420135,5777060586,'M','1954-03-05','1997-11-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9777755494,'Jenna','L.','Allen',3135233,7183761517,'M','1953-10-03','1997-10-25');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7415504759,'Luke','X.','Johnston',274721,3213567281,'M','1964-05-05','1995-09-02');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8607533006,'Antony','B.','Mason',185925,8137190487,'F','1989-08-27','2016-10-20');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6794118189,'Aldus','I.','Higgins',1488557,2962467263,'F','1998-02-28','1999-01-13');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9559423186,'Ned','X.','Anderson',2394653,9848653818,'F','1997-03-24','2022-06-24');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2532145686,'Jessica','M.','Lloyd',145246,8316256919,'M','1969-03-29','2022-10-31');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9812666138,'Lois','L.','Brenda',168251,2833773195,'M','1952-07-19','2010-08-28');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5738691381,'Alissa','X.','Parker',6880494,3731790377,'F','1966-11-30','2023-10-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1036077180,'Maximilian','B.','Andrews',1425191,5645059872,'M','1968-10-14','2006-12-05');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2306046365,'Nicholas','R.','Bailey',3635358,4187954512,'M','1983-04-05','2001-06-15');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3949455487,'Elizabeth','X.','Jimmy',85420,5442487176,'M','1989-02-01','2011-10-22');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8281942741,'Carina','X.','Campbell',7329737,4247811494,'M','1951-02-28','2018-11-07');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3879160954,'Sophia','A.','Reed',4096366,7364688681,'M','1977-10-08','2014-05-20');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8698663522,'Melissa','A.','Chapman',6118535,9936217459,'F','1987-12-02','2021-12-28');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1063563524,'Steven','L.','Montgomery',6751529,7447049406,'F','1951-12-28','2019-01-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6920182756,'Arthur','K.','Foster',5100810,6812874426,'M','1953-04-13','2014-11-28');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2067415434,'Chester','T.','Williams',7407454,4176186111,'F','1971-08-20','2014-11-14');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7556917806,'Violet','W.','Farrell',5556371,3249073557,'F','1954-03-22','1998-11-05');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5880889912,'Emma','R.','Ferguson',7534591,2255785771,'M','1972-03-30','2023-05-28');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2343867626,'Lucas','K.','Bennett',1571951,8082382208,'M','1956-11-18','2014-04-11');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2049010047,'Darcy','C.','Tucker',6755239,5902257248,'F','1961-05-08','2005-04-05');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6735638271,'Alberta','B.','Robinson',9653792,4154114257,'F','1965-05-04','2009-02-04');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3300076804,'Daryl','Q.','Martin',7204480,9798767966,'M','1970-04-18','1995-12-23');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6625811960,'Kristian','M.','Morgan',1767852,1726864584,'F','1999-08-11','2018-11-24');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1250946629,'Amy','Y.','Mitchell',5700429,2662994532,'M','1982-09-22','2006-06-11');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8581806435,'Arnold','W.','Andrews',6909708,1610709074,'M','2005-09-11','2021-01-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7635460557,'Lillian','D.','Andrea',149878,7415001314,'M','2004-07-28','2006-09-08');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1443933295,'Brooke','O.','Brown',6768961,9987276344,'M','1983-12-04','2004-04-12');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5391252459,'Martin','P.','Dixon',326942,3743912473,'M','1979-07-19','2014-05-17');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2741700391,'Isabella','Q.','Johnston',2212305,8426773758,'F','1981-03-08','2013-07-27');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7353415534,'Isabella','Q.','Robinson',7618049,4604201791,'F','1979-01-27','2011-02-18');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7356719401,'Haris','R.','Harper',6544121,5409750199,'F','2001-05-05','2002-11-19');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7715981543,'Mike','P.','Russell',2737786,7473829460,'F','1989-05-03','2004-11-08');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5557227589,'David','O.','Fowler',686594,9627386173,'M','1986-08-30','2012-07-11');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8323992682,'Dainton','P.','Perry',1376747,1291865750,'M','1962-01-22','2013-06-11');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7376558750,'Maddie','J.','Craig',4967604,5375878852,'F','2001-07-09','2010-11-26');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3544575412,'Rosie','W.','Harrison',8391019,9832595092,'F','1984-08-05','2007-02-20');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5977334394,'Eric','B.','Fowler',6454322,5781934274,'M','1958-11-29','2002-05-04');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4662500655,'Sofia','O.','Wright',4549786,9384404000,'M','1995-05-15','2017-11-14');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2564929537,'Anne','P.','Theresa',114426,4504035844,'F','1990-08-16','2010-04-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5064863999,'Nicole','R.','Hall',182496,5397469450,'M','2003-12-19','2005-04-17');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073015,'Ned','X.','Martin',6182,6767209658,'F','1955-01-18','2017-09-15');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1228881547,'Sawyer','L.','Dixon',9249,7233038713,'M','1964-03-30','2017-04-20');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4089035780,'Brianna','C.','Perkins',7973,6331256894,'M','1981-12-30','2016-11-16');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2596009902,'Mary','K.','Melissa',9394,4399549740,'F','2004-10-05','1998-09-19');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1818624322,'Adrian','X.','Harris',27319,2389664803,'M','1974-04-08','2017-03-21');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7782466558,'Sharon','O.','Anne',39139,5228516392,'F','1984-06-14','2020-12-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6004615448,'Harold','C.','Joe',36194,5055451320,'M','1969-07-21','2018-05-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1071916066,'Cadie','I.','Bailey',46207,4403095817,'F','1958-04-30','1999-02-14');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9455396887,'Carina','S.','Watson',6919,4098812342,'M','1967-07-10','2023-03-09');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2552794347,'Edgar','B.','Spencer',30543,4537002429,'M','1984-09-21','2003-09-13');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5666989915,'Jared','W.','Thomas',31348,2938654496,'F','1956-04-20','2001-12-21');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6471839288,'Amelia','L.','Moore',17299,7166539731,'M','1970-03-07','2004-08-09');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4775339493,'James','Q.','Morrison',14150,4095169758,'F','1991-01-11','2004-10-13');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6839710329,'Donna','S.','Carl',9836,9099145640,'F','1979-05-16','2020-04-22');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6144043210,'Sophia','E.','Andrews',9408,9749441704,'M','1965-05-10','2019-10-23');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6889127768,'Myra','T.','Harris',11949,5482141634,'M','2004-10-04','2003-10-30');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6795700315,'Antony','U.','Hawkins',60854,6266275512,'M','1997-06-15','2004-02-22');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6762227282,'Brenda','K.','Jimmy',35063,8393450665,'F','1965-04-03','2015-04-30');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3253673037,'Kelvin','H.','Ferguson',10707,6437561662,'F','1974-07-30','1999-12-30');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6979274052,'Tara','K.','Reed',9992,1811188368,'F','1998-06-05','2006-04-09');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1242581599,'Briony','M.','Anderson',10985,4947227165,'M','1984-05-17','2009-12-05');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9656325312,'Maximilian','R.','Nelson',10678,9292327435,'M','1971-04-29','2014-07-26');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5094754453,'Kellan','V.','Elliott',10020,4907179430,'F','2002-04-30','1996-09-28');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7162241260,'Jared','O.','Robinson',12302,6781554132,'F','1978-09-21','2004-01-26');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5656436115,'Patrick','L.','Brooks',11707,9226071227,'M','1978-04-06','1999-02-08');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8660516635,'Chelsea','K.','Evans',10576,6124892628,'F','1986-08-16','2013-06-27');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6154727188,'Adrian','R.','Ellis',10481,2702961493,'F','1957-10-10','1999-02-12');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7856451395,'James','K.','Hawkins',12465,4727527357,'M','1968-02-05','2008-10-15');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7029451799,'Roy','A.','Jason',10895,3081978275,'M','1961-04-09','2019-05-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7514048819,'Tony','I.','Warren',10166,1766616855,'M','1950-04-24','2013-10-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9993757512,'Michael','J.','Brown',9018,7505374919,'F','1997-11-02','2014-10-22');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6378527201,'Alexia','K.','Perkins',24445,6706734298,'M','1962-05-27','1997-02-15');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6560444561,'Alan','S.','Hall',10966,8888419465,'F','1954-10-12','2015-02-02');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9923912715,'Antony','G.','Morrison',8293,9150128637,'F','1960-02-13','1997-03-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2199130905,'Samantha','U.','Carter',26681,3632315913,'M','1965-06-28','2015-01-26');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2049569671,'Audrey','U.','Alexander',4775,3958687192,'M','1952-12-10','2000-12-22');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8235456444,'Ryan','P.','Gray',49443,5162882057,'M','2003-11-28','2005-01-18');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3058929914,'Amanda','B.','Hawkins',9959,1265125699,'M','1958-02-10','2016-12-19');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6224231677,'Arianna','O.','Mitchell',6421,5777060586,'M','1954-03-05','1997-11-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9777755494,'Jenna','L.','Allen',12233,7183761517,'M','1953-10-03','1997-10-25');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7415504759,'Luke','X.','Johnston',10721,3213567281,'M','1964-05-05','1995-09-02');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8607533006,'Antony','B.','Mason',10925,8137190487,'F','1989-08-27','2016-10-20');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6794118189,'Aldus','I.','Higgins',30557,2962467263,'F','1998-02-28','1999-01-13');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9559423186,'Ned','X.','Anderson',8653,9848653818,'F','1997-03-24','2022-06-24');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2532145686,'Jessica','M.','Lloyd',8246,8316256919,'M','1969-03-29','2022-10-31');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9812666138,'Lois','L.','Brenda',8251,2833773195,'M','1952-07-19','2010-08-28');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5738691381,'Alissa','X.','Parker',8494,3731790377,'F','1966-11-30','2023-10-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1036077180,'Maximilian','B.','Andrews',8191,5645059872,'M','1968-10-14','2006-12-05');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2306046365,'Nicholas','R.','Bailey',8358,4187954512,'M','1983-04-05','2001-06-15');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3949455487,'Elizabeth','X.','Jimmy',18420,5442487176,'M','1989-02-01','2011-10-22');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8281942741,'Carina','X.','Campbell',9737,4247811494,'M','1951-02-28','2018-11-07');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3879160954,'Sophia','A.','Reed',9636,7364688681,'M','1977-10-08','2014-05-20');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8698663522,'Melissa','A.','Chapman',11535,9936217459,'F','1987-12-02','2021-12-28');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1063563524,'Steven','L.','Montgomery',6529,7447049406,'F','1951-12-28','2019-01-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6920182756,'Arthur','K.','Foster',40080,6812874426,'M','1953-04-13','2014-11-28');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2067415434,'Chester','T.','Williams',7404,4176186111,'F','1971-08-20','2014-11-14');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7556917806,'Violet','W.','Farrell',7637,3249073557,'F','1954-03-22','1998-11-05');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5880889912,'Emma','R.','Ferguson',9459,2255785771,'M','1972-03-30','2023-05-28');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2343867626,'Lucas','K.','Bennett',41951,8082382208,'M','1956-11-18','2014-04-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2049010047,'Darcy','C.','Tucker',36239,5902257248,'F','1961-05-08','2005-04-05');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6735638271,'Alberta','B.','Robinson',9792,4154114257,'F','1965-05-04','2009-02-04');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3300076804,'Daryl','Q.','Martin',30480,9798767966,'M','1970-04-18','1995-12-23');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6625811960,'Kristian','M.','Morgan',9852,1726864584,'F','1999-08-11','2018-11-24');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1250946629,'Amy','Y.','Mitchell',57429,2662994532,'M','1982-09-22','2006-06-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8581806435,'Arnold','W.','Andrews',9708,1610709074,'M','2005-09-11','2021-01-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7635460557,'Lillian','D.','Andrea',9878,7415001314,'M','2004-07-28','2006-09-08');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1443933295,'Brooke','O.','Brown',38961,9987276344,'M','1983-12-04','2004-04-12');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5391252459,'Martin','P.','Dixon',36942,3743912473,'M','1979-07-19','2014-05-17');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2741700391,'Isabella','Q.','Johnston',22305,8426773758,'F','1981-03-08','2013-07-27');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7353415534,'Isabella','Q.','Robinson',58049,4604201791,'F','1979-01-27','2011-02-18');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7356719401,'Haris','R.','Harper',14121,5409750199,'F','2001-05-05','2002-11-19');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7715981543,'Mike','P.','Russell',27786,7473829460,'F','1989-05-03','2004-11-08');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5557227589,'David','O.','Fowler',46594,9627386173,'M','1986-08-30','2012-07-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8323992682,'Dainton','P.','Perry',6747,1291865750,'M','1962-01-22','2013-06-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7376558750,'Maddie','J.','Craig',7604,5375878852,'F','2001-07-09','2010-11-26');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3544575412,'Rosie','W.','Harrison',31019,9832595092,'F','1984-08-05','2007-02-20');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5977334394,'Eric','B.','Fowler',10322,5781934274,'M','1958-11-29','2002-05-04');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4662500655,'Sofia','O.','Wright',9786,9384404000,'M','1995-05-15','2017-11-14');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2564929537,'Anne','P.','Theresa',14426,4504035844,'F','1990-08-16','2010-04-29');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5064863999,'Nicole','R.','Hall',40496,5397469450,'M','2003-12-19','2005-04-17');
 
 
 INSERT INTO employee_address(SSN,Street,City,District) VALUES (2049569671,'114-36 Sutter Ave','Hamden','AL');
@@ -4347,60 +4532,11 @@ INSERT INTO supervision(SSN,SuperSSN) VALUES (8235456444,6795700315);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (5094754453,2199130905);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (5557227589,8235456444);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (5880889912,4775339493);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7514048819,6144043210);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (7514048819,6144043210);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (7556917806,5557227589);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6794118189,8698663522);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (6794118189,8698663522);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (6560444561,1443933295);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (1723073015,6471839288);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2532145686,1071916066);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6795700315,1818624322);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (3949455487,1063563524);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2306046365,4775339493);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6839710329,5977334394);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (1443933295,1723073015);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (1036077180,8698663522);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (5064863999,6979274052);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7856451395,7162241260);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (9923912715,9812666138);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (9455396887,6224231677);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8607533006,4775339493);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8323992682,7356719401);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (1250946629,4775339493);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (4662500655,5880889912);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2596009902,2552794347);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (9993757512,8607533006);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (9559423186,2343867626);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7782466558,5977334394);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (3544575412,7353415534);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2564929537,2343867626);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2049010047,3544575412);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (5656436115,6762227282);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8660516635,6839710329);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (9812666138,1242581599);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7376558750,2306046365);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (5738691381,6735638271);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6471839288,6979274052);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (4089035780,6625811960);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6920182756,8698663522);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6378527201,2552794347);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (1071916066,2049010047);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6762227282,1242581599);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7029451799,6224231677);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6224231677,6224231677);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6735638271,2343867626);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7162241260,2343867626);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (1242581599,7376558750);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7353415534,2552794347);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (5977334394,8281942741);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8698663522,7162241260);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8281942741,5557227589);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2049569671,6004615448);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2199130905,1228881547);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (6625811960,7376558750);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (3253673037,9923912715);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (4775339493,9777755494);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (2343867626,9455396887);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8581806435,6889127768);
 
 INSERT INTO flight(FlightID,RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT,BasePrice) VALUES (1,3,'Unassigned',9,9993757512,'EQ0101','2024-04-17 14:44:38.844114','2024-04-18 00:13:48.844114','1970-01-01','1970-01-01',0.057);
 INSERT INTO flight(FlightID,RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT,BasePrice) VALUES (2,26,'Landed',13,9656325312,'LO0101','2024-04-14 17:30:59.844114','2024-04-14 22:43:13.844114','2024-04-14 16:54:24.844114','2024-04-14 21:54:20.844114',0.066);
@@ -4457,166 +4593,217 @@ INSERT INTO operates(FlightID,FSSN,Role) VALUES (1,6224231677,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (1,1036077180,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (1,6004615448,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (1,3544575412,'Flight Attendant');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (1,7415504759,'Pilot');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (2,7415504759,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (2,2552794347,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (2,2306046365,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (2,2049569671,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (3,2564929537,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (3,1250946629,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (3,7353415534,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (3,7162241260,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (4,7356719401,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (4,1242581599,'Pilot');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (4,7556917806,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (4,4662500655,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (4,8281942741,'Flight Attendant');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (4,8581806435,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (5,7856451395,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (5,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (5,8581806435,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (5,7635460557,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (6,7514048819,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (6,6889127768,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (6,7162241260,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (6,3544575412,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (7,6839710329,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (7,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (7,6004615448,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (7,3544575412,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (8,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (8,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (8,1063563524,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (8,2049569671,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (9,6224231677,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (9,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (9,7029451799,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (9,6762227282,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (10,6889127768,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (10,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (10,4775339493,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (10,9923912715,'Flight Attendant');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (10,1063563524,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (11,7356719401,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (11,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (11,7353415534,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (11,6762227282,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (12,7556917806,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (12,2552794347,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (12,8235456444,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (12,2343867626,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (13,7415504759,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (13,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (13,9923912715,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (13,1063563524,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (14,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (14,6224231677,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (14,7029451799,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (14,6004615448,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (15,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (15,6839710329,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (15,4662500655,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (15,2343867626,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (16,7856451395,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (16,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (16,8281942741,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (16,2067415434,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (17,1250946629,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (17,1242581599,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (17,2306046365,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (17,6004615448,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (18,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (18,7415504759,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (18,8323992682,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (18,6004615448,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (19,1242581599,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (19,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (19,3544575412,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (19,2343867626,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (20,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (20,1242581599,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (20,1071916066,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (20,7353415534,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (21,7556917806,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (21,6795700315,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (21,4662500655,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (21,1063563524,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (22,7356719401,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (22,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (22,1063563524,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (22,7029451799,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (23,2564929537,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (23,7514048819,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (23,6762227282,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (23,8281942741,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (24,3949455487,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (24,7856451395,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (24,8581806435,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (24,8281942741,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (25,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (25,6224231677,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (25,2049569671,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (25,8235456444,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (26,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (26,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (26,7162241260,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (26,2067415434,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (27,2552794347,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (27,6795700315,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (27,8323992682,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (27,3544575412,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (28,1036077180,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (28,1250946629,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (28,1063563524,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (28,2343867626,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (29,3949455487,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (29,7356719401,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (29,7353415534,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (29,9923912715,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (30,6839710329,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (30,1036077180,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (30,8581806435,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (30,4662500655,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (31,7556917806,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (31,1242581599,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (31,3544575412,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (31,7162241260,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (32,2564929537,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (32,6224231677,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (32,2067415434,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (32,4662500655,'Flight Attendant');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (32,9923912715,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (33,7514048819,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (33,3949455487,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (33,3544575412,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (33,7029451799,'Flight Attendant');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (33,6004615448,'Flight Attendant');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (33,2049569671,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (34,5977334394,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (34,7415504759,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (34,9923912715,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (34,2049569671,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (35,3949455487,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (35,7856451395,'Pilot');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (35,8607533006,'Pilot');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (35,7415504759,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (35,6762227282,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (35,9923912715,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (36,1242581599,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (36,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (36,3544575412,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (36,9923912715,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (37,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (37,7556917806,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (37,6762227282,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (37,7353415534,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (38,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (38,7856451395,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (38,2306046365,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (38,4775339493,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (39,5880889912,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (39,1242581599,'Pilot');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (39,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (39,8281942741,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (39,2343867626,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (40,6839710329,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (40,8607533006,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (40,8323992682,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (40,7353415534,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (41,2552794347,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (41,6224231677,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (41,8281942741,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (41,2343867626,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (42,7514048819,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (42,1036077180,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (42,7635460557,'Flight Attendant');
@@ -4637,18 +4824,24 @@ INSERT INTO operates(FlightID,FSSN,Role) VALUES (46,5977334394,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (46,5656436115,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (46,9923912715,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (46,8323992682,'Flight Attendant');
+
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (47,6224231677,'Pilot');
+INSERT INTO operates(FlightID,FSSN,Role) VALUES (47,7514048819,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (47,5064863999,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (47,5977334394,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (47,6004615448,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (47,7353415534,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (48,6889127768,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (48,7514048819,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (48,7162241260,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (48,9923912715,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (49,5880889912,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (49,6839710329,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (49,8323992682,'Flight Attendant');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (49,7353415534,'Flight Attendant');
+
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (50,7556917806,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (50,6795700315,'Pilot');
 INSERT INTO operates(FlightID,FSSN,Role) VALUES (50,6004615448,'Flight Attendant');

@@ -26,14 +26,15 @@
                 <span>
                     <div class="d-felx badge-pill">
                         <span class="fa fa-user mr-2"></span>
-                        <span><b><?php echo ucwords($_SESSION['login_firstname']) ?></b></span>
+                        <span><b><?php echo ucwords($_SESSION['login_name']) ?></b></span>
                         <span class="fa fa-angle-down ml-2"></span>
                     </div>
                 </span>
             </a>
             <div class="dropdown-menu" aria-labelledby="account_settings" style="left: -2.5em;">
-                <a class="dropdown-item" href="javascript:void(0)" id="manage_account"><i class="fa fa-cog"></i> Manage
-                    Account</a>
+                <!-- <a class="dropdown-item" href="javascript:void(0)" id="manage_account"><i class="fa fa-cog"></i> Manage
+                    Account
+                </a> -->
                 <a class="dropdown-item" href="ajax.php?action=logout"><i class="fa fa-power-off"></i> Logout</a>
             </div>
         </li>

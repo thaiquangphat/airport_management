@@ -2,20 +2,11 @@
 <div class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
                     href="./index.php?page=new_airplane"><i class="fa fa-plus"></i> Add New Airplane</a>
             </div>
-            <?php endif; ?>
         </div>
-        <!-- AirplaneID INT AUTO_INCREMENT,
-        License_plate_num VARCHAR(7) UNIQUE NOT NULL,
-        AirlineID CHAR(3) NOT NULL,
-        OwnerID INT NOT NULL,
-        ModelID INT,
-        LeasedDate TIMESTAMP NOT NULL,
-        MName VARCHAR(50), -->
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
                 <thead>
@@ -78,15 +69,6 @@
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_airplane', function() {
         window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
     });
@@ -98,7 +80,7 @@ $(document).ready(function() {
 })
 
 function delete_airplane($airplaneid) {
-    start_load()
+    start_load();
     $.ajax({
         url: 'ajax.php?action=delete_airplane',
         method: 'POST',
@@ -107,17 +89,18 @@ function delete_airplane($airplaneid) {
         },
         success: function(resp) {
             if (resp == 1) {
-                alert_toast("Data successfully deleted", 'success')
+                alert_toast("Data successfully deleted", 'success');
                 setTimeout(function() {
-                    location.reload()
-                }, 1500)
+                    location.reload();
+                }, 1500);
             } else {
-                alert_toast('Data failed to delete.', "error");
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
-                    location.replace('index.php?page=list_airplane')
-                }, 750)
+                    location.reload();
+                }, 750);
             }
-        }
-    })
+        }.bind(this) // Bind this to the AJAX context
+    });
 }
 </script>

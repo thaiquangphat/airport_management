@@ -43,15 +43,31 @@
                                 if ($check > 0) $asType = 'Emergency Service';
                             ?>
                             <select class="form-control form-control-sm select2" name="ASType">
-                                <option value="HR" <?php echo isset($asType) && $asType == 'HR' ? 'selected' : '' ?>>HR</option>
-                                <option value="Secretary" <?php echo isset($asType) && $asType == 'Secretary' ? 'selected' : '' ?>>Secretary</option>
-                                <option value="Data Entry" <?php echo isset($asType) && $asType == 'Data Entry' ? 'selected' : '' ?>>Data Entry</option>
-                                <option value="Receptionist" <?php echo isset($asType) && $asType == 'Receptionist' ? 'selected' : '' ?>>Receptionist</option>
-                                <option value="Communications" <?php echo isset($asType) && $asType == 'Communications' ? 'selected' : '' ?>>Communications</option>
-                                <option value="PR" <?php echo isset($asType) && $asType == 'PR' ? 'selected' : '' ?>>PR</option>
-                                <option value="Security" <?php echo isset($asType) && $asType == 'Security' ? 'selected' : '' ?>>Sercurity</option>
-                                <option value="Ground Service" <?php echo isset($asType) && $asType == 'Ground Service' ? 'selected' : '' ?>>Ground Service</option>
-                                <option value="Emergency Service" <?php echo isset($asType) && $asType == 'Emergency Service' ? 'selected' : '' ?>>Emergency Service</option>
+                                <option value="HR" <?php echo isset($asType) && $asType == 'HR' ? 'selected' : '' ?>>HR
+                                </option>
+                                <option value="Secretary"
+                                    <?php echo isset($asType) && $asType == 'Secretary' ? 'selected' : '' ?>>Secretary
+                                </option>
+                                <option value="Data Entry"
+                                    <?php echo isset($asType) && $asType == 'Data Entry' ? 'selected' : '' ?>>Data Entry
+                                </option>
+                                <option value="Receptionist"
+                                    <?php echo isset($asType) && $asType == 'Receptionist' ? 'selected' : '' ?>>
+                                    Receptionist</option>
+                                <option value="Communications"
+                                    <?php echo isset($asType) && $asType == 'Communications' ? 'selected' : '' ?>>
+                                    Communications</option>
+                                <option value="PR" <?php echo isset($asType) && $asType == 'PR' ? 'selected' : '' ?>>PR
+                                </option>
+                                <option value="Security"
+                                    <?php echo isset($asType) && $asType == 'Security' ? 'selected' : '' ?>>Sercurity
+                                </option>
+                                <option value="Ground Service"
+                                    <?php echo isset($asType) && $asType == 'Ground Service' ? 'selected' : '' ?>>Ground
+                                    Service</option>
+                                <option value="Emergency Service"
+                                    <?php echo isset($asType) && $asType == 'Emergency Service' ? 'selected' : '' ?>>
+                                    Emergency Service</option>
                             </select>
                         </div>
                     </div>
@@ -108,13 +124,21 @@ $('#manage_employee').submit(function(e) {
                 setTimeout(function() {
                     location.replace('index.php?page=list_administrative_support')
                 }, 750)
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

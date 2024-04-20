@@ -9,18 +9,11 @@
 <div id="person-table" style="" class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_owner"><i
                         class="fa fa-plus"></i> Add New Owner-Person</a>
             </div>
-            <?php endif; ?>
         </div>
-        <!-- SSN CHAR(10),
-        Name VARCHAR(50),
-        Phone CHAR(10),
-        Address VARCHAR(50),
-        OwnerID INT, -->
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
                 <thead>
@@ -80,18 +73,12 @@
 <div id="cooperation-table" style="display: none;" class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
                     href="./index.php?page=new_owner_cooperation"><i class="fa fa-plus"></i> Add New
                     Owner-Cooperation</a>
             </div>
-            <?php endif; ?>
         </div>
-        <!-- Name VARCHAR(50),
-        Address VARCHAR(50),
-        Phone CHAR(10),
-        OwnerID INT, -->
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list1">
                 <thead>
@@ -193,13 +180,21 @@ function delete_owner($ownerid) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_owner')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_owner')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

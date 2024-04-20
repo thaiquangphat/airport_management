@@ -8,20 +8,6 @@ if(isset($_GET['id'])){
 }
 ?>
 
-<!-- View of airport
-MAIN
-airport name
-airport code
-city
-latitude
-longitude
-owner
-
-TEAM MEMBERS
-Total employee of Airplane: ...
-Member List
-SSN Name Role -->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -57,39 +43,17 @@ SSN Name Role -->
                     <span><b>Expert-Airport-Model List</b></span>
                     <div><small>This show the information of Airport and Model that this Consultant experts at.</small>
                     </div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- CREATE TABLE Expert_At
-                            (
-                                ConsultID INT,
-                                APCode    CHAR(3),
-                                ModelID   INT,
-                                PRIMARY KEY (ConsultID, APCode, ModelID),
-                                FOREIGN KEY (ConsultID) REFERENCES Consultant (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                                FOREIGN KEY (APCode) REFERENCES Airport (APCode) ON DELETE CASCADE ON UPDATE CASCADE,
-                                FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
-                            ); 
-                            CREATE TABLE Consultant
-                            (
-                                ID INT AUTO_INCREMENT,
-                                Name    VARCHAR(50),
-                                PRIMARY KEY (ID)
-                            );
-                            -->
                             <thead>
                                 <th>Consultant ID</th>
                                 <th>Consultant Name</th>
                                 <th>Airport Code</th>
                                 <th>Model ID</th>
                                 <th>Model Name</th>
+                                <th>Action</th>
                             </thead>
                             <tbody>
                                 <?php 
@@ -113,6 +77,18 @@ SSN Name Role -->
                                     <td class=""><?php echo $row['APCode'] ?></td>
                                     <td class=""><?php echo $row['ModelID'] ?></td>
                                     <td class=""><?php echo $row['MName'] ?></td>
+                                    <td class="">
+                                        <button type="button"
+                                            class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
+                                            data-toggle="dropdown" aria-expanded="true">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" style="">
+                                            <a class="dropdown-item delete_expert" href="javascript:void(0)"
+                                                data-id="<?php echo $row['ConsultID'].'-'.$row['APCode'].'-'.$row['ModelID']?>">
+                                                Delete</a>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <?php 
                                 endwhile;
@@ -127,7 +103,57 @@ SSN Name Role -->
 </div>
 
 <style>
+img#cimg {
+    height: 15vh;
+    width: 15vh;
+    object-fit: cover;
+    border-radius: 100% 100%;
+}
 </style>
 
 <script>
+$(document).ready(function() {
+    // Function to handle change event of the select element for OwnerID
+    $(document).on('click', '.delete_expert', function() {
+        _conf_str("Are you sure to delete this expertise [" + $(this).attr('data-id') + "] ?",
+            "delete_expert", [$(this).attr('data-id')]);
+    });
+})
+
+function delete_expert($data) {
+    start_load()
+    $.ajax({
+        url: 'ajax.php?action=delete_expert',
+        method: 'POST',
+        data: {
+            data: $data
+        },
+        success: function(resp) {
+            if (resp == 1) {
+                alert_toast("Data successfully deleted", 'success')
+                setTimeout(function() {
+                    location.reload()
+                }, 1500)
+            } else if (resp == 3) {
+                alert_toast('Debug', "error");
+                setTimeout(function() {
+                    location.reload();
+                }, 750)
+            }
+            // else {
+            //     alert_toast('Data failed to delete.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            }
+        }.bind(this) // Bind this to the AJAX context
+    })
+}
 </script>

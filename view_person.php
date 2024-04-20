@@ -8,34 +8,6 @@ if(isset($_GET['ownerid'])){
 }
 ?>
 
-<!--
-CREATE TABLE Owner
-(
-    OwnerID INT AUTO_INCREMENT,
-    Phone   CHAR(10),
-    PRIMARY KEY (OwnerID)
-);
-
-CREATE TABLE Cooperation
-(
-    Name    VARCHAR(50),
-    Address VARCHAR(50),
-    OwnerID INT,
-    PRIMARY KEY (Name),
-    FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE Person
-(
-    SSN     CHAR(10),
-    Name    VARCHAR(50),
-    Address VARCHAR(50),
-    OwnerID INT,
-    PRIMARY KEY (SSN),
-    FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE
-);
--->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -76,12 +48,6 @@ CREATE TABLE Person
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -125,7 +91,7 @@ CREATE TABLE Person
                                     <td>
                                         <p><?php echo date("F d, Y",strtotime($row['LeasedDate'])) ?></p>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="">
                                         <button type="button"
                                             class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
                                             data-toggle="dropdown" aria-expanded="true">
@@ -165,16 +131,6 @@ CREATE TABLE Person
 <script>
 $(document).ready(function() {
     $('#list').dataTable()
-
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_airplane', function() {
         window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
     });
@@ -186,7 +142,7 @@ $(document).ready(function() {
 })
 
 function delete_airplane($airplaneid) {
-    start_load()
+    start_load();
     $.ajax({
         url: 'ajax.php?action=delete_airplane',
         method: 'POST',
@@ -195,18 +151,18 @@ function delete_airplane($airplaneid) {
         },
         success: function(resp) {
             if (resp == 1) {
-                alert_toast("Data successfully deleted", 'success')
+                alert_toast("Data successfully deleted", 'success');
                 setTimeout(function() {
-                    location.reload()
-                }, 1500)
+                    location.reload();
+                }, 1500);
             } else {
-                alert_toast('Data failed to delete.', "error");
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
-                    // location.replace('index.php?page=list_airplane')
-                    location.replace('index.php?page=view_airplane&id='.$_GET['id'])
-                }, 750)
+                    location.reload();
+                }, 2000);
             }
-        }
-    })
+        }.bind(this) // Bind this to the AJAX context
+    });
 }
 </script>

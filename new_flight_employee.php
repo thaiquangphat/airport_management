@@ -82,7 +82,7 @@ $(document).ready(function() {
             $('input[name="Year_Experience"]').prop('readonly', false);
         }
     });
-    
+
     $('#manage_employee input[name="License"]').change(function() {
         var selectedLicense = $(this).val();
         $('#manage_employee input[name="License"]').val(selectedLicense);
@@ -124,13 +124,21 @@ $('#manage_employee').submit(function(e) {
                 setTimeout(function() {
                     location.reload();
                 }, 750)
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

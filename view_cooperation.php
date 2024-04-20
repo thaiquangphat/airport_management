@@ -72,12 +72,6 @@ CREATE TABLE Person
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -121,7 +115,7 @@ CREATE TABLE Person
                                     <td>
                                         <p><?php echo date("F d, Y",strtotime($row['LeasedDate'])) ?></p>
                                     </td>
-                                    <td class="text-center">
+                                    <td class="">
                                         <button type="button"
                                             class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
                                             data-toggle="dropdown" aria-expanded="true">
@@ -162,15 +156,6 @@ CREATE TABLE Person
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_airplane', function() {
         window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
     });
@@ -195,14 +180,22 @@ function delete_airplane($airplaneid) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "error");
-                setTimeout(function() {
-                    // location.replace('index.php?page=list_airplane')
-                    location.replace('index.php?page=view_airplane&id='.$_GET['id'])
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "error");
+            //     setTimeout(function() {
+            //         // location.replace('index.php?page=list_airplane')
+            //         location.replace('index.php?page=view_airplane&id='.$_GET['id'])
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

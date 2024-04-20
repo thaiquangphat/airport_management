@@ -1,15 +1,10 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <div class="dropdown">
         <a href="./" class="brand-link">
-            <?php if($_SESSION['login_type'] == 1): ?>
-            <h3 class="text-center p-0 m-0"><b>ADMIN</b></h3>
-            <?php elseif($_SESSION['login_type'] == 2): ?>
-            <h3 class="text-center p-0 m-0"><b>MANAGER</b></h3>
-            <?php else: ?>
-            <h3 class="text-center p-0 m-0"><b>USER</b></h3>
-            <?php endif; ?>
+            <h3 class="text-center p-0 m-0">
+                <b><?php echo isset($_SESSION['login_name']) ? $_SESSION['login_name'] : ''; ?></b>
+            </h3>
         </a>
-
     </div>
     <div class="sidebar pb-4 mb-4">
         <nav class="mt-2">
@@ -24,7 +19,6 @@
                     </a>
                 </li>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_airport nav-view_airport">
                         <i class="nav-icon fas fa-building"></i>
@@ -34,14 +28,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
                             <a href="./index.php?page=new_airport" class="nav-link nav-new_airport tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add New</p>
                             </a>
                         </li>
-                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="./index.php?page=list_airport" class="nav-link nav-list_airport tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
@@ -50,9 +42,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_airline nav-view_airline">
                         <i class="nav-icon fas fa-rocket"></i>
@@ -62,14 +52,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
                             <a href="./index.php?page=new_airline" class="nav-link nav-new_airline tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add New</p>
                             </a>
                         </li>
-                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="./index.php?page=list_airline" class="nav-link nav-list_airline tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
@@ -78,9 +66,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_owner">
                         <i class="nav-icon fas fa-briefcase"></i>
@@ -90,14 +76,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
                             <a href="./index.php?page=new_owner" class="nav-link nav-new_owner tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add Owner</p>
                             </a>
                         </li>
-                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="./index.php?page=list_owner" class="nav-link nav-list_owner tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
@@ -106,9 +90,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_airline nav-view_model">
                         <i class="nav-icon fas fa-robot"></i>
@@ -118,14 +100,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
                             <a href="./index.php?page=new_model" class="nav-link nav-new_model tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add New</p>
                             </a>
                         </li>
-                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="./index.php?page=list_model" class="nav-link nav-list_model tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
@@ -134,9 +114,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_airplane nav-view_airplane">
                         <i class="nav-icon fas fa-plane"></i>
@@ -146,23 +124,27 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
                             <a href="./index.php?page=new_airplane" class="nav-link nav-new_airplane tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add New</p>
                             </a>
                         </li>
-                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="./index.php?page=list_airplane" class="nav-link nav-list_airplane tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>List</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="./index.php?page=graph_top_airplane"
+                                class="nav-link nav-graph_top_airplane tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Top 10 Most Used Airplane</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
                 <li class="nav-item">
                     <a href="./index.php?page=list_route" class="nav-link nav-list_route">
@@ -178,7 +160,6 @@
                     </a>
                 </li>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_flight nav-view_flight">
                         <i class="nav-icon fas fa-plane-departure"></i>
@@ -188,14 +169,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php if($_SESSION['login_type'] == 1): ?>
                         <li class="nav-item">
                             <a href="./index.php?page=new_flight" class="nav-link nav-new_flight tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add New</p>
                             </a>
                         </li>
-                        <?php endif; ?>
                         <li class="nav-item">
                             <a href="./index.php?page=list_flight" class="nav-link nav-list_flight tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
@@ -204,9 +183,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_employee">
                         <i class="nav-icon fas fa-users"></i>
@@ -220,6 +197,19 @@
                             <a href="./index.php?page=new_employee" class="nav-link nav-new_employee tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
                                 <p>Add Employee</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./index.php?page=graph_employee" class="nav-link nav-graph_employee tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Graph for Employee</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./index.php?page=graph_average_salary"
+                                class="nav-link nav-graph_average_salary tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Graph Average Salary</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -257,9 +247,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_consultant nav-view_consultant">
                         <i class="nav-icon fas fa-user-tie"></i>
@@ -283,14 +271,8 @@
                         </li>
                     </ul>
                 </li>
-                <?php endif?>
 
-                <?php if($_SESSION['login_type'] != 3): ?>
                 <li class="nav-item">
-                    <!-- <a href="./index.php?page=list_passenger" class="nav-link nav-list_passenger">
-                        <i class="fas fa-calendar-check nav-icon"></i>
-                        <p>Passenger</p>
-                    </a> -->
                     <a href="#" class="nav-link nav-edit_passenger nav-view_passenger">
                         <i class="nav-icon fas fa-user-tie"></i>
                         <p>
@@ -311,12 +293,17 @@
                                 <p>List</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="./index.php?page=graph_top_passenger"
+                                class="nav-link nav-graph_top_passenger tree-item">
+                                <i class="fas fa-angle-right nav-icon"></i>
+                                <p>Top 10 VIP</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <?php endif; ?>
 
-                <?php if($_SESSION['login_type'] == 1): ?>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link nav-edit_user">
                         <i class="nav-icon fas fa-user-secret"></i>
                         <p>
@@ -338,8 +325,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
-                <?php endif; ?>
+                </li> -->
             </ul>
         </nav>
     </div>

@@ -20,7 +20,8 @@ ob_end_flush();
 
 <style>
 #intro {
-    background-image: url(https://www.wallpaperuse.com/wallp/73-736441_m.jpg);
+    background-image: url(https://lms.hcmut.edu.vn/pluginfile.php/3/theme_academi/slide1image/1711678871/slbk.jpg);
+    /* background-image: url('./img/background.jpg'); */
     height: 100vh;
     background-size: auto 100%;
 }
@@ -42,7 +43,7 @@ ob_end_flush();
         <div class="login-logo">
             <a href="#" class="text-black"><b><?php echo $_SESSION["system"][
         "name"
-        ]; ?> - Login</b></a>
+    ]; ?> - Login</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card" style="">
@@ -52,7 +53,7 @@ ob_end_flush();
                         <input type="text" class="form-control" name="user" required placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-user"></span>
+                                <span class="fas fa-envelope"></span>
                             </div>
                         </div>
                     </div>
@@ -81,11 +82,11 @@ ob_end_flush();
                     </div>
                     <div class="row">
                         <!-- /.col -->
-                        <div
+                        <!-- <div
                             style="border: 1px solid transparent; padding: .375rem .75rem; border-right: 0; display: block; width: 100%;">
                             Don't have an account?
                             <a href="register.php"> Register</button>
-                        </div>
+                        </div> -->
                         <!-- /.col -->
                     </div>
                 </form>
@@ -105,20 +106,33 @@ ob_end_flush();
                 url: 'ajax.php?action=login',
                 method: 'POST',
                 data: $(this).serialize(),
-                error: err => {
-                    console.log(err)
-                    end_load();
-                },
+                // error: err => {
+                //     console.log(err)
+                //     end_load();
+                // },
                 success: function(resp) {
                     if (resp == 1) {
-                        location.href = 'index.php?page=home';
-                    } else {
-                        $('#login-form').prepend(
-                            '<div class="alert alert-danger">Username or password is incorrect.</div>'
-                        )
-                        end_load();
+                        // location.href = 'index.php?page=home';
+                        // added here
+                        setTimeout(function() {
+                            location.replace('index.php?page=home')
+                        }, 750)
+                        // end added
                     }
-                }
+                    // else {
+                    //     $('#login-form').prepend(
+                    //         '<div class="alert alert-danger">Username or password is incorrect.</div>'
+                    //     )
+                    //     end_load();
+                    // }
+                    else {
+                        alert_toast('Cai loi gi z tr: ' + resp,
+                            "error"); // Display the error message returned from the server
+                        setTimeout(function() {
+                            location.reload();
+                        }, 750);
+                    }
+                }.bind(this) // Bind this to the AJAX context
             })
         })
     })

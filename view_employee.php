@@ -31,30 +31,6 @@ if(isset($_GET['ssn'])){
             }
         }
     }
-    
-    // Display additional details based on role
-    // if($role == "Traffic_Controller" || $role == "Flight_Attendant" || $role == "Pilot"){
-    //     $flights_qry = $conn->query("SELECT FlightID FROM Operates WHERE FSSN = ".$_GET['ssn']);
-    //     if($flights_qry->num_rows > 0){
-    //         while($flight = $flights_qry->fetch_assoc()){
-    //             echo "<p>Flight ID: " . $flight['FlightID'] . "</p>";
-    //         }
-    //     } else {
-    //         echo "<p>No flights assigned</p>";
-    //     }
-    // }
-
-    // if($role == "Engineer"){
-    //     echo "<h4>Expertise:</h4>";
-    //     $expertise_qry = $conn->query("SELECT MName FROM Model JOIN Expertise ON Model.ID = Expertise.ModelID WHERE ESSN = ".$_GET['ssn']);
-    //     if($expertise_qry->num_rows > 0){
-    //         while($expertise = $expertise_qry->fetch_assoc()){
-    //             echo "<p>Expertise in: " . $expertise['MName'] . "</p>";
-    //         }
-    //     } else {
-    //         echo "<p>No expertise listed</p>";
-    //     }
-    // }
 } else {
     echo "<p>Employee not found</p>";
 }
@@ -229,28 +205,10 @@ APCode char(3)
                 <div class="card-header">
                     <span><b>Flight List:</b></span>
                     <div><small>Flights that this Employee Working on</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- <colgroup>
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                            </colgroup> -->
                             <thead>
                                 <th>Flight ID</th>
                                 <th>Route ID</th>
@@ -318,12 +276,6 @@ APCode char(3)
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Model List:</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -393,12 +345,6 @@ APCode char(3)
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Flight Controlled List:</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -483,12 +429,6 @@ APCode char(3)
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b></b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -537,15 +477,6 @@ APCode char(3)
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_flight', function() {
         window.location.href = "view_flight.php?id=" + $(this).attr('data-id');
     });
@@ -583,14 +514,22 @@ function delete_flight($flightid) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "error");
-                setTimeout(function() {
-                    // location.replace('index.php?page=list_airplane')
-                    location.replace('index.php?page=view_flight&id='.$_GET['id'])
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "error");
+            //     setTimeout(function() {
+            //         // location.replace('index.php?page=list_airplane')
+            //         location.replace('index.php?page=view_flight&id='.$_GET['id'])
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 
@@ -608,13 +547,21 @@ function delete_model($id) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_model')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_model')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 
