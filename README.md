@@ -51,3 +51,15 @@
 - [19/04/24]
     - Update employee to add supervisor, view of employee can view supervisees.
     - Consider not to add address for employee (too complex, not necessary).
+- [21/04/24]
+    - SUPER BIG UPDATE.
+    - Remove user table, login by grant.
+    - Try and catch block enable.
+    - Trigger enable.
+    - Multivalue.
+    - Graph (some) -> maybe add more type of graphs.
+    - Stored procedure for graphs.
+    - View SEAT, TICKET, edit TICKET not done.
+    - Background and images maybe change later.
+    - COMMENT REMOVE IF EVERY THING IS DONE.
+    - REPORT NOT DONE (KHOIIIIIIII).
