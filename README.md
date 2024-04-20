@@ -63,3 +63,4 @@
     - Background and images maybe change later.
     - COMMENT REMOVE IF EVERY THING IS DONE.
     - REPORT NOT DONE (KHOIIIIIIII).
+    - CHECK CLAUSE not check yet.
