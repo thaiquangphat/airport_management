@@ -13,7 +13,7 @@
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required

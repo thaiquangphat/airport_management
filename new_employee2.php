@@ -6,7 +6,7 @@
             <form action="" id="manage_employee">
                 <input type="hidden" name="SSN" value="<?php echo isset($SSN) ? $SSN : '' ?>">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">New SSN</label>
                             <input type="text" name="NewSSN" class="form-control form-control-sm"
@@ -14,7 +14,7 @@
                                 value="<?php echo isset($NewSSN) ? $NewSSN : '' ?>">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required

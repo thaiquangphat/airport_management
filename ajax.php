@@ -428,5 +428,20 @@ if($action == 'delete_consultant'){
         echo $test_err; // Return the error message
     }
 }
+if ($action == 'new_expert'){
+	$save = $crud->new_expert();
+	if ($save)
+		echo $save;
+}
+if ($action == 'delete_expert'){
+	$save = $crud->delete_expert();
+	if ($save)
+		echo $save;
+}
+if ($action == 'delete_super'){
+	$save = $crud->delete_super();
+	if ($save)
+		echo $save;
+}
 ob_end_flush();
 ?>

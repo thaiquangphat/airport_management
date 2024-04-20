@@ -1724,6 +1724,36 @@ class Action
             // Store error message in $test_err
             $test_err = $error_message;
             return $test_err; // Return the error message
+
+        foreach ($_POST as $k => $v) {
+            if (!is_numeric($k) && $k != 'EmpType' && $k != 'super') {
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
+                } else {
+                    $data .= ", $k='$v' ";
+                }
+            }
+        }
+        $check = $this->db->query(
+            "SELECT * FROM Employee where SSN = '" . $SSN . "'")->num_rows;
+        if ($check > 0) {
+            return 2;
+            exit();
+        }
+        $save = $this->db->query("INSERT INTO Employee set $data");
+        if ($save) {
+            if (isset($super)) {
+                $sup = $this->db->query("INSERT INTO Supervision SET SSN = '" .$SSN. "', SuperSSN = '" . $super . "'");
+                if (!$sup) return 0;
+            }
+
+            if ($EmpType == 'ADSupport') return 3;
+            else if ($EmpType == 'FlightEmployee') return 4;
+            else if ($EmpType == 'Engineer') return 5;
+            else if ($EmpType == 'TrafficController') return 6;
+            return 1;
+        } else {
+            return 0;
         }
     }
     
@@ -2186,6 +2216,12 @@ class Action
                         default:
                             return 1;
                     }
+        foreach ($_POST as $k => $v) {
+            // Exclude numeric indices and certain parameters
+            if (!is_numeric($k) && $k != 'SSN' && $k != 'EmpType' && $k != 'NewSSN' && $k != 'NewEmpType' && $k != 'super') {
+                // Append each key-value pair to the $data string
+                if (empty($data)) {
+                    $data .= " $k='$v' ";
                 } else {
                     return 0; // Return an error message or code indicating failure
                 }
@@ -2246,7 +2282,6 @@ class Action
         }
     }
     
-
     // function delete_employee() {
     //     extract($_POST);
     //     // Wrap the APCode value in single quotes
@@ -2264,6 +2299,21 @@ class Action
             
             if ($delete) {
                 // Return 1 indicating success
+        $ssn = (isset($NewSSN) && !empty($NewSSN)) ? $NewSSN : $SSN;
+
+        if ($EmpType == $NewEmpType || $NewEmpType == 'No change') {
+            // Execute the SQL update query
+            $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
+            if ($save) {
+                if (isset($super)) {
+                    $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$ssn."'");
+                    if (!$update_super) return 0;
+                }
+
+                if ($EmpType == 'ADSupport') return 3;
+                else if ($EmpType == 'FlightEmployee') return 4;
+                else if ($EmpType == 'Engineer') return 5;
+                else if ($EmpType == 'TrafficController') return 6;
                 return 1;
             } else {
                 // Set error message and return
@@ -2275,6 +2325,34 @@ class Action
                 $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
             } else {
                 $error_message = $e->getMessage();
+        }
+        else {
+            $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
+            if ($save) {
+                if (isset($super)) {
+                    $update_super = $this->db->query("UPDATE Supervision SET SuperSSN = '" .$super."' WHERE SSN = '" .$ssn."'");
+                    if (!$update_super) return 0;
+                }
+
+                $delete="";
+                if ($EmpType == 'ADSupport') {
+                    $delete = $this->db->query("DELETE FROM Administrative_Support WHERE SSN = '" . $SSN . "'");
+                }
+                else if ($EmpType == 'FlightEmployee') {
+                    $delete = $this->db->query("DELETE FROM Flight_Employee WHERE SSN = '" . $SSN . "'");
+                }
+                else if ($EmpType == 'Engineer') {
+                    $delete = $this->db->query("DELETE FROM Engineer WHERE SSN = '" . $SSN . "'");
+                }
+                else if ($EmpType == 'TrafficController') {
+                    $delete = $this->db->query("DELETE FROM Traffic_Controller WHERE SSN = '" . $SSN . "'");
+                }
+                if ($delete && $NewEmpType == 'ADSupport') return 7;
+                if ($delete && $NewEmpType == 'FlightEmployee') return 8;
+                if ($delete && $NewEmpType == 'Engineer') return 9;
+                if ($delete && $NewEmpType == 'FlightEmployee') return 10;
+
+                return 0;
             }
         
             // Store error message in $test_err
@@ -2311,6 +2389,27 @@ class Action
     //     }
     // }
     function save_administrative_support(&$test_err) { // Note the use of &$test_err to pass by reference
+    function delete_super() {
+        extract($_POST);
+
+        $array = explode("-", $data);
+
+        $ssn = $array[0];
+        $superssn = $array[1];
+
+        $qry = "DELETE FROM Supervision WHERE SSN = '" . $ssn . "' AND SuperSSN = '" . $superssn . "'";
+
+        try {
+            $this->db->query($qry);
+        }
+        catch(mysqli_sql_exception) {
+            return 3;
+        }
+
+        return 1;
+    }
+
+    function save_administrative_support() {
         extract($_POST);
         $data = "";
     
@@ -3155,6 +3254,13 @@ class Action
     //     if (!isset($Name) || !isset($APCode) || !isset($ModelID)) {
     //         return 0; // Return 0 if any required field is missing
     //     }
+    function save_consultant() {
+        extract($_POST);
+        $_SESSION['cid'] = '1';
+        // Check if all required fields are received
+        if (!isset($Name)) {
+            return 0; // Return 0 if any required field is missing
+        }
     
     //     $sql = '';
     //     if (empty($ID)) {
@@ -3290,6 +3396,28 @@ class Action
             // Store error message in $test_err
             $test_err = $error_message;
             return $test_err; // Return the error message
+        if ($this->db->query($sql)) {
+            $_SESSION['cid'] = $ID ? $ID : mysqli_insert_id($this->db);
+            // Get the ID of the newly inserted or updated consultant
+            // $consultantId = $ID ? $ID : mysqli_insert_id($this->db);
+    
+            // $sql1 = '';
+            // if (empty($ID)) {
+            //     // Construct the SQL query for insertion into Expert_At
+            //     $sql1 = "INSERT INTO Expert_At (ConsultID, APCode, ModelID) VALUES ('$consultantId', '$APCode', '$ModelID')";
+            // } else {
+            //     // Construct the SQL query for update of Expert_At
+            //     $sql1 = "UPDATE Expert_At SET APCode = '$APCode', ModelID = '$ModelID' WHERE ConsultID = '$consultantId'";
+            // }
+    
+            // if ($this->db->query($sql1)) {
+            //     return 1; // Data successfully saved
+            // } else {
+            //     return 4; // Data failed to save
+            // }
+            return 1;
+        } else {
+            return 4; // Data failed to save
         }
     }
 
@@ -3386,5 +3514,42 @@ class Action
             $test_err = $error_message;
             return $test_err; // Return the error message
         }
+    }
+
+    function delete_expert() {
+        extract($_POST);
+
+        $array = explode("-", $data);
+
+        $id = $array[0];
+        $apcode = $array[1];
+        $modelid = $array[2];
+
+        $qry = "DELETE FROM Expert_At WHERE ConsultID = '" . $id . "' AND APCode = '" . $apcode . "' AND ModelID = '" . $modelid . "'";
+
+        try {
+            $this->db->query($qry);
+        }
+        catch(mysqli_sql_exception) {
+            return 3;
+        }
+
+        return 1;
+    }
+
+    function new_expert() {
+        extract($_POST);
+
+        if (!isset($APCode) || !isset($ModelID))
+            return 0;
+
+        $check = $this->db->query("SELECT * FROM Expert_At WHERE ConsultID = '" . $ID . "' AND APCode = '" . $APCode . "' AND ModelID = '" . $ModelID . "'")->num_rows;
+        if ($check > 0) return 2;
+        
+        $qry = "INSERT INTO Expert_At SET ConsultID = '" . $ID . "', APCode = '" . $APCode . "', ModelID = '" . $ModelID . "'";
+        
+        if ($this->db->query($qry)) return 1;
+
+        return 3;
     }
 }

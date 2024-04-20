@@ -64,9 +64,9 @@ $('#manage_consultant').submit(function(e) {
         type: 'POST',
         success: function(resp) {
             if (resp == 0) {
-                alert_toast('Some field missing.', "fail");
+                alert_toast('Some field missing.', "error");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_consultant')
+                    location.reload()
                 }, 750)
             } else if (resp == 1) {
                 alert_toast('Data successfully saved.', "success");
@@ -86,6 +86,11 @@ $('#manage_consultant').submit(function(e) {
                 setTimeout(function() {
                     location.reload();
                 }, 2000);
+            } else {
+                alert_toast('Data failed to saved.', "error");
+                setTimeout(function() {
+                    location.reload()
+                }, 750)
             }
         }.bind(this) // Bind this to the AJAX context
     })
