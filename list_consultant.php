@@ -7,13 +7,6 @@
                     href="./index.php?page=new_consultant"><i class="fa fa-plus"></i> Add New Consultant</a>
             </div>
         </div>
-        <!-- AirplaneID INT AUTO_INCREMENT,
-        License_plate_num VARCHAR(7) UNIQUE NOT NULL,
-        AirlineID CHAR(3) NOT NULL,
-        OwnerID INT NOT NULL,
-        ModelID INT,
-        LeasedDate TIMESTAMP NOT NULL,
-        MName VARCHAR(50), -->
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
                 <thead>
@@ -68,15 +61,6 @@
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_consultant', function() {
         window.location.href = "view_consultant.php?id=" + $(this).attr('data-id');
     });
@@ -101,13 +85,23 @@ function delete_consultant($consultantid) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
+            }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_consultant')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
             } else {
                 alert_toast('Data failed to delete.', "error");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_consultant')
-                }, 750)
+                    location.reload();
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

@@ -2,12 +2,10 @@
 <div class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_model"><i
                         class="fa fa-plus"></i> Add New Model</a>
             </div>
-            <?php endif; ?>
         </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
@@ -18,6 +16,7 @@
                         <th>Capacity</th>
                         <th>Max Speed</th>
                         <th>No Engineer Expertise</th>
+                        <th>No Airplane of this Model</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -36,6 +35,10 @@
                         <td><b><?php 
                                 $qry2 = $conn->query("SELECT count(*) as total FROM Model JOIN Expertise ON Model.ID = Expertise.ModelID where ID = ".$row['ID'])->fetch_assoc();
                                 echo $qry2['total'] 
+                        ?></b></td>
+                        <td><b><?php 
+                                $qry3 = $conn->query("SELECT count(*) as total FROM Airplane where ModelID = ".$row['ID'])->fetch_assoc();
+                                echo $qry3['total'] 
                         ?></b></td>
                         <td class="text-center">
                             <button type="button"
@@ -67,15 +70,6 @@
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_model', function() {
         window.location.href = "view_model.php?id=" + $(this).attr('data-id');
     });
@@ -100,13 +94,21 @@ function delete_model($id) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_model')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_model')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

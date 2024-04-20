@@ -205,8 +205,8 @@ $(document).ready(function() {
 })
 
 $('#manage_flight').submit(function(e) {
-    e.preventDefault()
-    start_load()
+    e.preventDefault();
+    start_load();
     $('#msg').html('');
 
     $.ajax({
@@ -218,34 +218,40 @@ $('#manage_flight').submit(function(e) {
         method: 'POST',
         type: 'POST',
         success: function(resp) {
-            if (resp == 0) {
+            if (resp == "MissingFields") {
                 alert_toast('Some field missing.', "fail");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_flight')
-                }, 750)
+                    location.replace('index.php?page=list_flight');
+                }, 750);
             } else if (resp == 1) {
                 alert_toast('Data successfully saved.', "success");
                 setTimeout(function() {
-                    location.replace('index.php?page=new_operate')
-                }, 750)
+                    location.replace('index.php?page=new_operate');
+                }, 750);
             } else if (resp == 2) {
-                $('#msg').html(
-                    "<div class='alert alert-danger'>Flight ID already exist.</div>");
-                $('[name="FlightID"]').addClass("border-danger")
-                end_load()
+                $('#msg').html("<div class='alert alert-danger'>Flight ID already exist.</div>");
+                $('[name="FlightID"]').addClass("border-danger");
+                end_load();
             } else if (resp == 3) {
                 $('#msg').html(
-                    "<div class='alert alert-danger'>License Plate Number already exist.</div>"
-                );
-                $('[name="License_plate_num"]').addClass("border-danger")
-                end_load()
-            } else {
-                alert_toast('Data failed to saved.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_flight')
-                }, 750)
+                    "<div class='alert alert-danger'>License Plate Number already exist.</div>");
+                $('[name="License_plate_num"]').addClass("border-danger");
+                end_load();
             }
-        }
-    })
-})
+            // else {
+            //     alert_toast('Debug: ' + resp, "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750);
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
+    });
+});
 </script>

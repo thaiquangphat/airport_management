@@ -25,8 +25,10 @@
                                     $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Morning'")->num_rows;
                                     if ($num > 0) $type="Pick"; 
                                 ?>
-                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
-                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                                <option value="Unpick"
+                                    <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>
+                                    Pick</option>
                             </select>
                         </div>
                     </div>
@@ -39,8 +41,10 @@
                                     $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Afternoon'")->num_rows;
                                     if ($num > 0) $type="Pick"; 
                                 ?>
-                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
-                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                                <option value="Unpick"
+                                    <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>
+                                    Pick</option>
                             </select>
                         </div>
                     </div>
@@ -53,8 +57,10 @@
                                     $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Evening'")->num_rows;
                                     if ($num > 0) $type="Pick"; 
                                 ?>
-                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
-                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                                <option value="Unpick"
+                                    <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>
+                                    Pick</option>
                             </select>
                         </div>
                     </div>
@@ -67,8 +73,10 @@
                                     $num=$conn->query("SELECT * FROM TCShift WHERE TCSSN = '" . $TCSSN . "' AND Shift = 'Night'")->num_rows;
                                     if ($num > 0) $type="Pick"; 
                                 ?>
-                                <option value="Unpick" <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
-                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>Pick</option>
+                                <option value="Unpick"
+                                    <?php echo isset($type) && $type == 'Unpick' ? 'selected' : '' ?>>Unpick</option>
+                                <option value="Pick" <?php echo isset($type) && $type == 'Pick' ? 'selected' : '' ?>>
+                                    Pick</option>
                             </select>
                         </div>
                     </div>
@@ -140,13 +148,21 @@ $('#manage_employee').submit(function(e) {
                 setTimeout(function() {
                     location.replace('index.php?page=list_traffic_controller')
                 }, 750)
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

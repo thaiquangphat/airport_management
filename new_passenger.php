@@ -3,20 +3,9 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-body">
-            <!-- int(4) UN zerofill AI PK 
-PID_Decode varchar(25) 
-PassportNo char(12) 
-Sex enum('M','F') 
-DOB date 
-Nationality varchar(50) 
-Fname varchar(50) 
-Minit char(2) 
-Lname varchar(50) 
-UserID int(11) -->
+
             <form action="" id="manage_passenger">
                 <input type="hidden" name="PID" value="<?php echo isset($PID) ? $PID : '' ?>">
-                <input type="hidden" name="UserID"
-                    value="<?php echo isset($UserID) ? $UserID : $_SESSION["login_id"] ?>">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -146,13 +135,21 @@ $('#manage_passenger').submit(function(e) {
                     "<div class='alert alert-danger'>Passport Number already exist.</div>");
                 $('[name="PassportNo"]').addClass("border-danger")
                 end_load()
-            } else {
-                alert_toast('Data failed to saved.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_passenger')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to saved.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_passenger')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

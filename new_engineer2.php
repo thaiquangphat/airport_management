@@ -30,9 +30,15 @@
                             ?>
                             <select class="form-control form-control-sm select2" name="EType">
                                 <option></option>
-                                <option value="Avionic Engineer" <?php echo isset($type) && $type == 'Avionic Engineer' ? 'selected' : '' ?>>Avionic Engineer</option>
-                                <option value="Mechanical Engineer" <?php echo isset($type) && $type == 'Mechanical Engineer' ? 'selected' : '' ?>>Mechanical Engineer</option>
-                                <option value="Electric Engineer" <?php echo isset($type) && $type == 'Electric Engineer' ? 'selected' : '' ?>>Electric Engineer</option>
+                                <option value="Avionic Engineer"
+                                    <?php echo isset($type) && $type == 'Avionic Engineer' ? 'selected' : '' ?>>Avionic
+                                    Engineer</option>
+                                <option value="Mechanical Engineer"
+                                    <?php echo isset($type) && $type == 'Mechanical Engineer' ? 'selected' : '' ?>>
+                                    Mechanical Engineer</option>
+                                <option value="Electric Engineer"
+                                    <?php echo isset($type) && $type == 'Electric Engineer' ? 'selected' : '' ?>>
+                                    Electric Engineer</option>
                             </select>
                         </div>
                     </div>
@@ -89,13 +95,21 @@ $('#manage_employee').submit(function(e) {
                 setTimeout(function() {
                     location.replace('index.php?page=list_engineer')
                 }, 750)
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

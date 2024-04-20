@@ -10,12 +10,10 @@
 <div id="flight_emp-table" style="" class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
                     href="./index.php?page=new_employee"><i class="fa fa-plus"></i> Add New Flight Employee</a>
             </div>
-            <?php endif; ?>
         </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
@@ -69,12 +67,10 @@
 <div id="flight_at-table" style="display: none;" class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
                     href="./index.php?page=new_employee"><i class="fa fa-plus"></i> Add New Flight Attendant</a>
             </div>
-            <?php endif; ?>
         </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
@@ -126,12 +122,10 @@
 <div id="pilot-table" style="display: none;" class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
                     href="./index.php?page=new_employee"><i class="fa fa-plus"></i> Add New Flight Employee</a>
             </div>
-            <?php endif; ?>
         </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
@@ -218,13 +212,21 @@ function delete_employee($ssn) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_employee')
-                }, 75000)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_employee')
+            //     }, 75000)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

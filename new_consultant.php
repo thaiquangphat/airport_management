@@ -19,7 +19,7 @@
                 <div class="col-lg-12 text-right justify-content-center d-flex">
                     <button class="btn btn-primary mr-2">Save</button>
                     <button class="btn btn-secondary" type="button"
-                        onclick="location.href = 'index.php?page=list_airplane'">Cancel</button>
+                        onclick="location.href = 'index.php?page=home'">Cancel</button>
                 </div>
             </form>
         </div>
@@ -35,15 +35,6 @@ img#cimg {
 </style>
 <script>
 $(document).ready(function() {
-    // document.getElementById('owner-type-chosen').addEventListener('change', function() {
-    //     var selectedOption = this.value;
-    //     // Hide all tables
-    //     document.getElementById('person-choose').style.display = 'none';
-    //     document.getElementById('cooperation-choose').style.display = 'none';
-    //     // Show the selected table
-    //     document.getElementById(selectedOption + '-choose').style.display = 'block';
-    // });
-
     // Function to handle change event of the select element for OwnerID
     // $('#manage_consultant select[name="APCode"]').change(function() {
     //     var selectedAPCode = $(this).val();
@@ -82,13 +73,26 @@ $('#manage_consultant').submit(function(e) {
                 setTimeout(function() {
                     location.replace('index.php?page=expert_at')
                 }, 750)
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_consultant')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             } else {
                 alert_toast('Data failed to saved.', "error");
                 setTimeout(function() {
                     location.reload()
                 }, 750)
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>
