@@ -51,14 +51,7 @@
 <script>
 $(document).ready(function() {
     $('#list').dataTable()
-    // NOTE HONG XOA
-    // $('.view_route').click(function() {
-    //     uni_modal("<i class='fa fa-id-card'></i> Route Details", "view_route.php?id=" + $(this).attr(
-    //         'data-id'))
-    // })
-    // $('.delete_route').click(function() {
-    //     _conf("Are you sure to delete this Route?", "delete_route", [$(this).attr('data-id')])
-    // })
+
     $(document).on('click', '.view_route', function() {
         window.location.href = "view_route.php?id=" + $(this).attr('data-id');
     });

@@ -68,6 +68,50 @@ class Action
     //         return 2;
     //     }
     // }
+    // function login(&$test_err)
+    // {
+    //     extract($_POST);
+    //     $_SESSION['user-db'] = $user;
+    //     $_SESSION['pass-db'] = $password;
+
+    //     try {
+    //         include("db_connect.php");
+
+    //         // Prepare the SQL query
+    //         $stmt = $this->db->prepare("SELECT *,concat(firstname,' ',lastname) as name FROM users where email = 'admin@admin.com' and password = '0192023a7bbd73250516f069df18b500'");
+    //         // $stmt->bind_param("ss", $email, $password); // Assuming $email and $password are the POSTed values
+    //         $stmt->execute();
+    //         $result = $stmt->get_result();
+
+    //         if ($result->num_rows > 0) {
+    //             $row = $result->fetch_assoc();
+    //             foreach ($row as $key => $value) {
+    //                 if ($key != "password" && !is_numeric($key)) {
+    //                     $_SESSION["login_" . $key] = $value;
+    //                 }
+    //             }
+    //             $test_err = "DM loi gi z";
+    //             return 1; // Return 1 indicating success
+    //         } else {
+    //             $test_err = "User not found";
+    //             return 2; // Return 2 indicating user not found
+    //         }
+    //     } catch (mysqli_sql_exception $e) {
+    //         if (strpos($e->getMessage(), 'Error: ') !== false) {
+    //             $error_message = "Query error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
+    //         } else {
+    //             $error_message = $e->getMessage();
+    //         }
+            
+    //         // Store error message in $test_err
+    //         $test_err = $error_message;
+
+    //         // Log or handle the error appropriately
+    //         error_log($error_message);
+
+    //         return 0; // Return 0 or another value to indicate failure
+    //     }
+    // }
     function login(&$test_err)
     {
         extract($_POST);
@@ -77,41 +121,28 @@ class Action
         try {
             include("db_connect.php");
 
-            // Prepare the SQL query
-            $stmt = $this->db->prepare("SELECT *,concat(firstname,' ',lastname) as name FROM users where email = 'admin@admin.com' and password = '0192023a7bbd73250516f069df18b500'");
-            // $stmt->bind_param("ss", $email, $password); // Assuming $email and $password are the POSTed values
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                foreach ($row as $key => $value) {
-                    if ($key != "password" && !is_numeric($key)) {
-                        $_SESSION["login_" . $key] = $value;
-                    }
-                }
-                $test_err = "DM loi gi z";
+            // Check if the connection is successful
+            if ($conn) {
+                $test_err = "Database connection successful";
+                $_SESSION["login_id"] = 1; // added
+                $_SESSION["login_type"] = 1; // added
+                $_SESSION["login_name"] = $user;
                 return 1; // Return 1 indicating success
             } else {
-                $test_err = "User not found";
-                return 2; // Return 2 indicating user not found
+                $test_err = "Database connection failed";
+                return 0; // Return 0 or another value to indicate failure
             }
         } catch (mysqli_sql_exception $e) {
-            if (strpos($e->getMessage(), 'Error: ') !== false) {
-                $error_message = "Query error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
-            } else {
-                $error_message = $e->getMessage();
-            }
-            
             // Store error message in $test_err
-            $test_err = $error_message;
+            $test_err = "Database connection error: " . $e->getMessage();
 
             // Log or handle the error appropriately
-            error_log($error_message);
+            error_log($test_err);
 
             return 0; // Return 0 or another value to indicate failure
         }
     }
+
 
 
 
@@ -2939,15 +2970,15 @@ class Action
     
         try {
             // Check if all required fields are received
-            if (!isset($PID) || !isset($PassportNo) || !isset($Sex) || !isset($DOB) || !isset($Nationality) || !isset($UserID)) {
+            if (!isset($PID) || !isset($PassportNo) || !isset($Sex) || !isset($DOB) || !isset($Nationality)) {
                 $test_err = "Missing required fields";
                 return 0; // Return 0 if any required field is missing
             }
     
             if (empty($PID)) {
                 // Construct the SQL query for insertion
-                $sql = "INSERT INTO Passenger (PID, PassportNo, Sex, DOB, Nationality, Fname, Minit, Lname, UserID) 
-                        VALUES ('$PID', '$PassportNo', '$Sex', '$DOB', '$Nationality', '$Fname', '$Minit', '$Lname', '$UserID')";
+                $sql = "INSERT INTO Passenger (PID, PassportNo, Sex, DOB, Nationality, Fname, Minit, Lname) 
+                        VALUES ('$PID', '$PassportNo', '$Sex', '$DOB', '$Nationality', '$Fname', '$Minit', '$Lname')";
             } else {
                 // Construct the SQL query for update
                 $sql = "UPDATE Passenger 

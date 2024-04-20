@@ -240,12 +240,6 @@ $fid =  $_GET['id'];
             <div class="card card-outline card-primary" id="list1">
                 <div class="card-header">
                     <span><b>Seat Of This Flight</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -284,13 +278,6 @@ $fid =  $_GET['id'];
                                             data-toggle="dropdown" aria-expanded="true">
                                             Action
                                         </button>
-                                        <!-- <div class="dropdown-menu" style="">
-                                            <a class="dropdown-item view_seat"
-                                                href="./index.php?page=view_seat&flightid=<?php echo $row['FlightID'] ?>&seatnum=<?php echo $row['SeatNum'] ?>"
-                                                data-id="<?php echo $row['FlightID'] ?>">View</a>
-                                            <a class="dropdown-item delete_seat" href="javascript:void(0)"
-                                                data-id="<?php echo $row['FlightID'] ?>">Delete</a>
-                                        </div> -->
                                     </td>
                                 </tr>
                                 <?php 

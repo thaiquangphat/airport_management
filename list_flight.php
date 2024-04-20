@@ -7,13 +7,6 @@
                     href="./index.php?page=new_flight"><i class="fa fa-plus"></i> Add New Flight</a>
             </div>
         </div>
-        <!-- AirplaneID INT AUTO_INCREMENT,
-        License_plate_num VARCHAR(7) UNIQUE NOT NULL,
-        AirlineID CHAR(3) NOT NULL,
-        OwnerID INT NOT NULL,
-        ModelID INT,
-        LeasedDate TIMESTAMP NOT NULL,
-        MName VARCHAR(50), -->
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
                 <thead>
@@ -84,14 +77,6 @@
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // $('.view_flight').click(function() {
-    //     window.location.href = "view_flight.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_flight').click(function() {
-    //     _conf("Are you sure to delete this Flight?", "delete_flight", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_flight', function() {
         window.location.href = "view_flight.php?id=" + $(this).attr('data-id');
     });

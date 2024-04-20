@@ -8,20 +8,6 @@ if(isset($_GET['id'])){
 }
 ?>
 
-<!-- View of airport
-MAIN
-airport name
-airport code
-city
-latitude
-longitude
-owner
-
-TEAM MEMBERS
-Total employee of Airplane: ...
-Member List
-SSN Name Role -->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -57,12 +43,6 @@ SSN Name Role -->
                 <div class="card-header">
                     <span><b>Consultant List</b></span>
                     <div><small>A Consultant is an expert of this Model at an Airport</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -73,23 +53,6 @@ SSN Name Role -->
                                 <col width="20%">
                                 <col width="20%">
                             </colgroup>
-                            <!-- CREATE TABLE Expert_At
-                            (
-                                ConsultID INT,
-                                APCode    CHAR(3),
-                                ModelID   INT,
-                                PRIMARY KEY (ConsultID, APCode, ModelID),
-                                FOREIGN KEY (ConsultID) REFERENCES Consultant (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                                FOREIGN KEY (APCode) REFERENCES Airport (APCode) ON DELETE CASCADE ON UPDATE CASCADE,
-                                FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
-                            ); 
-                            CREATE TABLE Consultant
-                            (
-                                ID INT AUTO_INCREMENT,
-                                Name    VARCHAR(50),
-                                PRIMARY KEY (ID)
-                            );
-                            -->
                             <thead>
                                 <th>Consultant ID</th>
                                 <th>Consultant Name</th>
@@ -148,12 +111,6 @@ SSN Name Role -->
                 <div class="card-header">
                     <span><b>Engineer List</b></span>
                     <div><small>An Engineer is an expert of this Model</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -215,12 +172,6 @@ SSN Name Role -->
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
                     <div><small>An Airplane is of this model type.</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

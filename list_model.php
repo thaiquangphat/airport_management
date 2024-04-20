@@ -2,12 +2,10 @@
 <div class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_model"><i
                         class="fa fa-plus"></i> Add New Model</a>
             </div>
-            <?php endif; ?>
         </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">
@@ -72,15 +70,6 @@
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_model', function() {
         window.location.href = "view_model.php?id=" + $(this).attr('data-id');
     });

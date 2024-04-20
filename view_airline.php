@@ -8,31 +8,6 @@ if(isset($_GET['id'])){
 }
 ?>
 
-<!-- 
-CREATE TABLE Airline
-(
-    AirlineID      CHAR(3),
-    IATADesignator CHAR(2) UNIQUE NOT NULL,
-    Name           VARCHAR(50),
-    Country        VARCHAR(50),
-    PRIMARY KEY (AirlineID)
-);
-
-CREATE TABLE Airplane
-(
-    AirplaneID        INT AUTO_INCREMENT,
-    License_plate_num VARCHAR(7) UNIQUE NOT NULL,
-    AirlineID         CHAR(3)        NOT NULL,
-    OwnerID           INT            NOT NULL,
-    ModelID           INT,
-    LeasedDate        DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
-    PRIMARY KEY (AirplaneID),
-    FOREIGN KEY (AirlineID) REFERENCES Airline (AirlineID) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ModelID) REFERENCES Model (ID) ON DELETE CASCADE ON UPDATE CASCADE
-);
--->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -68,12 +43,6 @@ CREATE TABLE Airplane
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
                     <div><small>Airplanes which belong to this Airline</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -162,15 +131,6 @@ CREATE TABLE Airplane
 $(document).ready(function() {
     $('#list').dataTable()
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
     $(document).on('click', '.view_airplane', function() {
         window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
     });

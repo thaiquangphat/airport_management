@@ -8,34 +8,6 @@ if(isset($_GET['ownerid'])){
 }
 ?>
 
-<!--
-CREATE TABLE Owner
-(
-    OwnerID INT AUTO_INCREMENT,
-    Phone   CHAR(10),
-    PRIMARY KEY (OwnerID)
-);
-
-CREATE TABLE Cooperation
-(
-    Name    VARCHAR(50),
-    Address VARCHAR(50),
-    OwnerID INT,
-    PRIMARY KEY (Name),
-    FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE Person
-(
-    SSN     CHAR(10),
-    Name    VARCHAR(50),
-    Address VARCHAR(50),
-    OwnerID INT,
-    PRIMARY KEY (SSN),
-    FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE
-);
--->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -76,12 +48,6 @@ CREATE TABLE Person
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Airplane List:</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

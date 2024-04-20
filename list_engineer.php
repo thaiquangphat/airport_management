@@ -2,12 +2,10 @@
 <div class="col-lg-12">
     <div class="card card-outline card-success">
         <div class="card-header">
-            <?php if($_SESSION['login_type'] == 1): ?>
             <div class="card-tools">
                 <a class="btn btn-block btn-sm btn-default btn-flat border-primary"
                     href="./index.php?page=new_employee"><i class="fa fa-plus"></i> Add New Engineer</a>
             </div>
-            <?php endif; ?>
         </div>
         <div class="card-body">
             <table class="table table-hover table-bordered" id="list">

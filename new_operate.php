@@ -2,22 +2,6 @@
     $fid = $_SESSION['fid'];
 ?>
 
-<!-- View of airport
-MAIN
-airport name
-airport code
-city
-latitude
-longitude
-owner
-
-TEAM MEMBERS
-Total employee of Airplane: ...
-Member List
-SSN Name Role -->
-
-<!--  -->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -33,12 +17,6 @@ SSN Name Role -->
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Flight Employee List</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -99,12 +77,6 @@ SSN Name Role -->
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <span><b>Employee List</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">

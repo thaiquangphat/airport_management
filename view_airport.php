@@ -8,20 +8,6 @@ if(isset($_GET['id'])){
 }
 ?>
 
-<!-- View of airport
-MAIN
-airport name
-airport code
-city
-latitude
-longitude
-owner
-
-TEAM MEMBERS
-Total employee of Airplane: ...
-Member List
-SSN Name Role -->
-
 <div class="col-lg-12">
     <div class="row">
         <div class="col-md-12">
@@ -112,7 +98,6 @@ SSN Name Role -->
                                             Action
                                         </button>
                                         <div class="dropdown-menu" style="">
-                                            <?php if($_SESSION['login_type'] != 3): ?>
                                             <a class="dropdown-item view_airplane"
                                                 href="./index.php?page=view_flight&id=<?php echo $row['FlightID'] ?>"
                                                 data-id="<?php echo $row['FlightID'] ?>">View</a>
@@ -125,7 +110,6 @@ SSN Name Role -->
                                             <a class="dropdown-item delete_flight" href="javascript:void(0)"
                                                 data-id="<?php echo $row['FlightID'] ?>">Delete
                                             </a>
-                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -203,15 +187,6 @@ SSN Name Role -->
     $(document).ready(function() {
         $('#list').dataTable()
 
-        // NOTE HONG XOA
-        // $('.view_airplane').click(function() {
-        //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-        // })
-
-        // $('.delete_airplane').click(function() {
-        //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-        //         'data-id')])
-        // })
         $(document).on('click', '.view_flight', function() {
             window.location.href = "view_flight.php?id=" + $(this).attr('data-id');
         });
