@@ -126,11 +126,10 @@ ob_end_flush();
                     //     end_load();
                     // }
                     else {
-                        alert_toast('Cai loi gi z tr: ' + resp,
-                            "error"); // Display the error message returned from the server
+                        alert_toast(" Database connection failed.", 'warning'); // Display the error message returned from the server
                         setTimeout(function() {
                             location.reload();
-                        }, 750);
+                        }, 2000);
                     }
                 }.bind(this) // Bind this to the AJAX context
             })

@@ -1689,6 +1689,21 @@ class Action
             
             if ($save) {
                 if (isset($super)) {
+                    $qry = $this->db->query("SELECT * FROM Employee WHERE SSN = '" . $super . "'");
+                    $row = $qry->fetch_assoc();
+
+                    // PHP trigger for price
+                    if ($Salary > $row['Salary']) {
+                        $test_err = "Employee must have salary less than its supervisor";
+                        $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $SSN ."'");
+                        if (!$delete) {
+                            $test_err = "Failed to delete";
+                            return 0;
+                        }
+
+                        return 0;
+                    }
+
                     $sup = $this->db->query("INSERT INTO Supervision SET SSN = '" .$SSN. "', SuperSSN = '" . $super . "'");
                     if (!$sup) {
                         $test_err = "Error saving employee here, sup false";

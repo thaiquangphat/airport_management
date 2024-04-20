@@ -13,15 +13,21 @@ try {
     }
 } catch (Exception $e) {
     // Log or handle the error appropriately
-    error_log("Database connection error: " . $e->getMessage());
+    error_log("Database connection failed: " . $e->getMessage());
 
     // Redirect or display an error message to the user
-    die("Database connection error: " . $e->getMessage());
+    // die("Database connection paul: " . $e->getMessage());
+
+    session_destroy();
+    foreach ($_SESSION as $key => $value) {
+        unset($_SESSION[$key]);
+    }
+    // header("location:login.php");
 }
 
 // You can continue using $conn for database operations
-    $user = 'sManager';
-    $pass = '123456';
+    // $user = 'sManager';
+    // $pass = '123456';
 
-    $conn= new mysqli('localhost',$user,$pass,'test_new')or die("Could not connect to mysql".mysqli_error($con));
+    // $conn= new mysqli('localhost',$user,$pass,'test_new')or die("Could not connect to mysql".mysqli_error($con));
 ?>

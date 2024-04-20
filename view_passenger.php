@@ -104,6 +104,7 @@ if(isset($_GET['pid'])){
                                             <a class="dropdown-item view_ticket"
                                                 href="./index.php?page=view_ticket&ticketid=<?php echo $row['TicketID'] ?>"
                                                 data-id="<?php echo $row['TicketID'] ?>">View</a>
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item delete_ticket" href="javascript:void(0)"
                                                 data-id="<?php echo $row['TicketID'] ?>">Delete</a>
                                         </div>
