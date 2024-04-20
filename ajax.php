@@ -443,10 +443,5 @@ if ($action == 'delete_super'){
 	if ($save)
 		echo $save;
 }
-if ($action == 'login_user'){
-	$save = $crud->login_user();
-	if ($save)
-		echo $save;
-}
 ob_end_flush();
 ?>
