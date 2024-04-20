@@ -182,7 +182,7 @@ $(document).ready(function() {
 })
 
 function delete_airplane($airplaneid) {
-    start_load()
+    start_load();
     $.ajax({
         url: 'ajax.php?action=delete_airplane',
         method: 'POST',
@@ -191,18 +191,18 @@ function delete_airplane($airplaneid) {
         },
         success: function(resp) {
             if (resp == 1) {
-                alert_toast("Data successfully deleted", 'success')
+                alert_toast("Data successfully deleted", 'success');
                 setTimeout(function() {
-                    location.reload()
-                }, 1500)
+                    location.reload();
+                }, 1500);
             } else {
-                alert_toast('Data failed to delete.', "error");
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
-                    // location.replace('index.php?page=list_airplane')
-                    location.replace('index.php?page=view_airline&id='.$_GET['id'])
-                }, 750)
+                    location.reload();
+                }, 750);
             }
-        }
-    })
+        }.bind(this) // Bind this to the AJAX context
+    });
 }
 </script>

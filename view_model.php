@@ -122,15 +122,82 @@ SSN Name Role -->
                                         </button>
                                         <div class="dropdown-menu" style="">
                                             <a class="dropdown-item view_airplane"
-                                                href="./index.php?page=view_airplane&id=<?php echo $row['AirplaneID'] ?>"
-                                                data-id="<?php echo $row['AirplaneID'] ?>">View</a>
+                                                href="./index.php?page=view_consultant&id=<?php echo $row['ConsultID'] ?>"
+                                                data-id="<?php echo $row['ConsultID'] ?>">View</a>
 
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item"
-                                                href="./index.php?page=edit_airplane&airplaneid=<?php echo $row["AirplaneID"]; ?>">Edit</a>
+                                                href="./index.php?page=edit_consultant&consultantid=<?php echo $row["ConsultID"]; ?>">Edit</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item delete_airplane" href="javascript:void(0)"
-                                                data-id="<?php echo $row['AirplaneID'] ?>">Delete</a>
+                                            <a class="dropdown-item delete_consultant" href="javascript:void(0)"
+                                                data-id="<?php echo $row['ConsultID'] ?>">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php 
+                                endwhile;
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <span><b>Engineer List</b></span>
+                    <div><small>An Engineer is an expert of this Model</small></div>
+                    <?php if($_SESSION['login_type'] != 3): ?>
+                    <!-- <div class="card-tools">
+                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
+                                class="fa fa-plus"></i> New Task</button>
+                    </div> -->
+                    <?php endif; ?>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-condensed m-0 table-hover">
+                            <thead>
+                                <th>SSN</th>
+                                <th>Engineer Name</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $i = 1;
+
+                                // Select consultants who are experts on the specific model
+                                $engineer_query = $conn->query("
+                                    SELECT *, CONCAT(Fname, ' ', Lname) as name
+                                    FROM Expertise
+                                    JOIN Engineer ON Expertise.ESSN = Engineer.SSN
+                                    JOIN Employee ON Employee.SSN = Engineer.SSN
+                                    WHERE Expertise.ModelID = '".$_GET['id']."'
+                                ");
+
+                                while ($row = $engineer_query->fetch_assoc()):
+                                ?>
+                                <tr>
+                                    <td class=""><?php echo $row['ESSN'] ?></td>
+                                    <td class=""><?php echo $row['name'] ?></td>
+                                    <td class="">
+                                        <button type="button"
+                                            class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
+                                            data-toggle="dropdown" aria-expanded="true">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" style="">
+                                            <a class="dropdown-item view_employee"
+                                                href="./index.php?page=view_employee&ssn=<?php echo $row['SSN'] ?>"
+                                                data-id="<?php echo $row['SSN'] ?>">View</a>
+
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item"
+                                                href="./index.php?page=edit_employee&ssn=<?php echo $row["SSN"]; ?>">Edit</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item delete_employee" href="javascript:void(0)"
+                                                data-id="<?php echo $row['SSN'] ?>">Delete</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -158,13 +225,6 @@ SSN Name Role -->
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <colgroup>
-                                <col width="10%">
-                                <col width="25%">
-                                <col width="25%">
-                                <col width="15%">
-                                <col width="15%">
-                            </colgroup>
                             <thead>
                                 <th>ID</th>
                                 <th>License Plate Number</th>
@@ -239,16 +299,14 @@ SSN Name Role -->
 <script>
 $(document).ready(function() {
     $('#list').dataTable()
+    $(document).on('click', '.view_consultant', function() {
+        window.location.href = "view_consultant.php?id=" + $(this).attr('data-id');
+    });
 
-    // NOTE HONG XOA
-    // $('.view_airplane').click(function() {
-    //     window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
-    // })
-
-    // $('.delete_airplane').click(function() {
-    //     _conf("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
-    //         'data-id')])
-    // })
+    $(document).on('click', '.delete_consultant', function() {
+        _conf_str("Are you sure to delete this Consultant?", "delete_consultant", [$(this).attr(
+            'data-id')]);
+    });
     $(document).on('click', '.view_airplane', function() {
         window.location.href = "view_airplane.php?id=" + $(this).attr('data-id');
     });
@@ -257,10 +315,50 @@ $(document).ready(function() {
         _conf_str("Are you sure to delete this Airplane?", "delete_airplane", [$(this).attr(
             'data-id')]);
     });
+    $(document).on('click', '.view_employee', function() {
+        window.location.href = "view_employee.php?id=" + $(this).attr('data-id');
+    });
+
+    $(document).on('click', '.delete_employee', function() {
+        _conf_str("Are you sure to delete this Employee?", "delete_employee", [$(this).attr(
+            'data-id')]);
+    });
 })
 
-function delete_airplane($airplaneid) {
+function delete_consultant($consultantid) {
     start_load()
+    $.ajax({
+        url: 'ajax.php?action=delete_consultant',
+        method: 'POST',
+        data: {
+            consultantid: $consultantid
+        },
+        success: function(resp) {
+            if (resp == 1) {
+                alert_toast("Data successfully deleted", 'success')
+                setTimeout(function() {
+                    location.reload()
+                }, 1500)
+            }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_consultant')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
+    })
+}
+
+function delete_airplane($airplaneid) {
+    start_load();
     $.ajax({
         url: 'ajax.php?action=delete_airplane',
         method: 'POST',
@@ -269,18 +367,50 @@ function delete_airplane($airplaneid) {
         },
         success: function(resp) {
             if (resp == 1) {
+                alert_toast("Data successfully deleted", 'success');
+                setTimeout(function() {
+                    location.reload();
+                }, 1500);
+            } else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
+    });
+}
+
+function delete_employee($ssn) {
+    start_load()
+    $.ajax({
+        url: 'ajax.php?action=delete_employee',
+        method: 'POST',
+        data: {
+            ssn: $ssn
+        },
+        success: function(resp) {
+            if (resp == 1) {
                 alert_toast("Data successfully deleted", 'success')
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "error");
-                setTimeout(function() {
-                    // location.replace('index.php?page=list_airplane')
-                    location.replace('index.php?page=view_airplane&id='.$_GET['id'])
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_employee')
+            //     }, 75000)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

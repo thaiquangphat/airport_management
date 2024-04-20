@@ -18,6 +18,7 @@
                         <th>Capacity</th>
                         <th>Max Speed</th>
                         <th>No Engineer Expertise</th>
+                        <th>No Airplane of this Model</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -36,6 +37,10 @@
                         <td><b><?php 
                                 $qry2 = $conn->query("SELECT count(*) as total FROM Model JOIN Expertise ON Model.ID = Expertise.ModelID where ID = ".$row['ID'])->fetch_assoc();
                                 echo $qry2['total'] 
+                        ?></b></td>
+                        <td><b><?php 
+                                $qry3 = $conn->query("SELECT count(*) as total FROM Airplane where ModelID = ".$row['ID'])->fetch_assoc();
+                                echo $qry3['total'] 
                         ?></b></td>
                         <td class="text-center">
                             <button type="button"
@@ -100,13 +105,21 @@ function delete_model($id) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_model')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_model')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

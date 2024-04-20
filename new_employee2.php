@@ -4,12 +4,13 @@
     <div class="card">
         <div class="card-body">
             <form action="" id="manage_employee">
-            <input type="hidden" name="SSN" value="<?php echo isset($SSN) ? $SSN : '' ?>">
+                <input type="hidden" name="SSN" value="<?php echo isset($SSN) ? $SSN : '' ?>">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">New SSN</label>
-                            <input type="text" name="NewSSN" class="form-control form-control-sm" placeholder="Leave this section blank if no change in SSN"
+                            <input type="text" name="NewSSN" class="form-control form-control-sm"
+                                placeholder="Leave this section blank if no change in SSN"
                                 value="<?php echo isset($NewSSN) ? $NewSSN : '' ?>">
                         </div>
                     </div>
@@ -18,6 +19,26 @@
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required
                                 value="<?php echo isset($Phone) ? $Phone : '' ?>">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="" class="control-label">Supervisor</label>
+                            <select class="form-control form-control-sm select2" name="super">
+                                <option></option>
+                                <?php
+                                    $oldsup = $conn->query("SELECT * FROM Supervision WHERE SSN = '" . $SSN . "'");
+                                    $supssn = $oldsup->fetch_assoc();
+
+                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee order by SSN asc ");
+                                    while($row= $sup->fetch_assoc()):
+                                ?>
+                                <option value="<?php echo $row['SSN'] ?>"
+                                    <?php echo $supssn['SuperSSN'] == $row['SSN']  ? "selected" : '' ?>>
+                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>
+                                </option>
+                                <?php endwhile; ?>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -45,7 +66,7 @@
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-md-4">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Salary</label>
                             <input type="text" name="Salary" class="form-control form-control-sm" required
@@ -92,7 +113,8 @@
                                 $verify=$conn->query($query)->num_rows;
                                 if ($verify > 0) $type="TrafficController";
                             ?>
-                            <input type="text" class="form-control form-control-sm" name="EmpType" value="<?php echo isset($type) ? $type : '' ?>" readonly>
+                            <input type="text" class="form-control form-control-sm" name="EmpType"
+                                value="<?php echo isset($type) ? $type : '' ?>" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -128,7 +150,6 @@ img#cimg {
 }
 </style>
 <script>
-
 $(document).ready(function() {
     // Function to handle change event of the select element for Sex
     $('#manage_employee select[name="Sex"]').change(function() {
@@ -140,6 +161,11 @@ $(document).ready(function() {
     $('#manage_employee input[name="DOB"]').change(function() {
         var selectedDateOfBirth = $(this).val();
         $('#manage_employee input[name="DOB"]').val(selectedDateOfBirth);
+    });
+
+    $('#manage_employee select[name="super"]').change(function() {
+        var selectedsuper = $(this).val();
+        $('#manage_employee select[name="super"]').val(selectedsuper);
     });
 })
 
@@ -207,13 +233,21 @@ $('#manage_employee').submit(function(e) {
                 setTimeout(function() {
                     location.replace('index.php?page=new _traffic_controller')
                 }, 750)
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 3000);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

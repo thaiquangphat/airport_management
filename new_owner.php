@@ -35,7 +35,8 @@
                             ?>
                             <select class="form-control form-control-sm select2" name="Type">
                                 <option></option>
-                                <option value="Cooperation" <?php echo $type == 1 ? 'selected' : '' ?>>Cooperation</option>
+                                <option value="Cooperation" <?php echo $type == 1 ? 'selected' : '' ?>>Cooperation
+                                </option>
                                 <option value="Person" <?php echo $type == 0 ? 'selected' : '' ?>>Person</option>
                             </select>
                         </div>
@@ -123,13 +124,21 @@ $('#manage_owner').submit(function(e) {
                 setTimeout(function() {
                     location.reload();
                 }, 750)
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context        
     })
 })
 </script>

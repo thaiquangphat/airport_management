@@ -83,8 +83,14 @@ function delete_route($id) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
+            } else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

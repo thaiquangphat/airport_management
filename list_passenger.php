@@ -39,7 +39,7 @@
 					while($row= $qry->fetch_assoc()):
 					?>
                     <tr>
-                        <td><b><?php echo $row['PID'] ?></b></td>
+                        <td><b><?php echo $row['PID_Decode'] ?></b></td>
                         <td><b><?php echo $row['pname'] ?></b></td>
                         <td><b><?php echo $row['Sex'] ?></b></td>
                         <td><b><?php echo $row['DOB'] ?></b></td>
@@ -113,13 +113,21 @@ function delete_passenger($pid) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_passenger')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_passenger')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

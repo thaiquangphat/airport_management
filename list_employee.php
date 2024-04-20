@@ -19,6 +19,7 @@
                         <th>Salary</th>
                         <th>Phone</th>
                         <th>Date of Birth</th>
+                        <th>Age</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
@@ -52,6 +53,10 @@
                         <td><b><?php echo $row['Salary'] ?></b></td>
                         <td><b><?php echo $row['Phone'] ?></b></td>
                         <td><b><?php echo $row['DOB'] ?></b></td>
+                        <td><b><?php 
+                            $qry2 = $conn->query("SELECT COALESCE(CalculateAgeBySSN({$row['emp_SSN']}), 0) as empage")->fetch_assoc();
+                            echo $qry2['empage']; 
+                        ?></b></td>
                         <td><b><?php echo $row['role'] ?></b></td>
                         <td class="text-center">
                             <button type="button"
@@ -107,13 +112,21 @@ function delete_employee($ssn) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_employee')
-                }, 75000)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_employee')
+            //     }, 75000)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

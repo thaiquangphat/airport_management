@@ -165,11 +165,11 @@ SSN Name Role -->
         </div>
     </div>
     <hr>
-        <div class="col-lg-12 text-right justify-content-center d-flex">
-            <button class="btn btn-primary mr-2" onclick="location.href = 'index.php?page=list_flight'">Save</button>
-            <button class="btn btn-secondary" type="button"
-                onclick="location.href = 'index.php?page=list_flight'">Cancel</button>
-        </div>
+    <div class="col-lg-12 text-right justify-content-center d-flex">
+        <button class="btn btn-primary mr-2" onclick="location.href = 'index.php?page=list_flight'">Save</button>
+        <button class="btn btn-secondary" type="button"
+            onclick="location.href = 'index.php?page=list_flight'">Cancel</button>
+    </div>
     <hr>
     <style>
     .truncate {
@@ -230,14 +230,22 @@ SSN Name Role -->
                     setTimeout(function() {
                         location.reload()
                     }, 1500)
-                } else {
-                    alert_toast('Data failed to add.', "error");
-                    setTimeout(function() {
-                        // location.replace('index.php?page=list_airplane')
-                        location.reload();
-                    }, 750)
                 }
-            }
+                // else {
+                //     alert_toast('Data failed to add.', "error");
+                //     setTimeout(function() {
+                //         // location.replace('index.php?page=list_airplane')
+                //         location.reload();
+                //     }, 750)
+                // }
+                else {
+                    alert_toast('Error: ' + resp,
+                        "error"); // Display the error message returned from the server
+                    setTimeout(function() {
+                        location.reload();
+                    }, 750);
+                }
+            }.bind(this) // Bind this to the AJAX context
         })
     }
     </script>

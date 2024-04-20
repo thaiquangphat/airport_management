@@ -21,6 +21,23 @@
                             <small id="#msg"></small>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="" class="control-label">Supervisor</label>
+                            <select class="form-control form-control-sm select2" name="super">
+                                <option></option>
+                                <?php
+                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee order by SSN asc ");
+                                    while($row= $sup->fetch_assoc()):
+                                ?>
+                                <option value="<?php echo $row['SSN'] ?>"
+                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>>
+                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>
+                                </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -127,6 +144,11 @@ $(document).ready(function() {
         var selectedEmpType = $(this).val();
         $('#manage_employee select[name="EmpType"]').val(selectedEmpType);
     });
+
+    $('#manage_employee select[name="super"]').change(function() {
+        var selectedsuper = $(this).val();
+        $('#manage_employee select[name="super"]').val(selectedsuper);
+    });
 })
 
 $('#manage_employee').submit(function(e) {
@@ -179,13 +201,21 @@ $('#manage_employee').submit(function(e) {
                     "<div class='alert alert-danger'>SSN already exist.</div>");
                 $('[name="SSN"]').addClass("border-danger")
                 end_load()
-            } else {
-                alert_toast('Data failed to saved.', "error");
+            }
+            // else {
+            //     alert_toast('Data failed to saved.', "error");
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750)
+                }, 750);
             }
-        }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

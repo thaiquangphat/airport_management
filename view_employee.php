@@ -86,6 +86,21 @@ APCode char(3)
                                 <dt><b class="border-bottom border-primary">Salary</b></dt>
                                 <dd><?php echo ucwords($Salary) ?></dd>
                             </dl>
+                            <dl>
+                                <dt><b class="border-bottom border-primary">Supervisor</b></dt>
+                                <?php
+                                    $supname = '';
+
+                                    $check = $conn->query("SELECT *, concat(Employee.fname, ' ', Employee.minit, ' ', Employee.lname) AS SuperName FROM Supervision JOIN Employee ON Supervision.SuperSSN = Employee.SSN WHERE Supervision.SSN = '" . $SSN . "'")->num_rows;
+                                    if ($check == 0) $supname = 'NULL';
+                                    else {
+                                        $sup = $conn->query("SELECT *, concat(Employee.fname, ' ', Employee.minit, ' ', Employee.lname) AS SuperName FROM Supervision JOIN Employee ON Supervision.SuperSSN = Employee.SSN WHERE Supervision.SSN = '" . $SSN . "'");
+                                        $row = $sup->fetch_assoc();
+                                        $supname = $row['SuperName'];
+                                    }
+                                ?>
+                                <dd><?php echo ucwords($supname) ?></dd>
+                            </dl>
                         </div>
                         <div class="col-md-6">
                             <dl>
@@ -117,28 +132,10 @@ APCode char(3)
                 <div class="card-header">
                     <span><b>Flight List:</b></span>
                     <div><small>Flights that this Employee Working on</small></div>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- <colgroup>
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                                <col width="10%">
-                            </colgroup> -->
                             <thead>
                                 <th>Flight ID</th>
                                 <th>Route ID</th>
@@ -466,14 +463,22 @@ function delete_flight($flightid) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "error");
-                setTimeout(function() {
-                    // location.replace('index.php?page=list_airplane')
-                    location.replace('index.php?page=view_flight&id='.$_GET['id'])
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "error");
+            //     setTimeout(function() {
+            //         // location.replace('index.php?page=list_airplane')
+            //         location.replace('index.php?page=view_flight&id='.$_GET['id'])
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 
@@ -491,13 +496,21 @@ function delete_model($id) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_model')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_model')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

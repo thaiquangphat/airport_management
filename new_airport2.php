@@ -66,12 +66,13 @@ $('#manage_airport').submit(function(e) {
                     location.replace('index.php?page=list_airport')
                 }, 750)
             } else {
-                alert_toast('Data failed to save.', "fail");
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
-                    location.replace('index.php?page=list_airport')
-                }, 750)
+                    location.reload();
+                }, 2000);
             }
-        }
+        }.bind(this)
     })
 })
 </script>

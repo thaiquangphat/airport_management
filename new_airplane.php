@@ -20,12 +20,12 @@
                             <select class="form-control form-control-sm select2" name="AirlineID">
                                 <option></option>
                                 <?php 
-                                    $airlines = $conn->query("SELECT * FROM Airline order by Name asc ");
+                                    $airlines = $conn->query("SELECT * FROM Airline order by AirlineID asc ");
                                     while($row= $airlines->fetch_assoc()):
                                 ?>
                                 <option value="<?php echo $row['AirlineID'] ?>"
                                     <?php echo isset($AirlineID) && $AirlineID == $row['AirlineID'] ? "selected" : '' ?>>
-                                    <?php echo ucwords($row['Name']) ?></option>
+                                    <?php echo ucwords($row['AirlineID'] .'-'. $row['Name']) ?></option>
                                 <?php endwhile; ?>
                             </select>
                         </div>
@@ -173,13 +173,28 @@ $('#manage_airplane').submit(function(e) {
                 );
                 $('[name="License_plate_num"]').addClass("border-danger")
                 end_load()
-            } else {
-                alert_toast('Data failed to saved.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_airplane')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to saved.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_airplane')
+            //     }, 750)
+            // } 
+            // else {
+            //     alert_toast('Error: ' + resp,
+            //         "error"); // Display the error message returned from the server
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 750);
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>

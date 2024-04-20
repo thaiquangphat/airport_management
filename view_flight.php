@@ -1,7 +1,11 @@
 <?php include 'db_connect.php' ?>
 <?php
 if(isset($_GET['id'])){
-	$qry = $conn->query("SELECT * FROM Flight JOIN Route ON Flight.RID = Route.ID where FlightID = ".$_GET['id'])->fetch_array();
+	$qry = $conn->query("SELECT * FROM Flight 
+                        JOIN Airplane ON Airplane.AirplaneID = Flight.AirplaneID
+                        JOIN Route ON Flight.RID = Route.ID 
+                        JOIN Model ON Airplane.ModelID = Model.ID
+                        where FlightID = ".$_GET['id'])->fetch_array();
     foreach($qry as $k => $v){
         $$k = $v;
     }
@@ -77,6 +81,10 @@ $fid =  $_GET['id'];
                                 <dt><b class="border-bottom border-primary">Actual Arrival Time</b></dt>
                                 <dd><?php echo ucwords($AAT) ?></dd>
                             </dl>
+                            <dl>
+                                <dt><b class="border-bottom border-primary">Number of Seat</b></dt>
+                                <dd><?php echo ucwords(ROUND($Capacity*0.9)) ?></dd>
+                            </dl>
                         </div>
                     </div>
                 </div>
@@ -88,25 +96,10 @@ $fid =  $_GET['id'];
             <div class="card card-outline card-primary" id="list">
                 <div class="card-header">
                     <span><b>Flight Employees On This Flight</b></span>
-                    <?php if($_SESSION['login_type'] != 3): ?>
-                    <!-- <div class="card-tools">
-                        <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
-                                class="fa fa-plus"></i> New Task</button>
-                    </div> -->
-                    <?php endif; ?>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- <colgroup>
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="10%">
-                            </colgroup> -->
                             <thead>
                                 <th>SSN</th>
                                 <th>Name</th>
@@ -147,7 +140,7 @@ $fid =  $_GET['id'];
                                         </button>
                                         <div class="dropdown-menu" style="">
                                             <a class="dropdown-item view_employee"
-                                                href="./index.php?page=view_employee&id=<?php echo $row['ssn'] ?>"
+                                                href="./index.php?page=view_employee&ssn=<?php echo $row['ssn'] ?>"
                                                 data-id="<?php echo $row['ssn'] ?>">View</a>
 
                                             <div class="dropdown-divider"></div>
@@ -155,8 +148,80 @@ $fid =  $_GET['id'];
                                                 href="./index.php?page=edit_employee&ssn=<?php echo $row["ssn"]; ?>"
                                                 data-id="<?php echo $row['ssn'] ?>">Edit</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item delete_operate" href="javascript:void(0)"
+                                            <a class="dropdown-item delete_employee" href="javascript:void(0)"
                                                 data-id="<?php echo $row['ssn'] ?>">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php 
+                                endwhile;
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-outline card-primary" id="list">
+                <div class="card-header">
+                    <span><b>Passenger On This Flight</b></span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-condensed m-0 table-hover">
+                            <thead>
+                                <th>PID</th>
+                                <th>Passport Number</th>
+                                <th>Passenger Name</th>
+                                <th>Date Of Birth</th>
+                                <th>Nationality</th>
+                                <th>Sex</th>
+                                <th>Seat Num</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $i = 1;
+                                $feinfo = $conn->query("
+                                    SELECT Passenger.PID_Decode, Passenger.PID, Passenger.PassportNo, CONCAT(Passenger.Fname, ' ', Passenger.Lname) as Name, Passenger.DOB, Passenger.Sex, Passenger.Nationality, Ticket.SeatNum
+                                    FROM Ticket
+                                    JOIN Seat ON Ticket.FlightID = Seat.FlightID AND Ticket.SeatNum = Seat.SeatNum
+                                    JOIN Passenger ON Passenger.PID = Ticket.PID
+                                    WHERE Ticket.FlightID = '".$_GET['id']."'
+                                ");
+
+                                $i++;
+                                while ($row = $feinfo->fetch_assoc()):
+                                ?>
+                                <tr>
+                                    <td class=""><?php echo $row['PID_Decode'] ?></td>
+                                    <td class=""><?php echo $row['PassportNo'] ?></td>
+                                    <td class=""><?php echo $row['Name'] ?></td>
+                                    <td class=""><?php echo $row['DOB'] ?></td>
+                                    <td class=""><?php echo $row['Nationality'] ?></td>
+                                    <td class=""><?php echo $row['Sex'] ?></td>
+                                    <td class=""><?php echo $row['SeatNum'] ?></td>
+                                    <td class="">
+                                        <button type="button"
+                                            class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
+                                            data-toggle="dropdown" aria-expanded="true">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" style="">
+                                            <a class="dropdown-item view_passenger"
+                                                href="./index.php?page=view_passenger&pid=<?php echo $row['PID'] ?>"
+                                                data-id="<?php echo $row['PID'] ?>">View</a>
+
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item"
+                                                href="./index.php?page=edit_passenger&pid=<?php echo $row["PID"]; ?>"
+                                                data-id="<?php echo $row['PID'] ?>">Edit</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item delete_passenger" href="javascript:void(0)"
+                                                data-id="<?php echo $row['PID'] ?>">Delete</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -174,7 +239,7 @@ $fid =  $_GET['id'];
         <div class="col-md-12">
             <div class="card card-outline card-primary" id="list1">
                 <div class="card-header">
-                    <span><b>Passenger On This Flight</b></span>
+                    <span><b>Seat Of This Flight</b></span>
                     <?php if($_SESSION['login_type'] != 3): ?>
                     <!-- <div class="card-tools">
                         <button class="btn btn-primary bg-gradient-primary btn-sm" type="button" id="new_task"><i
@@ -185,72 +250,47 @@ $fid =  $_GET['id'];
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-condensed m-0 table-hover">
-                            <!-- <colgroup>
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="15%">
-                                <col width="10%">
-                            </colgroup> -->
                             <thead>
-                                <th>Passenger ID</th>
+                                <th>Flight Code</th>
                                 <th>Seat No</th>
+                                <th>Class</th>
+                                <th>Status</th>
                                 <th>Price</th>
-                                <th>Name</th>
-                                <th>Passport Number</th>
-                                <th>Sex</th>
-                                <th>Nationality</th>
-                                <th>User Created</th>
-                                <th>User Name</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
                                 <?php 
                                 $i = 1;
                                 $feinfo = $conn->query("
-                                    SELECT DISTINCT *, CONCAT(Passenger.Fname, ' ', Passenger.Lname) as PName, CONCAT(Users.FirstName, ' ', Users.LastName) as UName
-                                    FROM Passenger 
-                                    JOIN Ticket ON Passenger.PID = Ticket.PID
-                                    JOIN Flight ON Ticket.FlightID = Flight.FlightID
-                                    JOIN Seat ON Flight.FlightID = Seat.FlightID
-                                    JOIN Users ON Passenger.UserID = Users.ID
-                                    WHERE Ticket.FlightID = '".$_GET['id']."'
+                                    SELECT Seat.FlightID, Seat.SeatNum, Seat.Class, Seat.Status, Seat.Price, Flight.FlightCode
+                                    FROM Seat
+                                    JOIN Flight ON Seat.FlightID = Flight.FlightID
+                                    WHERE Seat.FlightID = '".$_GET['id']."'
+                                    ORDER BY SeatNum ASC
                                 ");
 
                                 $i++;
                                 while ($row = $feinfo->fetch_assoc()):
                                 ?>
                                 <tr>
-                                    <td class=""><?php echo $row['PID'] ?></td>
+                                    <td class=""><?php echo $row['FlightCode'] ?></td>
                                     <td class=""><?php echo $row['SeatNum'] ?></td>
+                                    <td class=""><?php echo $row['Class'] ?></td>
+                                    <td class=""><?php echo $row['Status'] ?></td>
                                     <td class=""><?php echo $row['Price'] ?></td>
-                                    <td class=""><?php echo $row['PName'] ?></td>
-                                    <td class=""><?php echo $row['PassportNo'] ?></td>
-                                    <td class=""><?php echo $row['Sex'] ?></td>
-                                    <td class=""><?php echo $row['Nationality'] ?></td>
-                                    <td class=""><?php echo $row['UserID'] ?></td>
-                                    <td class=""><?php echo $row['UName'] ?></td>
                                     <td class="">
                                         <button type="button"
                                             class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
                                             data-toggle="dropdown" aria-expanded="true">
                                             Action
                                         </button>
-                                        <div class="dropdown-menu" style="">
-                                            <a class="dropdown-item view_employee"
-                                                href="./index.php?page=view_employee&id=<?php echo $row['ssn'] ?>"
-                                                data-id="<?php echo $row['ssn'] ?>">View</a>
-
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item"
-                                                href="./index.php?page=edit_employee&ssn=<?php echo $row["ssn"]; ?>"
-                                                data-id="<?php echo $row['ssn'] ?>">Edit</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item delete_operate" href="javascript:void(0)"
-                                                data-id="<?php echo $row['ssn'] ?>">Delete</a>
-                                        </div>
+                                        <!-- <div class="dropdown-menu" style="">
+                                            <a class="dropdown-item view_seat"
+                                                href="./index.php?page=view_seat&flightid=<?php echo $row['FlightID'] ?>&seatnum=<?php echo $row['SeatNum'] ?>"
+                                                data-id="<?php echo $row['FlightID'] ?>">View</a>
+                                            <a class="dropdown-item delete_seat" href="javascript:void(0)"
+                                                data-id="<?php echo $row['FlightID'] ?>">Delete</a>
+                                        </div> -->
                                     </td>
                                 </tr>
                                 <?php 
@@ -268,23 +308,31 @@ $fid =  $_GET['id'];
 <script>
 $(document).ready(function() {
     $('.table').dataTable();
-    $(document).on('click', '.view_airport', function() {
-        window.location.href = "view_airport.php?id=" + $(this).attr('data-apcode');
+    $(document).on('click', '.view_employee', function() {
+        window.location.href = "view_employee.php?id=" + $(this).attr('data-id');
     });
 
-    $(document).on('click', '.delete_airport', function() {
-        _conf_str("Are you sure to delete this Airport?", "delete_airport", [$(this).attr(
-            'data-apcode')]);
+    $(document).on('click', '.delete_employee', function() {
+        _conf_str("Are you sure to delete this Employee?", "delete_employee", [$(this).attr(
+            'data-id')]);
+    });
+    $(document).on('click', '.view_passenger', function() {
+        window.location.href = "view_employee.php?pid=" + $(this).attr('data-id');
+    });
+
+    $(document).on('click', '.delete_passenger', function() {
+        _conf_str("Are you sure to delete this Passenger?", "delete_passenger", [$(this).attr(
+            'data-id')]);
     });
 })
 
-function delete_airport($apcode) {
+function delete_employee($ssn) {
     start_load()
     $.ajax({
-        url: 'ajax.php?action=delete_airport',
+        url: 'ajax.php?action=delete_employee',
         method: 'POST',
         data: {
-            apcode: $apcode
+            ssn: $ssn
         },
         success: function(resp) {
             if (resp == 1) {
@@ -292,13 +340,53 @@ function delete_airport($apcode) {
                 setTimeout(function() {
                     location.reload()
                 }, 1500)
-            } else {
-                alert_toast('Data failed to delete.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_airport')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_employee')
+            //     }, 75000)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            }
+        }.bind(this) // Bind this to the AJAX context
+    })
+}
+
+function delete_passenger($pid) {
+    start_load()
+    $.ajax({
+        url: 'ajax.php?action=delete_passenger',
+        method: 'POST',
+        data: {
+            pid: $pid
+        },
+        success: function(resp) {
+            if (resp == 1) {
+                alert_toast("Data successfully deleted", 'success')
+                setTimeout(function() {
+                    location.reload()
+                }, 1500)
+            }
+            // else {
+            //     alert_toast('Data failed to delete.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_employee')
+            //     }, 75000)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 }
 </script>

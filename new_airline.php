@@ -76,13 +76,21 @@ $('#manage_airline').submit(function(e) {
                     "<div class='alert alert-danger'>IATA Designator already exist.</div>");
                 $('[name="IATADesignator"]').addClass("border-danger")
                 end_load()
-            } else {
-                alert_toast('Data failed to saved.', "fail");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_airline')
-                }, 750)
             }
-        }
+            // else {
+            //     alert_toast('Data failed to saved.', "fail");
+            //     setTimeout(function() {
+            //         location.replace('index.php?page=list_airline')
+            //     }, 750)
+            // }
+            else {
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
     })
 })
 </script>
