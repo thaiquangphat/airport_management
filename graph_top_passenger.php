@@ -2,13 +2,7 @@
 include 'db_connect.php';
 
 // Query to get top 10 passengers who spend the most on tickets
-$query = "SELECT p.PID, CONCAT(p.Fname, ' ', p.Lname) as PassengerName, SUM(s.Price) as TotalSpent
-          FROM Passenger p
-          JOIN Ticket t ON p.PID = t.PID
-          JOIN Seat s ON t.SeatNum = s.SeatNum AND t.FlightID = s.FlightID
-          GROUP BY p.PID
-          ORDER BY TotalSpent DESC
-          LIMIT 10";
+$query = "SELECT * FROM top_ten_passenger";
 
 $result = mysqli_query($conn, $query);
 

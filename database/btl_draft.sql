@@ -1475,6 +1475,51 @@ END;
 //
 DELIMITER ;
 
+-- This view is for ploting the graph
+CREATE VIEW employee_distribution_by_type AS
+SELECT 
+    (SELECT COUNT(*) FROM Pilot) AS PilotCount,
+    (SELECT COUNT(*) FROM Flight_Attendant) AS FlightAttendantCount,
+    (SELECT COUNT(*) FROM Engineer) AS EngineerCount,
+    (SELECT COUNT(*) FROM Traffic_Controller) AS TrafficControllerCount,
+    (SELECT COUNT(*) FROM Administrative_Support) AS AdministrativeSupportCount,
+    (SELECT COUNT(*) FROM Employee) AS TotalCount;
+    
+-- This view is for ploting the graph of top 10 airplane
+CREATE VIEW top_ten_airplane AS
+	SELECT AirplaneID, COUNT(*) as NumberOfFlights
+	FROM Flight
+	GROUP BY AirplaneID
+	ORDER BY NumberOfFlights DESC
+	LIMIT 10;
+
+-- This view is for ploting the graph of top 10 passenger
+CREATE VIEW top_ten_passenger AS
+	SELECT p.PID, CONCAT(p.Fname, ' ', p.Lname) as PassengerName, SUM(s.Price) as TotalSpent
+	FROM Passenger p
+	JOIN Ticket t ON p.PID = t.PID
+	JOIN Seat s ON t.SeatNum = s.SeatNum AND t.FlightID = s.FlightID
+	GROUP BY p.PID
+	ORDER BY TotalSpent DESC
+	LIMIT 10;
+
+-- This procedure is for getting number of experts of a consultant
+DELIMITER //
+CREATE PROCEDURE total_expert (IN CID INT)
+BEGIN
+	SELECT count(*) as total FROM Expert_At where ConsultID = CID;
+END;
+//
+DELIMITER ;
+
+-- This procedure is for getting number of flights of a route
+DELIMITER //
+CREATE PROCEDURE total_flight (IN id INT)
+BEGIN
+	SELECT count(*) as total FROM Flight where RID = id;
+END;
+//
+DELIMITER ;
 
 -- --------------------------------------------------------------------
 INSERT INTO airline(AirlineID,IATADesignator,Name,Country) VALUES (110,'UJ','AlMasria Universal Airlines','Egypt');

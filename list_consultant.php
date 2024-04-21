@@ -28,8 +28,21 @@
                         <td><b><?php echo $row['ID'] ?></b></td>
                         <td><b><?php echo $row['Name'] ?></b></td>
                         <td><b><?php 
-                                $qry2 = $conn->query("SELECT count(*) as total FROM Expert_At where ConsultID = ".$row['ID'])->fetch_assoc();
-                                echo $qry2['total'] 
+                                $consultID = intval($row['ID']);  // Sanitize the ID input.
+                                $query = "CALL total_expert($consultID)";  // Prepare the stored procedure call.
+                            
+                                if ($result = $conn->query($query)) {
+                                    if ($my_row = $result->fetch_assoc()) {
+                                        echo $my_row['total'];  // Output the total.
+                                    }
+                                    $result->close();  // Close the result set.
+                                    $conn->next_result();  // Prepare the connection for the next SQL command.
+                                } else {
+                                    echo "Error: " . $conn->error;  // Display error if the query fails.
+                                }
+
+                                // $qry2 = $conn->query("SELECT count(*) as total FROM Expert_At where ConsultID = ".$row['ID'])->fetch_assoc();
+                                // echo $qry2['total'] 
                         ?></b></td>
                         <td class="text-center">
                             <button type="button"

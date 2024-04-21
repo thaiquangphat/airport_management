@@ -1,13 +1,7 @@
 <?php 
 include 'db_connect.php';
 
-$query = "SELECT 
-            (SELECT COUNT(*) FROM Pilot) AS PilotCount,
-            (SELECT COUNT(*) FROM Flight_Attendant) AS FlightAttendantCount,
-            (SELECT COUNT(*) FROM Engineer) AS EngineerCount,
-            (SELECT COUNT(*) FROM Traffic_Controller) AS TrafficControllerCount,
-            (SELECT COUNT(*) FROM Administrative_Support) AS AdministrativeSupportCount,
-            (SELECT COUNT(*) FROM Employee) AS TotalCount";  // Assuming Employee table contains all types
+$query = "SELECT * FROM employee_distribution_by_type";  // Assuming Employee table contains all types
 
 $result = mysqli_query($conn, $query);
 
