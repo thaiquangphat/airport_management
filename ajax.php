@@ -443,5 +443,14 @@ if ($action == 'delete_super'){
 	if ($save)
 		echo $save;
 }
+if($action == 'update_ticket'){
+	$test_err = ""; // Initialize $test_err
+	$save = $crud->update_ticket($test_err);
+	if($save == 1) {
+        echo $save;
+    } else {
+        echo $test_err; // Return the error message
+    }
+}
 ob_end_flush();
 ?>

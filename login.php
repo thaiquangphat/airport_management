@@ -114,6 +114,7 @@ ob_end_flush();
                     if (resp == 1) {
                         // location.href = 'index.php?page=home';
                         // added here
+                        alert_toast(" Database connection success.", 'success');
                         setTimeout(function() {
                             location.replace('index.php?page=home')
                         }, 750)

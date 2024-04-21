@@ -74,7 +74,8 @@ CREATE TABLE Employee
     DOB    		DATE,
     Sex    		ENUM ('F', 'M'),
     Date_Start  DATE,
-    PRIMARY KEY (SSN)
+    PRIMARY KEY (SSN),
+    CONSTRAINT `check-salary` CHECK (( Salary > 0 ))
 );
 
 CREATE TABLE Supervision
@@ -293,7 +294,8 @@ CREATE TABLE Flight
     UNIQUE (RID, FlightCode),
     FOREIGN KEY (RID) REFERENCES Route (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AirplaneID) REFERENCES Airplane (AirplaneID) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `check-valid-date` CHECK (( EAT > EDT ))
 );
 
 -- ------------------------------------------ IMPORTANT --------------------------------------------------
@@ -792,6 +794,23 @@ END;
 //
 
 DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------- 
+-- DELIMITER //
+
+-- CREATE TRIGGER before_flight_insert
+-- BEFORE INSERT ON Flight
+-- FOR EACH ROW
+-- BEGIN
+-- 	IF TIMESTAMPDIFF(SECOND, NEW.EDT, NEW.EAT) <= 0 THEN
+--         SIGNAL SQLSTATE '45000'
+--         SET MESSAGE_TEXT = 'EAT must be greater than EDT';
+--     END IF;
+-- END;
+-- //
+
+-- DELIMITER ;
+
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 

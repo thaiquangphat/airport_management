@@ -1,5 +1,5 @@
 <?php 
-    echo $TicketID;
+    // echo $TicketID;
 ?>
 <div class="col-lg-12">
     <div class="card">
@@ -14,97 +14,69 @@
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label for="" class="control-label">Passenger ID</label>
                             <input type="text" name="PID" class="form-control form-control-sm" required
-                                value="<?php echo isset($PID) ? $PID : '' ?>">
+                                value="<?php echo isset($PID) ? $PID : '' ?>" readonly>
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label for="" class="control-label">Supervisor</label>
-                            <select class="form-control form-control-sm select2" name="super">
-                                <option></option>
-                                <?php
-                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee order by SSN asc ");
-                                    while($row= $sup->fetch_assoc()):
-                                ?>
-                                <option value="<?php echo $row['SSN'] ?>"
-                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>>
-                                    <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>
-                                </option>
-                                <?php endwhile; ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="" class="control-label">First name</label>
-                            <input type="text" name="Fname" class="form-control form-control-sm" required
-                                value="<?php echo isset($Fname) ? $Fname : '' ?>">
+                            <label for="" class="control-label">Seat Num</label>
+                            <input type="text" name="SeatNum" class="form-control form-control-sm" required
+                                value="<?php echo isset($SeatNum) ? $SeatNum : '' ?>" readonly>
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label for="" class="control-label">Last name</label>
-                            <input type="text" name="Lname" class="form-control form-control-sm" required
-                                value="<?php echo isset($Lname) ? $Lname : '' ?>">
-                            <small id="#msg"></small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="" class="control-label">Minit</label>
-                            <input type="text" name="Minit" class="form-control form-control-sm" required
-                                value="<?php echo isset($Minit) ? $Minit : '' ?>">
+                            <label for="" class="control-label">Flight ID</label>
+                            <input type="text" name="FlightID" class="form-control form-control-sm" required
+                                value="<?php echo isset($FlightID) ? $FlightID : '' ?>" readonly>
                             <small id="#msg"></small>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label for="" class="control-label">Salary</label>
-                            <input type="text" name="Salary" class="form-control form-control-sm" required
-                                value="<?php echo isset($Salary) ? $Salary : '' ?>">
+                            <label for="" class="control-label">Check In Status</label>
+                            <select class="form-control form-control-sm select2" name="CheckInStatus" <?php echo isset($CheckInStatus) && $CheckInStatus == 'Yes' ? 'disabled' : '' ?>>
+                                <option value="Yes" <?php echo isset($CheckInStatus) && $CheckInStatus == 'Yes' ? "selected" : ''?>>Yes</option>
+                                <option value="No" <?php echo isset($CheckInStatus) && $CheckInStatus == 'No' ? "selected" : '' ?>>No</option>
+                            </select>
+                            <?php 
+                                // Add a hidden input to ensure that the value 'Yes' is still submitted even if the select is disabled
+                                if (isset($CheckInStatus) && $CheckInStatus == 'Yes') {
+                                    echo '<input type="hidden" name="CheckInStatus" value="Yes">';
+                                }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="" class="control-label">Check In Time</label>
+                            <input type="datetime-local" name="CheckInTime" class="form-control form-control-sm" <?php echo isset($CheckInStatus) && $CheckInStatus == 'Yes' ? 'readonly' : '' ?>
+                                value="<?php echo isset($CheckInTime) ? $CheckInTime : '' ?>" required>
                             <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label for="" class="control-label">Date Of Birth</label>
-                            <input type="date" class="form-control form-control-sm" autocomplete="off" name="DOB"
-                                value="<?php echo isset($DOB) ? date("Y-m-d",strtotime($DOB)) : '' ?>" required>
+                            <label for="" class="control-label">Book Time</label>
+                            <input type="datetime-local" name="BookTime" class="form-control form-control-sm" <?php echo isset($CheckInStatus) && $CheckInStatus == 'Yes' ? 'readonly' : '' ?>
+                                value="<?php echo isset($BookTime) ? $BookTime : '' ?>" required>
+                            <small id="#msg"></small>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label for="" class="control-label">Gender</label>
-                            <select class="form-control form-control-sm select2" name="Sex">
-                                <option></option>
-                                <option value="F">Female</option>
-                                <option value="M" selected="selected">Male</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="" class="control-label">Choose type</label>
-                            <select class="form-control form-control-sm select2" name="EmpType">
-                                <option></option>
-                                <option value="None" selected="selected">None</option>
-                                <option value="ADSupport">Administrative Support</option>
-                                <option value="FlightEmployee">Flight Employee</option>
-                                <option value="Engineer">Engineer</option>
-                                <option value="TrafficController">Traffic Controller</option>
-                            </select>
+                            <label for="" class="control-label">Cancel Time</label>
+                            <input type="datetime-local" name="CancelTime" class="form-control form-control-sm"
+                                value="<?php echo isset($CancelTime) ? $CancelTime : '' ?>" required>
+                            <small id="#msg"></small>
                         </div>
                     </div>
                 </div>
@@ -129,36 +101,34 @@ img#cimg {
 <script>
 $(document).ready(function() {
     // Function to handle change event of the select element for Sex
-    $('#manage_employee select[name="Sex"]').change(function() {
-        var selectedGender = $(this).val();
-        $('#manage_employee input[name="Sex"]').val(selectedGender);
+    $('#manage_ticket select[name="CheckInStatus"]').change(function() {
+        var selectedStatus = $(this).val();
+        $('#manage_employee input[name="CheckInStatus"]').val(selectedStatus);
     });
 
-    // Function to handle change event of the input element for Date Of Birth
-    $('#manage_employee input[name="DOB"]').change(function() {
-        var selectedDateOfBirth = $(this).val();
-        $('#manage_employee input[name="DOB"]').val(selectedDateOfBirth);
+    $('#manage_ticket select[name="CheckInTime"]').change(function() {
+        var selectedCheckInTime = $(this).val();
+        $('#manage_employee input[name="CheckInTime"]').val(selectedCheckInTime);
     });
 
-    // Function to handle change event of the input element for EmpType
-    $('#manage_employee select[name="EmpType"]').change(function() {
-        var selectedEmpType = $(this).val();
-        $('#manage_employee select[name="EmpType"]').val(selectedEmpType);
+    $('#manage_ticket select[name="BookTime"]').change(function() {
+        var selectedBookTime = $(this).val();
+        $('#manage_employee input[name="BookTime"]').val(selectedBookTime);
     });
-
-    $('#manage_employee select[name="super"]').change(function() {
-        var selectedsuper = $(this).val();
-        $('#manage_employee select[name="super"]').val(selectedsuper);
+    
+    $('#manage_ticket select[name="CancelTime"]').change(function() {
+        var selectedCancelTime = $(this).val();
+        $('#manage_employee input[name="CancelTime"]').val(selectedCancelTime);
     });
 })
 
-$('#manage_employee').submit(function(e) {
+$('#manage_ticket').submit(function(e) {
     e.preventDefault()
     start_load()
     $('#msg').html('');
 
     $.ajax({
-        url: 'ajax.php?action=save_employee',
+        url: 'ajax.php?action=update_ticket',
         data: new FormData($(this)[0]),
         cache: false,
         contentType: false,
@@ -170,46 +140,14 @@ $('#manage_employee').submit(function(e) {
             if (resp == 0) {
                 alert_toast('Some field missing.', "error");
                 setTimeout(function() {
-                    location.replace('index.php?page=list_employee')
+                    location.reload();
                 }, 750)
             } else if (resp == 1) {
-                alert_toast('Data successfully saved.', "success");
-                setTimeout(function() {
-                    location.replace('index.php?page=list_employee')
-                }, 750)
-            } else if (resp == 3) {
                 alert_toast('Data successfully saved, redirecting.', "success");
                 setTimeout(function() {
-                    location.replace('index.php?page=new_administrative_support')
+                    location.replace("./index.php?page=view_passenger&pid=<?php echo $PID?>")
                 }, 750)
-            } else if (resp == 4) {
-                alert_toast('Data successfully saved, redirecting.', "success");
-                setTimeout(function() {
-                    location.replace('index.php?page=new_flight_employee')
-                }, 750)
-            } else if (resp == 5) {
-                alert_toast('Data successfully saved, redirecting.', "success");
-                setTimeout(function() {
-                    location.replace('index.php?page=new_engineer')
-                }, 750)
-            } else if (resp == 6) {
-                alert_toast('Data successfully saved, redirecting.', "success");
-                setTimeout(function() {
-                    location.replace('index.php?page=new_traffic_controller')
-                }, 750)
-            } else if (resp == 2) {
-                $('#msg').html(
-                    "<div class='alert alert-danger'>SSN already exist.</div>");
-                $('[name="SSN"]').addClass("border-danger")
-                end_load()
-            }
-            // else {
-            //     alert_toast('Data failed to saved.', "error");
-            //     setTimeout(function() {
-            //         location.reload();
-            //     }, 750)
-            // }
-            else {
+            } else {
                 alert_toast('Error: ' + resp,
                     "error"); // Display the error message returned from the server
                 setTimeout(function() {
