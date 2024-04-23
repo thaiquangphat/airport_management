@@ -18,13 +18,25 @@ $dataPoints = [];
 
 // Function to fetch data and append to $dataPoints
 function fetchData($result, $label) {
+    global $dataPoints; // Access global $dataPoints array
     $salaries = [];
     while ($row = mysqli_fetch_assoc($result)) {
         $salaries[] = $row['Salary'];
     }
+
+    // Sort salaries to calculate quartiles
+    sort($salaries);
+    
+    $count = count($salaries);
+    $min = $salaries[0];
+    $max = $salaries[$count - 1];
+    $q1 = $salaries[floor($count * 0.25)];
+    $median = $salaries[floor($count * 0.5)];
+    $q3 = $salaries[floor($count * 0.75)];
+
     $dataPoints[] = [
         "label" => $label,
-        "y" => $salaries
+        "y" => [$min, $q1, $median, $q3, $max]
     ];
 }
 
@@ -80,7 +92,7 @@ fetchData($result_administrative_support, "Administrative Support");
             axisY: {
                 title: "Annual Salary (in USD)",
                 prefix: "$",
-                interval: 60000,
+                interval: 10000,
                 labelFormatter: addSymbols
             },
             data: [{
