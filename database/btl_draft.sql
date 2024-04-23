@@ -1525,7 +1525,7 @@ CREATE VIEW top_ten_passenger AS
 DELIMITER //
 CREATE PROCEDURE total_expert (IN CID INT)
 BEGIN
-	SELECT count(*) as total FROM Expert_At where ConsultID = CID;
+	SELECT count(*) as num_model FROM Expert_At where ConsultID = CID;
 END;
 //
 DELIMITER ;
@@ -4187,7 +4187,7 @@ INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALU
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1818624322,'Adrian','X.','Harris',27319,2389664803,'M','1974-04-08','2017-03-21');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7782466558,'Sharon','O.','Anne',39139,5228516392,'F','1984-06-14','2020-12-11');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6004615448,'Harold','C.','Joe',36194,5055451320,'M','1969-07-21','2018-05-29');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1071916066,'Cadie','I.','Bailey',46207,4403095817,'F','1958-04-30','1999-02-14');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1071916066,'Cadie','I.','Bailey',36780,4403095817,'F','1958-04-30','1999-02-14');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9455396887,'Carina','S.','Watson',6919,4098812342,'M','1967-07-10','2023-03-09');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2552794347,'Edgar','B.','Spencer',30543,4537002429,'M','1984-09-21','2003-09-13');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5666989915,'Jared','W.','Thomas',31348,2938654496,'F','1956-04-20','2001-12-21');
@@ -4196,7 +4196,7 @@ INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALU
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6839710329,'Donna','S.','Carl',9836,9099145640,'F','1979-05-16','2020-04-22');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6144043210,'Sophia','E.','Andrews',9408,9749441704,'M','1965-05-10','2019-10-23');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6889127768,'Myra','T.','Harris',11949,5482141634,'M','2004-10-04','2003-10-30');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6795700315,'Antony','U.','Hawkins',60854,6266275512,'M','1997-06-15','2004-02-22');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6795700315,'Antony','U.','Hawkins',40000,6266275512,'M','1997-06-15','2004-02-22');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6762227282,'Brenda','K.','Jimmy',35063,8393450665,'F','1965-04-03','2015-04-30');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3253673037,'Kelvin','H.','Ferguson',10707,6437561662,'F','1974-07-30','1999-12-30');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6979274052,'Tara','K.','Reed',9992,1811188368,'F','1998-06-05','2006-04-09');
@@ -4216,7 +4216,7 @@ INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALU
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9923912715,'Antony','G.','Morrison',8293,9150128637,'F','1960-02-13','1997-03-29');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2199130905,'Samantha','U.','Carter',26681,3632315913,'M','1965-06-28','2015-01-26');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2049569671,'Audrey','U.','Alexander',4775,3958687192,'M','1952-12-10','2000-12-22');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8235456444,'Ryan','P.','Gray',49443,5162882057,'M','2003-11-28','2005-01-18');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8235456444,'Ryan','P.','Gray',37890,5162882057,'M','2003-11-28','2005-01-18');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3058929914,'Amanda','B.','Hawkins',9959,1265125699,'M','1958-02-10','2016-12-19');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6224231677,'Arianna','O.','Mitchell',6421,5777060586,'M','1954-03-05','1997-11-29');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (9777755494,'Jenna','L.','Allen',12233,7183761517,'M','1953-10-03','1997-10-25');
@@ -4243,16 +4243,16 @@ INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALU
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6735638271,'Alberta','B.','Robinson',9792,4154114257,'F','1965-05-04','2009-02-04');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3300076804,'Daryl','Q.','Martin',30480,9798767966,'M','1970-04-18','1995-12-23');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (6625811960,'Kristian','M.','Morgan',9852,1726864584,'F','1999-08-11','2018-11-24');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1250946629,'Amy','Y.','Mitchell',57429,2662994532,'M','1982-09-22','2006-06-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1250946629,'Amy','Y.','Mitchell',40000,2662994532,'M','1982-09-22','2006-06-11');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8581806435,'Arnold','W.','Andrews',9708,1610709074,'M','2005-09-11','2021-01-29');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7635460557,'Lillian','D.','Andrea',9878,7415001314,'M','2004-07-28','2006-09-08');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1443933295,'Brooke','O.','Brown',38961,9987276344,'M','1983-12-04','2004-04-12');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5391252459,'Martin','P.','Dixon',36942,3743912473,'M','1979-07-19','2014-05-17');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2741700391,'Isabella','Q.','Johnston',22305,8426773758,'F','1981-03-08','2013-07-27');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7353415534,'Isabella','Q.','Robinson',58049,4604201791,'F','1979-01-27','2011-02-18');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7353415534,'Isabella','Q.','Robinson',39999,4604201791,'F','1979-01-27','2011-02-18');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7356719401,'Haris','R.','Harper',14121,5409750199,'F','2001-05-05','2002-11-19');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7715981543,'Mike','P.','Russell',27786,7473829460,'F','1989-05-03','2004-11-08');
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5557227589,'David','O.','Fowler',46594,9627386173,'M','1986-08-30','2012-07-11');
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5557227589,'David','O.','Fowler',37000,9627386173,'M','1986-08-30','2012-07-11');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (8323992682,'Dainton','P.','Perry',6747,1291865750,'M','1962-01-22','2013-06-11');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (7376558750,'Maddie','J.','Craig',7604,5375878852,'F','2001-07-09','2010-11-26');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (3544575412,'Rosie','W.','Harrison',31019,9832595092,'F','1984-08-05','2007-02-20');
@@ -4260,7 +4260,6 @@ INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALU
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (4662500655,'Sofia','O.','Wright',9786,9384404000,'M','1995-05-15','2017-11-14');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (2564929537,'Anne','P.','Theresa',14426,4504035844,'F','1990-08-16','2010-04-29');
 INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (5064863999,'Nicole','R.','Hall',40496,5397469450,'M','2003-12-19','2005-04-17');
-
 
 INSERT INTO employee_address(SSN,Street,City,District) VALUES (2049569671,'114-36 Sutter Ave','Hamden','AL');
 INSERT INTO employee_address(SSN,Street,City,District) VALUES (4662500655,'67 Dexter Ave','Methuen','AL');
@@ -4570,7 +4569,7 @@ INSERT INTO expert_at(ConsultID,APCode,ModelID) VALUES (10,'SYQ',6);
 INSERT INTO expert_at(ConsultID,APCode,ModelID) VALUES (8,'ROR',11);
 
 INSERT INTO supervision(SSN,SuperSSN) VALUES (6154727188,1443933295);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (3300076804,5557227589);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (3300076804,5557227589);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (6979274052,2552794347);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (9656325312,7782466558);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (2067415434,6762227282);
@@ -4591,12 +4590,12 @@ INSERT INTO supervision(SSN,SuperSSN) VALUES (5666989915,7353415534);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (9777755494,3949455487);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (3058929914,3544575412);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (7356719401,6378527201);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (8235456444,6795700315);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (8235456444,6795700315);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (5094754453,2199130905);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (5557227589,8235456444);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (5880889912,4775339493);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (5557227589,8235456444);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (5880889912,4775339493);
 -- INSERT INTO supervision(SSN,SuperSSN) VALUES (7514048819,6144043210);
-INSERT INTO supervision(SSN,SuperSSN) VALUES (7556917806,5557227589);
+-- INSERT INTO supervision(SSN,SuperSSN) VALUES (7556917806,5557227589);
 -- INSERT INTO supervision(SSN,SuperSSN) VALUES (6794118189,8698663522);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (6560444561,1443933295);
 INSERT INTO supervision(SSN,SuperSSN) VALUES (1723073015,6471839288);
