@@ -71,3 +71,7 @@
     - View done for graph.
     - DDL (btl_draft) update for views and procedure.
     - Check clause done (2 check clauses).
+ - [23/04/24]
+    - Remove last unused table - system_settings.
+    - Find another background for the login page -> Not done yet.
+    - Keep other Images unchanged.
