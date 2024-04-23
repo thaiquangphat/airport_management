@@ -119,22 +119,18 @@ foreach($qry as $k => $v){
 <div id="flightList"></div>
 
 <style>
-/* .section {
-    position: relative;
-    height: 80vh;
-} */
-/* .section {
-    position: relative;
-    height: 80vh;
+.section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    /* Subtract the height of the navbar or other fixed elements */
 }
 
 .section .section-center {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
+    width: 100%;
+    max-width: 1200px;
+    /* Adjust this value as needed */
 }
 
 #booking {
@@ -346,30 +342,30 @@ function fetchFlights() {
 
 document.addEventListener("DOMContentLoaded", function() {
     // Add event listeners to handle radio button changes
-    document.getElementById("baseflight").addEventListener("change", updateFlightType);
-    document.getElementById("returningflight").addEventListener("change", updateFlightType);
+    // document.getElementById("baseflight").addEventListener("change", updateFlightType);
+    // document.getElementById("returningflight").addEventListener("change", updateFlightType);
 
-    function updateFlightType() {
-        var departureAirport = document.getElementById("departureAirport");
-        var destinationAirport = document.getElementById("destinationAirport");
+    // function updateFlightType() {
+    //     var departureAirport = document.getElementById("departureAirport");
+    //     var destinationAirport = document.getElementById("destinationAirport");
 
-        if (document.getElementById("baseflight").checked) {
-            // For Base Flight
-            departureAirport.value = "ADE";
-            departureAirport.setAttribute("disabled", true);
-            destinationAirport.removeAttribute("disabled");
-            destinationAirport.value = '';
-        } else {
-            // For Returning Flight
-            destinationAirport.value = "ARW";
-            destinationAirport.setAttribute("disabled", true);
-            departureAirport.removeAttribute("disabled");
-            departureAirport.value = '';
-        }
-    }
+    //     if (document.getElementById("baseflight").checked) {
+    //         // For Base Flight
+    //         departureAirport.value = "ADE";
+    //         departureAirport.setAttribute("disabled", true);
+    //         destinationAirport.removeAttribute("disabled");
+    //         destinationAirport.value = '';
+    //     } else {
+    //         // For Returning Flight
+    //         destinationAirport.value = "ARW";
+    //         destinationAirport.setAttribute("disabled", true);
+    //         departureAirport.removeAttribute("disabled");
+    //         departureAirport.value = '';
+    //     }
+    // }
 
-    // Trigger the function to set initial values
-    updateFlightType();
+    // // Trigger the function to set initial values
+    // updateFlightType();
 
     // Handle form submission
     document.querySelector(".submit-btn").addEventListener("click", function(e) {
