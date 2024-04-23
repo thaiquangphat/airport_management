@@ -20,7 +20,7 @@ ob_end_flush();
 
 <style>
 #intro {
-    background-image: url(https://lms.hcmut.edu.vn/pluginfile.php/3/theme_academi/slide1image/1711678871/slbk.jpg);
+    background-image: url(https://hnm.1cdn.vn/2023/08/25/t3.jpg);
     /* background-image: url('./img/background.jpg'); */
     height: 100vh;
     background-size: auto 100%;
