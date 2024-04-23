@@ -1534,7 +1534,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE total_flight (IN id INT)
 BEGIN
-	SELECT count(*) as num_flight FROM Flight where RID = id;
+	SELECT count(*) as total FROM Flight where RID = id;
 END;
 //
 DELIMITER ;
