@@ -20,10 +20,13 @@ ob_end_flush();
 
 <style>
 #intro {
-    background-image: url(https://lms.hcmut.edu.vn/pluginfile.php/3/theme_academi/slide1image/1711678871/slbk.jpg);
-    /* background-image: url('./img/background.jpg'); */
-    height: 100vh;
-    background-size: auto 100%;
+    background-image: url(https://wallpaperset.com/w/full/9/5/8/217503.jpg);
+    background-size: cover;
+    /* Make the background image cover the entire screen */
+    background-repeat: no-repeat;
+    /* Prevent the background image from repeating */
+    background-position: center;
+    /* Center the background image */
 }
 
 /* Height for devices larger than 576px */
