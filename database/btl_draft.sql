@@ -6,7 +6,6 @@ CREATE SCHEMA Test_New;
 USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
-SET GLOBAL log_bin_trust_function_creators = 1;		# ko them thi loi :)))
 -- --------------------------------------------------------------------
 -- CREATE TABLE `system_settings` (
 --   `id` INT NOT NULL,
@@ -388,7 +387,7 @@ GRANT SELECT ON Test_new.* TO 'rUser'@'localhost';
 DELIMITER //
 
 CREATE FUNCTION CalculateAgeBySSN(employeeSSN CHAR(10))
-RETURNS INT
+RETURNS INT DETERMINISTIC
 BEGIN
     DECLARE birthDate DATE;
     DECLARE age INT;
@@ -478,7 +477,7 @@ END
 
 DELIMITER //
 CREATE FUNCTION revenue_flights(flight_id INT)
-RETURNS FLOAT
+RETURNS FLOAT DETERMINISTIC
 BEGIN
     DECLARE revenue FLOAT;
     SET revenue = 0;
@@ -530,7 +529,7 @@ DELIMITER ;
 DELIMITER //
 
 CREATE FUNCTION CalculateTotalSpent(PassengerID INT)
-RETURNS FLOAT
+RETURNS FLOAT DETERMINISTIC
 BEGIN
     DECLARE total_spent FLOAT;
     
@@ -547,7 +546,7 @@ END;
 DELIMITER //
 
 CREATE FUNCTION CalculateAge(birthDate DATE)
-RETURNS INT
+RETURNS INT DETERMINISTIC
 BEGIN
     DECLARE age INT;
     SET age = TIMESTAMPDIFF(YEAR, birthDate, CURDATE());
@@ -573,7 +572,7 @@ END
 //
 
 delimiter //
-CREATE FUNCTION CheckEmployeeAge(DOB DATE) RETURNS BOOLEAN
+CREATE FUNCTION CheckEmployeeAge(DOB DATE) RETURNS BOOLEAN DETERMINISTIC
 BEGIN
     DECLARE emp_age INT;
     SET emp_age = YEAR(CURRENT_DATE()) - YEAR(DOB);
@@ -1522,11 +1521,11 @@ CREATE VIEW top_ten_passenger AS
 	ORDER BY TotalSpent DESC
 	LIMIT 10;
 
--- This procedure is for getting number of experts of a consultant
+-- This procedure is for getting number of models that a consultant expertise on
 DELIMITER //
 CREATE PROCEDURE total_expert (IN CID INT)
 BEGIN
-	SELECT count(*) as total FROM Expert_At where ConsultID = CID;
+	SELECT count(*) as num_model FROM Expert_At where ConsultID = CID;
 END;
 //
 DELIMITER ;
@@ -1535,7 +1534,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE total_flight (IN id INT)
 BEGIN
-	SELECT count(*) as total FROM Flight where RID = id;
+	SELECT count(*) as num_flight FROM Flight where RID = id;
 END;
 //
 DELIMITER ;
