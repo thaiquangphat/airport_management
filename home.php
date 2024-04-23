@@ -16,7 +16,7 @@
             <div class="col-12 col-sm-6 col-md-12">
                 <a href="index.php?page=list_airport">
                     <div class="small-box bg-info shadow-sm border"
-                        style="background-image: url('./img/total_airport.jpg'); background-size: cover; background-position: center; position: relative;">
+                        style="background-image: url('./img/total_airport1.jpg'); background-size: cover; background-position: center; position: relative;">
                         <div class="inner">
                             <h3>
                                 <?php echo $conn->query("SELECT * FROM Airport")->num_rows; ?>
