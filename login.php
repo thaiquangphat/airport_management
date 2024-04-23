@@ -6,10 +6,10 @@ include "./db_connect.php";
 ob_start();
 // if(!isset($_SESSION['system'])){
 
-$system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-foreach ($system as $k => $v) {
-    $_SESSION["system"][$k] = $v;
-}
+// $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+// foreach ($system as $k => $v) {
+//     $_SESSION["system"][$k] = $v;
+// }
 // }
 ob_end_flush();
 ?>
@@ -41,9 +41,7 @@ ob_end_flush();
 <body id="intro" class="hold-transition login-page bg-black">
     <div class="login-box" style="background-color: rgba(255,255,255,0.8);">
         <div class="login-logo">
-            <a href="#" class="text-black"><b><?php echo $_SESSION["system"][
-        "name"
-    ]; ?> - Login</b></a>
+            <a href="#" class="text-black"><b><?php echo "Airport Management System"; ?> - Login</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card" style="">
@@ -127,7 +125,9 @@ ob_end_flush();
                     //     end_load();
                     // }
                     else {
-                        alert_toast(" Database connection failed.", 'warning'); // Display the error message returned from the server
+                        alert_toast(" Database connection failed.",
+                            'warning'
+                        ); // Display the error message returned from the server
                         setTimeout(function() {
                             location.reload();
                         }, 2000);

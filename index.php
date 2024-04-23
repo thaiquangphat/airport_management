@@ -128,7 +128,7 @@
             <strong>Copyright &copy; 2024 <a href="https://chat.openai.com/" target="_blank">PhuKhoiPaul</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b><?php echo $_SESSION["system"]["name"]; ?></b>
+                <b><?php echo "Airport Management System"; ?></b>
             </div>
         </footer>
     </div>
