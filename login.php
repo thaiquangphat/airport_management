@@ -6,10 +6,10 @@ include "./db_connect.php";
 ob_start();
 // if(!isset($_SESSION['system'])){
 
-$system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-foreach ($system as $k => $v) {
-    $_SESSION["system"][$k] = $v;
-}
+// $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+// foreach ($system as $k => $v) {
+//     $_SESSION["system"][$k] = $v;
+// }
 // }
 ob_end_flush();
 ?>
@@ -20,10 +20,13 @@ ob_end_flush();
 
 <style>
 #intro {
-    background-image: url(https://hnm.1cdn.vn/2023/08/25/t3.jpg);
-    /* background-image: url('./img/background.jpg'); */
-    height: 100vh;
-    background-size: auto 100%;
+    background-image: url(https://wallpaperset.com/w/full/9/5/8/217503.jpg);
+    background-size: cover;
+    /* Make the background image cover the entire screen */
+    background-repeat: no-repeat;
+    /* Prevent the background image from repeating */
+    background-position: center;
+    /* Center the background image */
 }
 
 /* Height for devices larger than 576px */
@@ -41,9 +44,7 @@ ob_end_flush();
 <body id="intro" class="hold-transition login-page bg-black">
     <div class="login-box" style="background-color: rgba(255,255,255,0.8);">
         <div class="login-logo">
-            <a href="#" class="text-black"><b><?php echo $_SESSION["system"][
-        "name"
-    ]; ?> - Login</b></a>
+            <a href="#" class="text-black"><b><?php echo "Airport Management System"; ?> - Login</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card" style="">
@@ -114,6 +115,7 @@ ob_end_flush();
                     if (resp == 1) {
                         // location.href = 'index.php?page=home';
                         // added here
+                        alert_toast(" Database connection success.", 'success');
                         setTimeout(function() {
                             location.replace('index.php?page=home')
                         }, 750)
@@ -126,7 +128,9 @@ ob_end_flush();
                     //     end_load();
                     // }
                     else {
-                        alert_toast(" Database connection failed.", 'warning'); // Display the error message returned from the server
+                        alert_toast(" Database connection failed.",
+                            'warning'
+                        ); // Display the error message returned from the server
                         setTimeout(function() {
                             location.reload();
                         }, 2000);

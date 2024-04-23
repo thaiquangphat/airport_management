@@ -8,26 +8,26 @@ USE Test_New;
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
 SET GLOBAL log_bin_trust_function_creators = 1;		# ko them thi loi :)))
 -- --------------------------------------------------------------------
-CREATE TABLE `system_settings` (
-  `id` INT NOT NULL,
-  `name` text NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `contact` varchar(20) NOT NULL,
-  `address` text NOT NULL,
-  `cover_img` text NOT NULL
-);
+-- CREATE TABLE `system_settings` (
+--   `id` INT NOT NULL,
+--   `name` text NOT NULL,
+--   `email` varchar(200) NOT NULL,
+--   `contact` varchar(20) NOT NULL,
+--   `address` text NOT NULL,
+--   `cover_img` text NOT NULL
+-- );
 
---
--- Dumping data for table `system_settings`
---
-INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
-(1, 'Airport Management System', 'info@sample.comm', '+6123 4567 899', '123  ABC DEF, GHI, MNP, 123123', '');
+-- --
+-- -- Dumping data for table `system_settings`
+-- --
+-- INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
+-- (1, 'Airport Management System', 'info@sample.comm', '+6123 4567 899', '123  ABC DEF, GHI, MNP, 123123', '');
 
---
--- Indexes for table `system_settings`
---
-ALTER TABLE `system_settings`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `system_settings`
+-- --
+-- ALTER TABLE `system_settings`
+--   ADD PRIMARY KEY (`id`);
 -- --------------------------------------------------------------------
 -- CREATE TABLE `users` (
 --   `id` int(30) AUTO_INCREMENT,
@@ -74,7 +74,8 @@ CREATE TABLE Employee
     DOB    		DATE,
     Sex    		ENUM ('F', 'M'),
     Date_Start  DATE,
-    PRIMARY KEY (SSN)
+    PRIMARY KEY (SSN),
+    CONSTRAINT `check-salary` CHECK (( Salary > 0 ))
 );
 
 CREATE TABLE Supervision
@@ -293,7 +294,8 @@ CREATE TABLE Flight
     UNIQUE (RID, FlightCode),
     FOREIGN KEY (RID) REFERENCES Route (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AirplaneID) REFERENCES Airplane (AirplaneID) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `check-valid-date` CHECK (( EAT > EDT ))
 );
 
 -- ------------------------------------------ IMPORTANT --------------------------------------------------
@@ -792,6 +794,23 @@ END;
 //
 
 DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------- 
+-- DELIMITER //
+
+-- CREATE TRIGGER before_flight_insert
+-- BEFORE INSERT ON Flight
+-- FOR EACH ROW
+-- BEGIN
+-- 	IF TIMESTAMPDIFF(SECOND, NEW.EDT, NEW.EAT) <= 0 THEN
+--         SIGNAL SQLSTATE '45000'
+--         SET MESSAGE_TEXT = 'EAT must be greater than EDT';
+--     END IF;
+-- END;
+-- //
+
+-- DELIMITER ;
+
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 
@@ -1475,6 +1494,51 @@ END;
 //
 DELIMITER ;
 
+-- This view is for ploting the graph
+CREATE VIEW employee_distribution_by_type AS
+SELECT 
+    (SELECT COUNT(*) FROM Pilot) AS PilotCount,
+    (SELECT COUNT(*) FROM Flight_Attendant) AS FlightAttendantCount,
+    (SELECT COUNT(*) FROM Engineer) AS EngineerCount,
+    (SELECT COUNT(*) FROM Traffic_Controller) AS TrafficControllerCount,
+    (SELECT COUNT(*) FROM Administrative_Support) AS AdministrativeSupportCount,
+    (SELECT COUNT(*) FROM Employee) AS TotalCount;
+    
+-- This view is for ploting the graph of top 10 airplane
+CREATE VIEW top_ten_airplane AS
+	SELECT AirplaneID, COUNT(*) as NumberOfFlights
+	FROM Flight
+	GROUP BY AirplaneID
+	ORDER BY NumberOfFlights DESC
+	LIMIT 10;
+
+-- This view is for ploting the graph of top 10 passenger
+CREATE VIEW top_ten_passenger AS
+	SELECT p.PID, CONCAT(p.Fname, ' ', p.Lname) as PassengerName, SUM(s.Price) as TotalSpent
+	FROM Passenger p
+	JOIN Ticket t ON p.PID = t.PID
+	JOIN Seat s ON t.SeatNum = s.SeatNum AND t.FlightID = s.FlightID
+	GROUP BY p.PID
+	ORDER BY TotalSpent DESC
+	LIMIT 10;
+
+-- This procedure is for getting number of experts of a consultant
+DELIMITER //
+CREATE PROCEDURE total_expert (IN CID INT)
+BEGIN
+	SELECT count(*) as total FROM Expert_At where ConsultID = CID;
+END;
+//
+DELIMITER ;
+
+-- This procedure is for getting number of flights of a route
+DELIMITER //
+CREATE PROCEDURE total_flight (IN id INT)
+BEGIN
+	SELECT count(*) as total FROM Flight where RID = id;
+END;
+//
+DELIMITER ;
 
 -- --------------------------------------------------------------------
 INSERT INTO airline(AirlineID,IATADesignator,Name,Country) VALUES (110,'UJ','AlMasria Universal Airlines','Egypt');

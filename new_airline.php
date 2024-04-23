@@ -5,24 +5,32 @@
         <div class="card-body">
             <form action="" id="manage_airline">
                 <div class="row">
-                    <div class="col-md-12 border-right">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">Airline ID</label>
                             <input type="text" name="AirlineID" class="form-control form-control-sm" required
                                 value="<?php echo isset($AirlineID) ? $AirlineID : '' ?>">
                             <small id="#msg"></small>
                         </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">IATA Designator</label>
                             <input type="text" name="IATADesignator" class="form-control form-control-sm" required
                                 value="<?php echo isset($IATADesignator) ? $IATADesignator : '' ?>">
                             <small id="#msg"></small>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label for="" class="control-label">Airport Name</label>
+                            <label for="" class="control-label">Airline Name</label>
                             <input type="text" name="Name" class="form-control form-control-sm" required
                                 value="<?php echo isset($Name) ? $Name : '' ?>">
                         </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">Country</label>
                             <input type="text" name="Country" class="form-control form-control-sm" required

@@ -107,7 +107,7 @@ if($action == 'delete_airline'){
 if($action == 'save_owner'){
 	$test_err = ""; // Initialize $test_err
 	$save = $crud->save_owner($test_err);
-	if($save == 1) {
+	if($save == 1 || $save == 2 || $save == 3 || $save == 4 || $save == 5) {
 		echo $save;
 	} else {
 		echo $test_err; // Return the error message
@@ -116,7 +116,7 @@ if($action == 'save_owner'){
 if($action == 'update_owner'){
 	$test_err = ""; // Initialize $test_err
 	$save = $crud->update_owner($test_err);
-	if($save == 1) {
+	if($save == 1 || $save == 2 || $save == 3 || $save == 4 || $save == 5) {
 		echo $save;
 	} else {
 		echo $test_err; // Return the error message
@@ -442,6 +442,15 @@ if ($action == 'delete_super'){
 	$save = $crud->delete_super();
 	if ($save)
 		echo $save;
+}
+if($action == 'update_ticket'){
+	$test_err = ""; // Initialize $test_err
+	$save = $crud->update_ticket($test_err);
+	if($save == 1) {
+        echo $save;
+    } else {
+        echo $test_err; // Return the error message
+    }
 }
 ob_end_flush();
 ?>

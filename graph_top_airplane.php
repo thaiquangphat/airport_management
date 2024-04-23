@@ -2,11 +2,7 @@
 include 'db_connect.php';
 
 // Query to get top 10 most used airplanes
-$query = "SELECT AirplaneID, COUNT(*) as NumberOfFlights
-          FROM Flight
-          GROUP BY AirplaneID
-          ORDER BY NumberOfFlights DESC
-          LIMIT 10";
+$query = "SELECT * FROM top_ten_airplane";
 
 $result = mysqli_query($conn, $query);
 

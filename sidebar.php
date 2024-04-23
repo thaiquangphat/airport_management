@@ -302,30 +302,6 @@
                         </li>
                     </ul>
                 </li>
-
-                <!-- <li class="nav-item">
-                    <a href="#" class="nav-link nav-edit_user">
-                        <i class="nav-icon fas fa-user-secret"></i>
-                        <p>
-                            Users
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="./index.php?page=new_user" class="nav-link nav-new_user tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Add New</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="./index.php?page=list_user" class="nav-link nav-list_user tree-item">
-                                <i class="fas fa-angle-right nav-icon"></i>
-                                <p>List</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li> -->
             </ul>
         </nav>
     </div>
@@ -345,8 +321,6 @@ $(document).ready(function() {
         if ($('.nav-link.nav-' + page).hasClass('nav-is-tree') == true) {
             $('.nav-link.nav-' + page).parent().addClass('menu-open')
         }
-
     }
-
 })
 </script>

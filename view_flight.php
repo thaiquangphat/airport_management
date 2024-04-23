@@ -278,6 +278,11 @@ $fid =  $_GET['id'];
                                             data-toggle="dropdown" aria-expanded="true">
                                             Action
                                         </button>
+                                        <div class="dropdown-menu" style="">
+                                            <a class="dropdown-item view_seat"
+                                                href="./index.php?page=view_seat&sid=<?php echo $row['FlightID'].'-'.$row['SeatNum'] ?>"
+                                                data-id="<?php echo $row['FlightID'].'-'.$row['SeatNum'] ?>">View</a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php 
@@ -303,8 +308,8 @@ $(document).ready(function() {
         _conf_str("Are you sure to delete this Employee?", "delete_employee", [$(this).attr(
             'data-id')]);
     });
-    $(document).on('click', '.view_passenger', function() {
-        window.location.href = "view_employee.php?pid=" + $(this).attr('data-id');
+    $(document).on('click', '.view_seat', function() {
+        window.location.href = "view_seat.php?sid=" + $(this).attr('data-id');
     });
 
     $(document).on('click', '.delete_passenger', function() {

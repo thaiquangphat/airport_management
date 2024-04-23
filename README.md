@@ -51,7 +51,7 @@
 - [19/04/24]
     - Update employee to add supervisor, view of employee can view supervisees.
     - Consider not to add address for employee (too complex, not necessary).
-- [21/04/24]
+- [20/04/24]
     - SUPER BIG UPDATE.
     - Remove user table, login by grant.
     - Try and catch block enable.
@@ -64,3 +64,14 @@
     - COMMENT REMOVE IF EVERY THING IS DONE.
     - REPORT NOT DONE (KHOIIIIIIII).
     - CHECK CLAUSE not check yet.
+- [21/04/24]
+    - Edit for ticket.
+    - View seat, ticket done.
+    - Stored procedure done.
+    - View done for graph.
+    - DDL (btl_draft) update for views and procedure.
+    - Check clause done (2 check clauses).
+ - [23/04/24]
+    - Remove last unused table - system_settings.
+    - Find another background for the login page -> Not done yet.
+    - Keep other Images unchanged.

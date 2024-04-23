@@ -23,8 +23,21 @@
                         <th class="text-center"><?php echo $row['ID'] ?></th>
                         <td><b><?php echo ucwords($row['RName']) ?></b></td>
                         <td><b><?php 
-                                $qry2 = $conn->query("SELECT count(*) as total FROM Flight where RID = ".$row['ID'])->fetch_assoc();
-                                echo $qry2['total'] 
+                                $rid = intval($row['ID']);  // Sanitize the ID input.
+                                $query = "CALL total_flight($rid)";  // Prepare the stored procedure call.
+                            
+                                if ($result = $conn->query($query)) {
+                                    if ($my_row = $result->fetch_assoc()) {
+                                        echo $my_row['total'];  // Output the total.
+                                    }
+                                    $result->close();  // Close the result set.
+                                    $conn->next_result();  // Prepare the connection for the next SQL command.
+                                } else {
+                                    echo "Error: " . $conn->error;  // Display error if the query fails.
+                                }
+
+                                // $qry2 = $conn->query("SELECT count(*) as total FROM Flight where RID = ".$row['ID'])->fetch_assoc();
+                                // echo $qry2['total'] 
                         ?></b></td>
                         <td class="text-center">
                             <button type="button"

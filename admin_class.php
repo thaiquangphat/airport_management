@@ -3420,4 +3420,29 @@ class Action
             return $test_err; // Return the error message
         }
     }
+
+    function update_ticket(&$test_err) { // Note the use of &$test_err to pass by reference
+        extract($_POST);
+    
+        try {
+            // Execute the SQL delete query
+            $update = $this->db->query("UPDATE Ticket SET CheckInStatus = '" . $CheckInStatus . "', CheckInTime = '" . $CheckInTime . "', BookTime = '" . $BookTime . "', CancelTime = '" . $CancelTime . "' WHERE TicketID = '" . $TicketID . "'");
+            if (!$update) {
+                $test_err = "Cannot update ticket";
+                return 0;
+            }
+            return 1;
+            
+        } catch(mysqli_sql_exception $e) {
+            if(strpos($e->getMessage(), 'Error: ') !== false) {
+                $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
+            } else {
+                $error_message = $e->getMessage();
+            }
+        
+            // Store error message in $test_err
+            $test_err = $error_message;
+            return $test_err; // Return the error message
+        }
+    }
 }
