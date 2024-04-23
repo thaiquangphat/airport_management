@@ -36,7 +36,7 @@ function fetchData($result, $label) {
 
     $dataPoints[] = [
         "label" => $label,
-        "y" => [$min, $q1, $median, $q3, $max]
+        "y" => [$min, $q1, $q3, $max, $median]
     ];
 }
 
