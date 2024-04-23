@@ -123,7 +123,7 @@ foreach($qry as $k => $v){
     position: relative;
     height: 80vh;
 } */
-.section {
+/* .section {
     position: relative;
     height: 80vh;
 }
