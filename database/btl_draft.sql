@@ -8,26 +8,26 @@ USE Test_New;
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
 SET GLOBAL log_bin_trust_function_creators = 1;		# ko them thi loi :)))
 -- --------------------------------------------------------------------
-CREATE TABLE `system_settings` (
-  `id` INT NOT NULL,
-  `name` text NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `contact` varchar(20) NOT NULL,
-  `address` text NOT NULL,
-  `cover_img` text NOT NULL
-);
+-- CREATE TABLE `system_settings` (
+--   `id` INT NOT NULL,
+--   `name` text NOT NULL,
+--   `email` varchar(200) NOT NULL,
+--   `contact` varchar(20) NOT NULL,
+--   `address` text NOT NULL,
+--   `cover_img` text NOT NULL
+-- );
 
---
--- Dumping data for table `system_settings`
---
-INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
-(1, 'Airport Management System', 'info@sample.comm', '+6123 4567 899', '123  ABC DEF, GHI, MNP, 123123', '');
+-- --
+-- -- Dumping data for table `system_settings`
+-- --
+-- INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
+-- (1, 'Airport Management System', 'info@sample.comm', '+6123 4567 899', '123  ABC DEF, GHI, MNP, 123123', '');
 
---
--- Indexes for table `system_settings`
---
-ALTER TABLE `system_settings`
-  ADD PRIMARY KEY (`id`);
+-- --
+-- -- Indexes for table `system_settings`
+-- --
+-- ALTER TABLE `system_settings`
+--   ADD PRIMARY KEY (`id`);
 -- --------------------------------------------------------------------
 -- CREATE TABLE `users` (
 --   `id` int(30) AUTO_INCREMENT,

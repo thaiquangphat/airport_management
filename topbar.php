@@ -9,7 +9,7 @@
         <?php endif; ?>
         <li>
             <a class="nav-link text-white" href="./" role="button">
-                <large><b><?php echo $_SESSION['system']['name'] ?></b></large>
+                <large><b><?php echo "Airport Management System" ?></b></large>
             </a>
         </li>
     </ul>
