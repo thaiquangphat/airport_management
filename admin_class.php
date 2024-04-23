@@ -3312,7 +3312,7 @@ class Action
             }
     
             $test_err = "Data failed to save";
-            return 3; // Data failed to save
+            return 0; // Data failed to save
         } catch(mysqli_sql_exception $e) {
             if(strpos($e->getMessage(), 'Error: ') !== false) {
                 $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
