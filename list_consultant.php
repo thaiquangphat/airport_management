@@ -105,11 +105,13 @@ function delete_consultant($consultantid) {
             //         location.replace('index.php?page=list_consultant')
             //     }, 750)
             // }
+            //else {
+            //    alert_toast('Error: ' + resp,
+            //        "error"); // Display the error message returned from the server
+            //} 
             else {
                 alert_toast('Error: ' + resp,
                     "error"); // Display the error message returned from the server
-            } else {
-                alert_toast('Data failed to delete.', "error");
                 setTimeout(function() {
                     location.reload();
                 }, 750);

@@ -75,3 +75,7 @@
     - Remove last unused table - system_settings.
     - Find another background for the login page -> Not done yet.
     - Keep other Images unchanged.
+- [25/04/24]
+    - Make a simple view for booking flights.
+    - Fix for enable to see the 'Cancel' button in the passenger's ticket list.
+    - Create `new_seat_log` table for viewing every time making a new ticket, clear every new session.

@@ -1,6 +1,9 @@
 <?php include 'db_connect.php' ?>
 <?php
 if(isset($_GET['id'])){
+    // this is for reseting the log table after every booking session
+    $clear_log = $conn->query("DELETE FROM new_seat_log");
+
 	$qry = $conn->query("SELECT * FROM Flight 
                         JOIN Airplane ON Airplane.AirplaneID = Flight.AirplaneID
                         JOIN Route ON Flight.RID = Route.ID 

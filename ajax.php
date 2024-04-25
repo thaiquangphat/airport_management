@@ -428,18 +428,45 @@ if($action == 'delete_consultant'){
         echo $test_err; // Return the error message
     }
 }
-if($action == 'delete_super'){
+// if($action == 'delete_super'){
+// 	$test_err = ""; // Initialize $test_err
+// 	$save = $crud->delete_super($test_err);
+// 	if($save == 1) {
+//         echo $save;
+//     } else {
+//         echo $test_err; // Return the error message
+//     }
+// }
+if($action == 'update_ticket'){
 	$test_err = ""; // Initialize $test_err
-	$save = $crud->delete_super($test_err);
+	$save = $crud->update_ticket($test_err);
 	if($save == 1) {
         echo $save;
     } else {
         echo $test_err; // Return the error message
     }
 }
-if($action == 'update_ticket'){
+if($action == 'save_ticket'){
 	$test_err = ""; // Initialize $test_err
-	$save = $crud->update_ticket($test_err);
+	$save = $crud->save_ticket($test_err);
+	if($save == 1) {
+        echo $save;
+    } else {
+        echo $test_err; // Return the error message
+    }
+}
+if($action == 'cancel_ticket'){
+	$test_err = ""; // Initialize $test_err
+	$save = $crud->cancel_ticket($test_err);
+	if($save == 1) {
+        echo $save;
+    } else {
+        echo $test_err; // Return the error message
+    }
+}
+if($action == 'clear_log'){
+	$test_err = ""; // Initialize $test_err
+	$save = $crud->clear_log($test_err);
 	if($save == 1) {
         echo $save;
     } else {

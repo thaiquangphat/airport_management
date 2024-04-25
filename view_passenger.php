@@ -73,7 +73,7 @@ if(isset($_GET['pid'])){
 
                                 // Select consultants who are experts on the specific model
                                 $tickets = $conn->query("
-                                    SELECT Ticket.TicketID, Ticket.PID, Passenger.PID_Decode, Route.RName, Flight.FlightID, Seat.SeatNum, Seat.Class, Seat.Price, Ticket.BookTime, Ticket.CheckInStatus
+                                    SELECT Ticket.TicketID, Ticket.PID, Passenger.PID_Decode, Route.RName, Flight.FlightID, Seat.SeatNum, Seat.Class, Seat.Price, Ticket.BookTime, Ticket.CheckInStatus, Ticket.CancelTime
                                     FROM Ticket
                                     JOIN Seat ON Ticket.SeatNum = Seat.SeatNum AND Ticket.FlightID = Seat.FlightID
                                     JOIN Passenger ON Ticket.PID = Passenger.PID
@@ -104,6 +104,9 @@ if(isset($_GET['pid'])){
                                             <a class="dropdown-item view_ticket"
                                                 href="./index.php?page=view_ticket&ticketid=<?php echo $row['TicketID'] ?>"
                                                 data-id="<?php echo $row['TicketID'] ?>">View</a>
+
+                                            <?php if($row['CancelTime'] == '1970-01-01 00:00:00'): ?>
+
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item edit_ticket"
                                                 href="./index.php?page=edit_ticket&tid=<?php echo $row['TicketID'] ?>"
@@ -111,6 +114,18 @@ if(isset($_GET['pid'])){
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item delete_ticket" href="javascript:void(0)"
                                                 data-id="<?php echo $row['TicketID'] ?>">Delete</a>
+                                            
+                                            <?php endif; ?>
+                                            
+                                            <!-- New dropdown menu item for Cancel action -->
+
+                                            <?php if($row['CheckInStatus'] == 'No'): ?>
+
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item cancel_ticket" href="javascript:void(0)"
+                                                data-id="<?php echo $row['TicketID'] ?>">Cancel</a>
+
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                 </tr>
@@ -135,6 +150,11 @@ $(document).ready(function() {
 
     $(document).on('click', '.delete_ticket', function() {
         _conf_str("Are you sure to delete this Ticket?", "delete_ticket", [$(this).attr(
+            'data-id')]);
+    });
+
+    $(document).on('click', '.cancel_ticket', function() {
+        _conf_str("Are you sure to cancel this Ticket?", "cancel_ticket", [$(this).attr(
             'data-id')]);
     });
 })
@@ -164,6 +184,30 @@ function delete_ticket($ticketid) {
             else {
                 alert_toast('Error: ' + resp,
                     "error"); // Display the error message returned from the server
+                setTimeout(function() {
+                    location.reload();
+                }, 750);
+            }
+        }.bind(this) // Bind this to the AJAX context
+    })
+}
+
+function cancel_ticket($ticketid) {
+    start_load()
+    $.ajax({
+        url: 'ajax.php?action=cancel_ticket',
+        method: 'POST',
+        data: {
+            ticketid: $ticketid
+        },
+        success: function(resp) {
+            if (resp == 1) {
+                alert_toast("Ticket successfully canceled", 'success')
+                setTimeout(function() {
+                    location.reload()
+                }, 1500)
+            } else {
+                alert_toast('Error: ' + resp, "error");
                 setTimeout(function() {
                     location.reload();
                 }, 750);
