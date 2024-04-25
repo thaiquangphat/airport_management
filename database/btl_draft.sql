@@ -1307,6 +1307,8 @@ BEGIN
         SET MESSAGE_TEXT = 'Error: Invalid flight ID or associated route does not exist.';
     ELSE
         -- Calculate the base price by multiplying the distance with 0.05
+        -- SET base_price = @distance * 0.05;
+        
         SET base_price = @distance * 0.05;
         
         -- Update the base price of the flight
@@ -1525,7 +1527,7 @@ CREATE VIEW top_ten_passenger AS
 DELIMITER //
 CREATE PROCEDURE total_expert (IN CID INT)
 BEGIN
-	SELECT count(*) as total FROM Expert_At where ConsultID = CID;
+	SELECT count(*) as num_model FROM Expert_At where ConsultID = CID;
 END;
 //
 DELIMITER ;
