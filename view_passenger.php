@@ -114,7 +114,9 @@ if(isset($_GET['pid'])){
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item delete_ticket" href="javascript:void(0)"
                                                 data-id="<?php echo $row['TicketID'] ?>">Delete</a>
-
+                                            
+                                            <?php endif; ?>
+                                            
                                             <!-- New dropdown menu item for Cancel action -->
 
                                             <?php if($row['CheckInStatus'] == 'No'): ?>
@@ -122,8 +124,6 @@ if(isset($_GET['pid'])){
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item cancel_ticket" href="javascript:void(0)"
                                                 data-id="<?php echo $row['TicketID'] ?>">Cancel</a>
-
-                                            <?php endif; ?>
 
                                             <?php endif; ?>
                                         </div>

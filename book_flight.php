@@ -87,7 +87,7 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                             <table class="table table-hover table-bordered" id="list">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
+                                        <!-- <th>No.</th> -->
                                         <th>PID</th>
                                         <th>Seat Number</th>
                                         <th>Flight Code</th>
@@ -101,7 +101,7 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                     while($rowlog= $qrylog->fetch_assoc()):
                                     ?>
                                     <tr>
-                                        <td><b><?php echo $rowlog['logid'] ?></b></td>
+                                        <!-- <td><b><?php echo $rowlog['logid'] ?></b></td> -->
                                         <td><b><?php echo $rowlog['PID_Decode'] ?></b></td>
                                         <td><b><?php echo $rowlog['SeatNum'] ?></b></td>
                                         <td><b><?php echo $rowlog['FlightCode'] ?></b></td>
@@ -119,7 +119,8 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
         <div class="card-body">
             <form action="" id="finish">
                 <div class="col-lg-12 text-right justify-content-center d-flex">
-                    <button class="btn btn-primary mr-2">Save</button>
+                    <button class="btn btn-primary mr-2" type="button"
+                        onclick="location.href = './index.php?page=view_flight&id=<?php echo $flightID?>'">Save</button>
                 </div>
             </form>
         </div>
@@ -201,46 +202,25 @@ $('#manage_booking').submit(function(e) {
     })
 })
 
-$('#finish').submit(function(e) {
-    e.preventDefault()
-    start_load()
-    $('#msg').html('');
-
-    $.ajax({
-        url: 'ajax.php?action=clear_log',
-        method: 'POST',
-        success: function(resp) {
-            if (resp == 0) {
-                alert_toast('Some field missing.', "error");
-                setTimeout(function() {
-                    location.reload()
-                }, 750)
-            } else if (resp == 2) {
-                alert_toast('Duplicate value exist.', "error");
-                setTimeout(function() {
-                    location.reload()
-                }, 750)
-            } else if (resp == 1) {
-                alert_toast('Data successfully saved.', "success");
-                setTimeout(function() {
-                    location.replace("index.php?page=view_flight&id=<?php echo $FID?>")
-                }, 750)
-            }
-            // else {
-            //     alert_toast('Data failed to saved.', "error");
-            //     setTimeout(function() {
-            //         location.reload()
-            //     }, 750)
-            // }
-            else {
-                alert_toast('Error: ' + resp,
-                    "error"); // Display the error message returned from the server
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
-            }
-        }.bind(this) // Bind this to the AJAX context
-    })
-})
+// $('#finish').submit(function() {
+//         start_load();
+//         $.ajax({
+//             url: 'ajax.php?action=clear_log',
+//             method: 'POST',
+//             success: function(resp) {
+//                 if (resp == 1) {
+//                     alert_toast('Data successfully saved.', "success");
+//                     setTimeout(function() {
+//                         location.href = "./index.php?page=list_flight";
+//                     }, 2000);
+//                 } else {
+//                     alert_toast('Error: ' + resp, "error");
+//                     setTimeout(function() {
+//                         location.reload();
+//                     }, 2000);
+//                 }
+//             }.bind(this)
+//         });
+//     });
 
 </script>
