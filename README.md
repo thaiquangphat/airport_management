@@ -47,7 +47,7 @@ You should be able to access the login page as below
 - `Username: sManager`
 - `Password: 123456`
 
-<h2 align="center">🙂 Contributors 🙂</h2>
+<h2 align="center">💟 Contributors 💟</h2>
 
 <a href="https://github.com/thaiquangphat"><img src="https://avatars.githubusercontent.com/u/135941272?v=4" title="thaiquangphat" width="50" height="50"></a>
 <a href="https://github.com/pdz1804"><img src="https://avatars.githubusercontent.com/u/123137268?v=4" title="pdz1804" width="50" height="50"></a>
