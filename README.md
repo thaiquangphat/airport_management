@@ -52,7 +52,7 @@ You should be able to access the login page as below
 This is a small demonstration of some functionalities of our website.
 <br></br>
 
-![](/img/readme-demo.gif)
+![](/img/demo.gif)
 
 As the clip shows, we can perform some simple operations such as:
 
