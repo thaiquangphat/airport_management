@@ -717,22 +717,6 @@ END;
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------------------------------------- 
--- DELIMITER //
-
--- CREATE TRIGGER before_flight_insert
--- BEFORE INSERT ON Flight
--- FOR EACH ROW
--- BEGIN
--- 	IF TIMESTAMPDIFF(SECOND, NEW.EDT, NEW.EAT) <= 0 THEN
---         SIGNAL SQLSTATE '45000'
---         SET MESSAGE_TEXT = 'EAT must be greater than EDT';
---     END IF;
--- END;
--- //
-
--- DELIMITER ;
-
--- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 
 CREATE TRIGGER check_delete_airline
@@ -1077,6 +1061,51 @@ DELIMITER ;
 
 DELIMITER //
 
+-- AFTER UPDATE Trigger to update Seat status
+CREATE TRIGGER update_seat_status_after
+AFTER UPDATE ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        UPDATE Seat
+        SET Status = 'Unavailable'
+        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+    END IF;
+END;
+//
+
+-- BEFORE UPDATE Trigger to set CheckInTime
+CREATE TRIGGER update_checkin_time_before
+BEFORE UPDATE ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        SET NEW.CheckInTime = CURRENT_TIMESTAMP;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER update_seat_status_on_cancel
+AFTER UPDATE ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CancelTime != '1970-01-01 00:00:00' THEN
+        UPDATE Seat
+        SET Status = 'Available'
+        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+-- --------------------------------------------------------------------
+DELIMITER //
+
 CREATE TRIGGER before_insert_ticket
 BEFORE INSERT ON Ticket
 FOR EACH ROW
@@ -1294,36 +1323,6 @@ END;
 //
 
 DELIMITER ;
-
-DELIMITER //
-
--- AFTER UPDATE Trigger to update Seat status
-CREATE TRIGGER update_seat_status_after
-AFTER UPDATE ON Ticket
-FOR EACH ROW
-BEGIN
-    IF NEW.CheckInStatus = 'Yes' THEN
-        UPDATE Seat
-        SET Status = 'Unavailable'
-        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
-    END IF;
-END;
-//
-
--- BEFORE UPDATE Trigger to set CheckInTime
-CREATE TRIGGER update_checkin_time_before
-BEFORE UPDATE ON Ticket
-FOR EACH ROW
-BEGIN
-    IF NEW.CheckInStatus = 'Yes' THEN
-        SET NEW.CheckInTime = CURRENT_TIMESTAMP;
-    END IF;
-END;
-//
-
-DELIMITER ;
-
-
 
 DELIMITER //
 
