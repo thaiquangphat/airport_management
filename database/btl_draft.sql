@@ -1527,7 +1527,7 @@ CREATE VIEW top_ten_passenger AS
 DELIMITER //
 CREATE PROCEDURE total_expert (IN CID INT)
 BEGIN
-	SELECT count(*) as num_model FROM Expert_At where ConsultID = CID;
+	SELECT count(*) as total FROM Expert_At where ConsultID = CID;
 END;
 //
 DELIMITER ;
