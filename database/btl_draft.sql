@@ -294,7 +294,11 @@ CREATE TABLE Flight
     FOREIGN KEY (RID) REFERENCES Route (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AirplaneID) REFERENCES Airplane (AirplaneID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `check-valid-date` CHECK (( EAT > EDT ))
+	CONSTRAINT `check-valid-date` CHECK (
+		(EAT > EDT AND AAT > ADT) OR 
+		(AAT = '1970-01-01 00:00:00' AND ADT = '1970-01-01 00:00:00') OR 
+		(AAT = '1970-01-01 00:00:00' AND ADT != '1970-01-01 00:00:00')
+	)
 );
 
 -- ------------------------------------------ IMPORTANT --------------------------------------------------
@@ -711,7 +715,7 @@ BEGIN
         END IF;
     END IF;
 
-    -- Check if the employee is an Engineer and has expertise in only one model
+    -- Check if the employee is an Engineer and he is the only expert on some model (we cannot delete him)
     IF EXISTS (
         SELECT 1
         FROM Engineer
@@ -852,33 +856,29 @@ DELIMITER ;
 
 -- ----------------------------------------------------------------------------------------------------------- 
 -- This trigger is for checking EAT EDT AAT ADT of a Flight
-DELIMITER //
+-- DELIMITER //
 
-CREATE TRIGGER check_flight_constraints
-BEFORE UPDATE ON Flight
-FOR EACH ROW
-BEGIN
-    DECLARE error_message VARCHAR(255);
+-- CREATE TRIGGER check_flight_constraints
+-- BEFORE UPDATE ON Flight
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE error_message VARCHAR(255);
 
-    IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
-        SET error_message = 'EAT must be larger than EDT';
-    ELSEIF NEW.EAT <> OLD.EAT AND NEW.EDT = OLD.EDT AND NEW.EAT <= OLD.EDT THEN
-        SET error_message = 'EAT must be larger than EDT';
-    ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
-        SET error_message = 'AAT must be larger than ADT';
-    ELSEIF NEW.AAT <> OLD.AAT AND NEW.AAT <= NEW.ADT THEN
-        SET error_message = 'AAT must be larger than ADT';
-    ELSE
-        SET error_message = NULL; -- No error
-    END IF;
+--     IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
+--         SET error_message = 'EAT must be larger than EDT';
+--     ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
+--         SET error_message = 'AAT must be larger than ADT';
+--     ELSE
+--         SET error_message = NULL; -- No error
+--     END IF;
 
-    IF error_message IS NOT NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
-    END IF;
-END;
-//
+--     IF error_message IS NOT NULL THEN
+--         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+--     END IF;
+-- END;
+-- //
 
-DELIMITER ;
+-- DELIMITER ;
 
 -- ----------------------------------------------------------------------------------------------------------- 
 -- Trigger of EXPERT_AT: total side CONSULTANT (ID)
@@ -1093,9 +1093,7 @@ END //
 DELIMITER ;
 
 -- --------------------------------------------------------------------
--- Every model must be maintained by at least 1 engineer of each EType
--- Model PK: ID
--- 'Avionic Engineer', 'Mechanical Engineer', 'Electric Engineer'
+-- Every model must be maintained by at least 1 engineer
 DELIMITER //
 
 CREATE TRIGGER check_engineer_after_delete
@@ -1198,36 +1196,36 @@ END;
 DELIMITER ;
 -- --------------------------------------------------------------------
 -- This trigger is for update the status of the seat when ticket has been checked in
-DELIMITER //
+-- DELIMITER //
 
-CREATE TRIGGER update_seat_status
-AFTER UPDATE ON Ticket
-FOR EACH ROW
-BEGIN
-    IF NEW.CheckInStatus = 'Yes' THEN
-        UPDATE Seat
-        SET Status = 'Unavailable'
-        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
-    END IF;
-END;
-//
+-- CREATE TRIGGER update_seat_status
+-- AFTER UPDATE ON Ticket
+-- FOR EACH ROW
+-- BEGIN
+--     IF NEW.CheckInStatus = 'Yes' THEN
+--         UPDATE Seat
+--         SET Status = 'Unavailable'
+--         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+--     END IF;
+-- END;
+-- //
 
-DELIMITER ;
+-- DELIMITER ;
 
 -- This trigger is for update the status of the seat when delete a ticket
-DELIMITER //
+-- DELIMITER //
 
-CREATE TRIGGER update_seat_status_after_ticket_delete
-AFTER DELETE ON Ticket
-FOR EACH ROW
-BEGIN
-    UPDATE Seat
-    SET Status = 'Unavailable'
-    WHERE FlightID = OLD.FlightID AND SeatNum = OLD.SeatNum;
-END;
-//
+-- CREATE TRIGGER update_seat_status_after_ticket_delete
+-- AFTER DELETE ON Ticket
+-- FOR EACH ROW
+-- BEGIN
+--     UPDATE Seat
+--     SET Status = 'Unavailable'
+--     WHERE FlightID = OLD.FlightID AND SeatNum = OLD.SeatNum;
+-- END;
+-- //
 
-DELIMITER ;
+-- DELIMITER ;
 
 DELIMITER //
 
@@ -1480,7 +1478,39 @@ END;
 DELIMITER ;
 
 DELIMITER //
-CREATE TRIGGER update_seat_status_after_ticket_insert
+
+-- AFTER UPDATE Trigger to update Seat status
+CREATE TRIGGER update_seat_status_after
+AFTER UPDATE ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        UPDATE Seat
+        SET Status = 'Unavailable'
+        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+    END IF;
+END;
+//
+
+-- BEFORE UPDATE Trigger to set CheckInTime
+CREATE TRIGGER update_checkin_time_before
+BEFORE UPDATE ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        SET NEW.CheckInTime = CURRENT_TIMESTAMP;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+
+
+DELIMITER //
+
+-- AFTER INSERT Trigger to update Seat status
+CREATE TRIGGER insert_seat_status_after
 AFTER INSERT ON Ticket
 FOR EACH ROW
 BEGIN
@@ -1491,7 +1521,21 @@ BEGIN
     END IF;
 END;
 //
+
+-- BEFORE INSERT Trigger to set CheckInTime
+CREATE TRIGGER insert_checkin_time_before
+BEFORE INSERT ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        SET NEW.CheckInTime = CURRENT_TIMESTAMP;
+    END IF;
+END;
+//
+
 DELIMITER ;
+
+
 
 -- This view is for ploting the graph
 CREATE VIEW employee_distribution_by_type AS
