@@ -7,7 +7,8 @@ FACULTY OF COMPUTER SCIENCE AND ENGINEERING
 <br />
 <br />
 
-[![N|Solid](https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HCMUT_official_logo.png/238px-HCMUT_official_logo.png)](https://www.hcmut.edu.vn/vi)
+<img src="https://hcmut.edu.vn/img/nhanDienThuongHieu/01_logobachkhoatoi.png" alt="logo" style="width: 400px; height: auto;">
+
 <br />
 <br />
 <img src="https://img.shields.io/github/stars/thaiquangphat/airport_management?color=white&logo=github">&emsp;<img src="https://img.shields.io/github/last-commit/thaiquangphat/airport_management?color=blue">
@@ -39,13 +40,26 @@ FACULTY OF COMPUTER SCIENCE AND ENGINEERING
 - Click the `Go Live` button at the bottom right corner, then copy the port to your web browser.
 - In your web browser, go to this directory
 ```
-http://localhost/airport_management/login.php
+http://localhost/airport_management/index.php
 ```
 You should be able to access the login page as below
 
 ![](/img/login.png)
 - `Username: sManager`
 - `Password: 123456`
+
+<h2 align="center">🛫 Demonstration 🛫</h2>
+This is a small demonstration of some functionalities of our website.
+<br></br>
+
+![](/img/readme-demo.gif)
+
+As the clip shows, we can perform some simple operations such as:
+
+- **Add, Delete, Update**: References to `INSERT`, `DELETE`, and `UPDATE` operations in MySQL.
+
+- **Viewing**: Listing out values in the table, references `SELECT` operation in MySQL.
+
 
 <h2 align="center">💟 Contributors 💟</h2>
 
