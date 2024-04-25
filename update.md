@@ -1,0 +1,77 @@
+# Update Status
+
+- [04/04/24] 
+    - Add functionalities for **employee**, including Add, Insert.
+    - Enable employees to change **SSN** if want.
+    - Each **employee** can't edit edmployee type if it is not **None**. If want to change the employee type, must delete the orginal one and Add again.
+    - Each **Edit & Delete** for employee type buttons are directed straight to the **Employee** button of each type, so don't have to worry about FKs.
+    - Did not add multiple values of shift for **traffic controller**.
+
+- [05/04/24]
+    - Changing the sidebar of employee
+    - Fix Flight Employee & Pilot & Flight Attendant --> edit and add
+    - Enable employees to change roles, enable multiple choice on traffic controller
+    - Assign new DDL in the App.
+    - Airline, Employee still ok
+    - Add Edit of Owner not done
+    - List of Consultant ok
+    - Fail to delete of Model, Airplane --> Delete Airplane is fine, something wrong with the returned value.
+    - Flight only List and Delete ok --> fixed delete (previous version accidently delete in airplane), add is fix
+    - Fix Airport after new DDL
+    - Fix 'Electrical Engineer' to 'Electric Engineer', fix edit and add in Flight Employee.
+    - Fixed deletion in Model and Airplane, bug in typo in ajax.php
+- [06/04/24]
+    - Add Add and Edit for Flight
+    - Flight can now choose actual arrival and departure time, Unassigned flights don't have AAT and ADT, On Air flights don't have AAT, Landed flights have all four.
+    - AAT, ADT, EAT, EDT are able to select date and time.
+- [07/04/24]
+    - Add ddl.sql file to database folder
+    - Update view of Airport, Airline, Owner, Model
+    - Model still not add or edit
+    - Just View, Not check update delete on that view
+- [08/04/24]
+    - Update flight to add operator (pilots, flight attendants)
+    - Update view for flight
+    - Owner add to Owner table only, not add to Person or Cooperation. Not able to edit.
+- [11/04/24]
+    - Owner is able to add for Person and Cooperation.
+    - Edit for Person and Cooperation is enable.
+    - Add is still fine, can't edit person and cooperation directly from owner (via person or cooperation is fine).
+- [12/04/24]
+    - Enable edit person and cooperation from owner, enable switching roles.
+    - Enable delete owner.
+    - Leave view owner for later.
+- [18/04/24]
+    - COMEBACK AFTER A LONG BREAK.
+    - Update consultant to add multiple expertise.
+    - Update handle trigger.
+    - New DDL added.
+    - View Owner finished.
+    - Haven't add supervisor for employee. Suggest employee have only 1 address.
+- [19/04/24]
+    - Update employee to add supervisor, view of employee can view supervisees.
+    - Consider not to add address for employee (too complex, not necessary).
+- [20/04/24]
+    - SUPER BIG UPDATE.
+    - Remove user table, login by grant.
+    - Try and catch block enable.
+    - Trigger enable.
+    - Multivalue.
+    - Graph (some) -> maybe add more type of graphs.
+    - Stored procedure for graphs.
+    - View SEAT, TICKET, edit TICKET not done.
+    - Background and images maybe change later.
+    - COMMENT REMOVE IF EVERY THING IS DONE.
+    - REPORT NOT DONE (KHOIIIIIIII).
+    - CHECK CLAUSE not check yet.
+- [21/04/24]
+    - Edit for ticket.
+    - View seat, ticket done.
+    - Stored procedure done.
+    - View done for graph.
+    - DDL (btl_draft) update for views and procedure.
+    - Check clause done (2 check clauses).
+ - [23/04/24]
+    - Remove last unused table - system_settings.
+    - Find another background for the login page -> Not done yet.
+    - Keep other Images unchanged.

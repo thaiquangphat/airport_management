@@ -1,77 +1,54 @@
-# Update Status
+<div align="center">
+VIETNAM NATIONAL UNIVERSITY, HO CHI MINH CITY
+<br />
+UNIVERSITY OF TECHNOLOGY
+<br />
+FACULTY OF COMPUTER SCIENCE AND ENGINEERING
+<br />
+<br />
 
-- [04/04/24] 
-    - Add functionalities for **employee**, including Add, Insert.
-    - Enable employees to change **SSN** if want.
-    - Each **employee** can't edit edmployee type if it is not **None**. If want to change the employee type, must delete the orginal one and Add again.
-    - Each **Edit & Delete** for employee type buttons are directed straight to the **Employee** button of each type, so don't have to worry about FKs.
-    - Did not add multiple values of shift for **traffic controller**.
+[![N|Solid](https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HCMUT_official_logo.png/238px-HCMUT_official_logo.png)](https://www.hcmut.edu.vn/vi)
+<br />
+<br />
+<img src="https://img.shields.io/github/stars/thaiquangphat/airport_management?color=white&logo=github">&emsp;<img src="https://img.shields.io/github/last-commit/thaiquangphat/airport_management?color=blue">
+<br />
+<img src="https://img.shields.io/github/languages/top/thaiquangphat/airport_management?color=yellow&logo=javascript&logoColor=yellow">&emsp;<img src="https://img.shields.io/github/repo-size/thaiquangphat/airport_management?color=orange&label=size&logo=git&logoColor=orange">
+<br />
 
-- [05/04/24]
-    - Changing the sidebar of employee
-    - Fix Flight Employee & Pilot & Flight Attendant --> edit and add
-    - Enable employees to change roles, enable multiple choice on traffic controller
-    - Assign new DDL in the App.
-    - Airline, Employee still ok
-    - Add Edit of Owner not done
-    - List of Consultant ok
-    - Fail to delete of Model, Airplane --> Delete Airplane is fine, something wrong with the returned value.
-    - Flight only List and Delete ok --> fixed delete (previous version accidently delete in airplane), add is fix
-    - Fix Airport after new DDL
-    - Fix 'Electrical Engineer' to 'Electric Engineer', fix edit and add in Flight Employee.
-    - Fixed deletion in Model and Airplane, bug in typo in ajax.php
-- [06/04/24]
-    - Add Add and Edit for Flight
-    - Flight can now choose actual arrival and departure time, Unassigned flights don't have AAT and ADT, On Air flights don't have AAT, Landed flights have all four.
-    - AAT, ADT, EAT, EDT are able to select date and time.
-- [07/04/24]
-    - Add ddl.sql file to database folder
-    - Update view of Airport, Airline, Owner, Model
-    - Model still not add or edit
-    - Just View, Not check update delete on that view
-- [08/04/24]
-    - Update flight to add operator (pilots, flight attendants)
-    - Update view for flight
-    - Owner add to Owner table only, not add to Person or Cooperation. Not able to edit.
-- [11/04/24]
-    - Owner is able to add for Person and Cooperation.
-    - Edit for Person and Cooperation is enable.
-    - Add is still fine, can't edit person and cooperation directly from owner (via person or cooperation is fine).
-- [12/04/24]
-    - Enable edit person and cooperation from owner, enable switching roles.
-    - Enable delete owner.
-    - Leave view owner for later.
-- [18/04/24]
-    - COMEBACK AFTER A LONG BREAK.
-    - Update consultant to add multiple expertise.
-    - Update handle trigger.
-    - New DDL added.
-    - View Owner finished.
-    - Haven't add supervisor for employee. Suggest employee have only 1 address.
-- [19/04/24]
-    - Update employee to add supervisor, view of employee can view supervisees.
-    - Consider not to add address for employee (too complex, not necessary).
-- [20/04/24]
-    - SUPER BIG UPDATE.
-    - Remove user table, login by grant.
-    - Try and catch block enable.
-    - Trigger enable.
-    - Multivalue.
-    - Graph (some) -> maybe add more type of graphs.
-    - Stored procedure for graphs.
-    - View SEAT, TICKET, edit TICKET not done.
-    - Background and images maybe change later.
-    - COMMENT REMOVE IF EVERY THING IS DONE.
-    - REPORT NOT DONE (KHOIIIIIIII).
-    - CHECK CLAUSE not check yet.
-- [21/04/24]
-    - Edit for ticket.
-    - View seat, ticket done.
-    - Stored procedure done.
-    - View done for graph.
-    - DDL (btl_draft) update for views and procedure.
-    - Check clause done (2 check clauses).
- - [23/04/24]
-    - Remove last unused table - system_settings.
-    - Find another background for the login page -> Not done yet.
-    - Keep other Images unchanged.
+**Database Management System / Semester 232**
+<br/>
+
+</div>
+
+# Project. Aiport Management System
+
+![](/img/homepage.png)
+
+<h2 align="center">⚒️ Languages-Frameworks-Tools ⚒️</h2>
+<br/>
+<div align="center">
+    <img src="https://skillicons.dev/icons?i=mysql,php,bootstrap,html,css,javascript,vscode,github,git" />
+</div>
+
+<h2 align="center">💻 How To Run 💻</h2>
+
+- Download XAMPP [here](https://sourceforge.net/projects/xampp/).
+- Download this repository, remember to put it in `C:/xampp/htdocs` folder.
+- Open the repository in `VSCode`. Install the `Live Server`, `Live Share` and `PHP Server` extensions.
+- Go to XAMPP localhost, then import the `btl_draft.php` file to initialize the database.
+- Click the `Go Live` button at the bottom right corner, then copy the port to your web browser.
+- In your web browser, go to this directory
+```
+http://localhost/airport_management/login.php
+```
+You should be able to access the login page as below
+
+![](/img/login.png)
+- `Username: sManager`
+- `Password: 123456`
+
+<h2 align="center">🙂 Contributors 🙂</h2>
+
+<a href="https://github.com/thaiquangphat"><img src="https://avatars.githubusercontent.com/u/135941272?v=4" title="thaiquangphat" width="50" height="50"></a>
+<a href="https://github.com/pdz1804"><img src="https://avatars.githubusercontent.com/u/123137268?v=4" title="pdz1804" width="50" height="50"></a>
+<a href="https://github.com/Frankie2030"><img src="https://avatars.githubusercontent.com/u/144931593?v=4" title="koi" width="50" height="50"></a>

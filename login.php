@@ -54,7 +54,7 @@ ob_end_flush();
                         <input type="text" class="form-control" name="user" required placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-user"></span>
                             </div>
                         </div>
                     </div>
