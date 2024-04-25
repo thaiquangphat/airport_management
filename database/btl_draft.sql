@@ -1307,6 +1307,8 @@ BEGIN
         SET MESSAGE_TEXT = 'Error: Invalid flight ID or associated route does not exist.';
     ELSE
         -- Calculate the base price by multiplying the distance with 0.05
+        -- SET base_price = @distance * 0.05;
+        
         SET base_price = @distance * 0.05;
         
         -- Update the base price of the flight

@@ -110,7 +110,8 @@ function delete_consultant($consultantid) {
             //        "error"); // Display the error message returned from the server
             //} 
             else {
-                alert_toast('Data failed to delete.', "error");
+                alert_toast('Error: ' + resp,
+                    "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
                 }, 750);
