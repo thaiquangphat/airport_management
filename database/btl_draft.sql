@@ -6,61 +6,6 @@ CREATE SCHEMA Test_New;
 USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
--- --------------------------------------------------------------------
--- CREATE TABLE `system_settings` (
---   `id` INT NOT NULL,
---   `name` text NOT NULL,
---   `email` varchar(200) NOT NULL,
---   `contact` varchar(20) NOT NULL,
---   `address` text NOT NULL,
---   `cover_img` text NOT NULL
--- );
-
--- --
--- -- Dumping data for table `system_settings`
--- --
--- INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
--- (1, 'Airport Management System', 'info@sample.comm', '+6123 4567 899', '123  ABC DEF, GHI, MNP, 123123', '');
-
--- --
--- -- Indexes for table `system_settings`
--- --
--- ALTER TABLE `system_settings`
---   ADD PRIMARY KEY (`id`);
--- --------------------------------------------------------------------
--- CREATE TABLE `users` (
---   `id` int(30) AUTO_INCREMENT,
---   `firstname` varchar(200) NOT NULL,
---   `lastname` varchar(200) NOT NULL,
---   `email` varchar(200) NOT NULL,
---   `password` text NOT NULL,
---   `type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1 = admin, 2 = staff',
---   `avatar` text NOT NULL DEFAULT 'no-image-available.png',
---   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
---   PRIMARY KEY (`id`)
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `users`
---
-
--- Admin: admin@admin.com; Pass: admin123
--- Manager: pauthai@pauthai.com; Pass: pauthai123
--- Manager: khoinguyen@khoinguyen.com; Pass: khoinguyen123
--- User: abc@abc.com; Pass: abc123
--- User: def@def.com; Pass: def123
--- User: ghi@ghi.com; Pass: ghi123
-
--- Khoi generate data cua thg Passenger thi attribute userid cua passenger lay random
--- trong set 3 so (4 or 5 or 6) thoi
-
--- INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `type`, `avatar`, `date_created`) VALUES
--- (1, 'Administrator', '', 'admin@admin.com', '0192023a7bbd73250516f069df18b500', 1, 'no-image-available.png', '2024-04-12 09:09:09'),
--- (2, 'Pau', 'Thai', 'pauthai@pauthai.com', '00e4d823dc5548d4b65cd958fe787828', 2, '1606978560_avatar.jpg', '2024-04-12 09:09:09'),
--- (3, 'Khoi', 'Nguyen', 'khoinguyen@khoinguyen.com', '349dc27260635ac9bfed779848d25ab0', 2, '1606978560_avatar.jpg', '2024-04-12 09:09:09'),
--- (4, 'abc', 'abc', 'abc@abc.com', 'e99a18c428cb38d5f260853678922e03', 3, 'no-image-available.png', '2024-04-12 09:09:09'),
--- (5, 'def', 'def', 'def@def.com', 'e88ebfe1ae982a6da01436e48af6eb74', 3, 'no-image-available.png', '2024-04-12 09:09:09'),
--- (6, 'ghi', 'ghi', 'ghi@ghi.com', '118e0bfeafaae5544f3f486533cf56db', 3, 'no-image-available.png', '2024-04-12 09:09:09');
 
 CREATE TABLE Employee
 (
@@ -173,12 +118,8 @@ CREATE TABLE Passenger
     Fname       VARCHAR(50),
     Minit       CHAR(2),
     Lname       VARCHAR(50),
-    -- Tao nghi la phai them 1 attribute de biet thg user (type 3: emp/user) nao` tao.
     UserID 		INT,
-    
-    -- Nay la tao them vao` tao nghi la can nen cu tao data co no di
     PRIMARY KEY (PID)
-    -- FOREIGN KEY (UserID) REFERENCES users (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Passenger_Phone
@@ -282,7 +223,7 @@ CREATE TABLE Flight
     RID             INT,
     Status          ENUM ('On Air', 'Landed', 'Unassigned'),
     AirplaneID      INT       NOT NULL,
-    TCSSN           CHAR(10)  NOT NULL, -- SSN of Traffic Controller
+    TCSSN           CHAR(10)  NOT NULL,         -- SSN of Traffic Controller
     FlightCode      VARCHAR(6)   NOT NULL,
     AAT             DATETIME DEFAULT '1970-01-01 00:00:00',
     EAT             DATETIME DEFAULT '1970-01-01 00:00:00',
@@ -300,15 +241,6 @@ CREATE TABLE Flight
 		(AAT = '1970-01-01 00:00:00' AND ADT != '1970-01-01 00:00:00')
 	)
 );
-
--- ------------------------------------------ IMPORTANT --------------------------------------------------
--- Assumption: Passenger can still cancel his flight before his check-in time.
--- Case 1: Passenger SUCCESSFULLY booked his flight. CheckinTime = DEFAULT, CheckinStatus = 'No', Seat.Status = 'Unavailable'.
--- Case 2: Passenger cancels the flight. CheckinTime = DEFAULT, CheckinStatus = 'No', Seat.Status = 'Available'.
--- Case 3: Passenger did not check-in or late check-in. CheckinTime = DEFAULT, CheckinStatus = 'No',
---                                                      [Seat.Status = 'Available' AT THE TIME OF (Flight.EDT - 15MINUTES)]
--- Case 4: Passenger check-in on-time at the airport and certainly fly: CheckInStatus = 'Yes', Seat.Status = 'Unavailable'.
--- Every passenger must check-in their flight [at least 15 minutes and at most 24 hours] in advance of Flight.EDT.
 
 CREATE TABLE Seat
 (
@@ -495,9 +427,6 @@ END
 //
 DELIMITER ;
 -- ----------------------------------------------------------------------------------------------------------- 
--- ----------------------------------------------------------------------------------------------------------- 
--- ----------------------------------------------------------------------------------------------------------- 
--- Nay tao moi Add vao de lam cho dep dep dui dui :))
 DELIMITER //
 CREATE FUNCTION getNoPilots (fid INT)
 RETURNS INT DETERMINISTIC
@@ -545,7 +474,6 @@ BEGIN
     RETURN total_spent;
 END;
 //
--- ----------------------------------------------------------------------------------------------------------- 
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 
@@ -743,16 +671,6 @@ BEGIN
         FROM Pilot
         WHERE SSN = OLD.SSN
     ) THEN
-		-- SELECT COUNT(*) INTO engineer_count
--- 		FROM Expertise
--- 		WHERE ESSN = OLD.SSN
--- 		AND ModelID IN (
--- 			SELECT ModelID
--- 			FROM Expertise
--- 			GROUP BY ModelID
--- 			HAVING COUNT(ESSN) = 1
--- 		);
-		
         SELECT COUNT(*)
         INTO pilot_count
         FROM Operates
@@ -854,33 +772,6 @@ END;
 DELIMITER ;
 
 
--- ----------------------------------------------------------------------------------------------------------- 
--- This trigger is for checking EAT EDT AAT ADT of a Flight
--- DELIMITER //
-
--- CREATE TRIGGER check_flight_constraints
--- BEFORE UPDATE ON Flight
--- FOR EACH ROW
--- BEGIN
---     DECLARE error_message VARCHAR(255);
-
---     IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
---         SET error_message = 'EAT must be larger than EDT';
---     ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
---         SET error_message = 'AAT must be larger than ADT';
---     ELSE
---         SET error_message = NULL; -- No error
---     END IF;
-
---     IF error_message IS NOT NULL THEN
---         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
---     END IF;
--- END;
--- //
-
--- DELIMITER ;
-
--- ----------------------------------------------------------------------------------------------------------- 
 -- Trigger of EXPERT_AT: total side CONSULTANT (ID)
 -- This check before delete the last record in EXPERT_AT of a Consultant
 delimiter //
@@ -1021,50 +912,7 @@ BEGIN
 	END IF;
 END //
 delimiter ;
--- --------------------------------------------------------------------
--- --------------------------------------------------------------------
--- Trigger: Passenger cannot travel on more than 1 flight at the same time
--- A flight must have EXACTLY 2 pilots and 2 flight attendants
-# delimiter //
-#
-# CREATE TRIGGER Ticket_Before_Insert BEFORE INSERT
-# ON Ticket
-# FOR EACH ROW
-# BEGIN
-#     DECLARE flight_count INT;
-#     DECLARE EAT1 TIMESTAMP;
-#     DECLARE EDT1 TIMESTAMP;
-#
-#     SELECT (EDT) INTO EDT1
-#     FROM Seat AS s
-#     JOIN Flight AS f ON s.FlightID = f.FlightID
-#     WHERE NEW.TicketID = s.TicketID;        # nhớ sửa lại là có đúng 2 FA, 2pilot
-#
-#     SELECT (EAT) INTO EAT1
-#     FROM Seat AS s
-#     JOIN Flight AS f ON s.FlightID = f.FlightID
-#     WHERE NEW.TicketID = s.TicketID;
-#
-#     -- Count the number of overlapping flights for the given passenger
-#     SELECT COUNT(*) INTO flight_count
-#     FROM Ticket AS t
-#     JOIN Seat AS s ON t.TicketID = s.TicketID AND t.SeatNum = s.SeatNum
-#     JOIN Flight AS f ON s.FlightID = f.FlightID
-#     WHERE t.PID = NEW.PID
-#         AND (
-#             (f.EAT BETWEEN EAT1 AND EDT1)
-#             OR (f.EDT BETWEEN EAT1 AND EDT1)
-#         );
-#
-#     -- If the count is greater than 0, it means there is an overlap
-#     IF flight_count > 0 THEN
-#         SIGNAL SQLSTATE '45000'
-#         SET MESSAGE_TEXT = 'Passenger is already booked on another flight during this time.';
-#     END IF;
-# END;
-# //
-# delimiter ;
--- --------------------------------------------------------------------
+
 -- --------------------------------------------------------------------
 -- Trigger ATC cannot work in 2 consecutive shift
 DELIMITER //
@@ -1261,29 +1109,6 @@ END;
 
 DELIMITER ;
 
-
--- --------------------------------------------------------------------
--- This trigger to modify the value of the base price of the flight
--- DELIMITER //
-
--- CREATE TRIGGER UpdateFlightBasePrice BEFORE INSERT ON Flight
--- FOR EACH ROW
--- BEGIN
---     DECLARE distance FLOAT;
---     DECLARE base_price FLOAT;
---     
---     -- Get the distance of the route associated with the new flight
---     SELECT Distance INTO distance FROM Route WHERE ID = NEW.RID;
---     
---     -- Calculate the base price by multiplying the distance with 10
---     SET base_price = distance * 10;
---     
---     -- Set the base price of the new flight
---     SET NEW.BasePrice = base_price;
--- END;
--- //
-
--- DELIMITER ;
 -- --------------------------------------------------------------------
 DELIMITER //
 
@@ -1424,13 +1249,6 @@ BEGIN
     SET d = R * c;
     
     RETURN d; -- Distance in km
-END;
-//
-
--- Function nay tao chu hong dung hjhj :))
-CREATE FUNCTION deg2rad(deg FLOAT) RETURNS FLOAT
-BEGIN
-    RETURN deg * (PI() / 180);
 END;
 //
 
