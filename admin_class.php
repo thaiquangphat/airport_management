@@ -3181,6 +3181,67 @@ class Action
         }
     }
 
+    function save_ticket(&$test_err) { // Note the use of &$test_err to pass by reference
+        extract($_POST);
+    
+        try {
+            $check = $this->db->query("SELECT * FROM Ticket WHERE PID = '" . $PID . "' AND FlightID = '" . $FID . "'")->num_rows;
+            if ($check > 0) {
+                $test_err = "This passenger already booked a ticket for this flight.";
+                return 0;
+            }
+
+            $qry = $this->db->query("INSERT INTO Ticket SET PID = '" . $PID . "', FlightID = '" . $FID . "', SeatNum = '" . $SeatNum . "', CheckInStatus = 'No', BookTime = CURRENT_TIMESTAMP");
+            if ($qry) {
+                // get the pid_decode to insert into log table
+                $pqry = $this->db->query("SELECT * FROM Passenger WHERE PID = '" .$PID."'");
+                $prow = $pqry->fetch_assoc();
+                $pid_decode = $prow['PID_Decode'];
+                
+                // insert into log table for display
+                $log = $this->db->query("INSERT INTO new_seat_log SET PID_Decode = '" .$pid_decode. "', SeatNum = '" .$SeatNum."', FlightCode = '" .$flightcode."'");
+                return 1;
+            }
+
+            // reach here if catch some error for trigger catch
+            return 0;
+
+        } catch(mysqli_sql_exception $e) {
+            if(strpos($e->getMessage(), 'Error: ') !== false) {
+                $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
+            } else {
+                $error_message = $e->getMessage();
+            }
+        
+            // Store error message in $test_err
+            $test_err = $error_message;
+            return $test_err; // Return the error message
+        }
+    }
+
+    function clear_log(&$test_err) { // Note the use of &$test_err to pass by reference
+        extract($_POST);
+    
+        try {
+            $qry = $this->db->query("DELETE FROM new_seat_log");
+            if ($qry) return 1;
+
+            // reach here if catch some error for trigger catch
+            return 0;
+
+        } catch(mysqli_sql_exception $e) {
+            if(strpos($e->getMessage(), 'Error: ') !== false) {
+                $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
+            } else {
+                $error_message = $e->getMessage();
+            }
+        
+            // Store error message in $test_err
+            $test_err = $error_message;
+            return $test_err; // Return the error message
+        }
+    }
+
     // function save_consultant() {
     //     extract($_POST);
     

@@ -446,9 +446,27 @@ if($action == 'update_ticket'){
         echo $test_err; // Return the error message
     }
 }
+if($action == 'save_ticket'){
+	$test_err = ""; // Initialize $test_err
+	$save = $crud->save_ticket($test_err);
+	if($save == 1) {
+        echo $save;
+    } else {
+        echo $test_err; // Return the error message
+    }
+}
 if($action == 'cancel_ticket'){
 	$test_err = ""; // Initialize $test_err
 	$save = $crud->cancel_ticket($test_err);
+	if($save == 1) {
+        echo $save;
+    } else {
+        echo $test_err; // Return the error message
+    }
+}
+if($action == 'clear_log'){
+	$test_err = ""; // Initialize $test_err
+	$save = $crud->clear_log($test_err);
 	if($save == 1) {
         echo $save;
     } else {
