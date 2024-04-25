@@ -3445,4 +3445,62 @@ class Action
             return $test_err; // Return the error message
         }
     }
+    // function update_ticket(&$test_err) { // Note the use of &$test_err to pass by reference
+    //     extract($_POST);
+    
+    //     try {
+    //         // Check if CheckInStatus is set to 'Yes'
+    //         if ($CheckInStatus == 'Yes') {
+    //             // Update CheckInStatus to 'Yes' and set CheckInTime to current timestamp
+    //             $update = $this->db->query("UPDATE Ticket SET CheckInStatus = 'Yes', CheckInTime = CURRENT_TIMESTAMP, BookTime = '" . $BookTime . "', CancelTime = '" . $CancelTime . "' WHERE TicketID = '" . $TicketID . "'");
+    //         } else {
+    //             // Update other columns without changing CheckInTime
+    //             $update = $this->db->query("UPDATE Ticket SET CheckInStatus = '" . $CheckInStatus . "', BookTime = '" . $BookTime . "', CancelTime = '" . $CancelTime . "' WHERE TicketID = '" . $TicketID . "'");
+    //         }
+    
+    //         if (!$update) {
+    //             $test_err = "Cannot update ticket";
+    //             return 0;
+    //         }
+    //         return 1;
+            
+    //     } catch(mysqli_sql_exception $e) {
+    //         if(strpos($e->getMessage(), 'Error: ') !== false) {
+    //             $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
+    //         } else {
+    //             $error_message = $e->getMessage();
+    //         }
+        
+    //         // Store error message in $test_err
+    //         $test_err = $error_message;
+    //         return $test_err; // Return the error message
+    //     }
+    // }
+    function cancel_ticket(&$test_err) { 
+        extract($_POST);
+        
+        try {
+            // Execute the SQL update query to cancel the ticket
+            $update = $this->db->query("UPDATE Ticket SET CheckInStatus = 'No', CancelTime = CURRENT_TIMESTAMP WHERE TicketID = '" . $ticketid . "'");
+            
+            if (!$update) {
+                $test_err = "Cannot cancel ticket";
+                return 0;
+            }
+            
+            return 1;
+                
+        } catch(mysqli_sql_exception $e) {
+            if(strpos($e->getMessage(), 'Error: ') !== false) {
+                $error_message = "Trigger error: " . substr($e->getMessage(), strpos($e->getMessage(), 'Error: '));
+            } else {
+                $error_message = $e->getMessage();
+            }
+            
+            // Store error message in $test_err
+            $test_err = $error_message;
+            return $test_err; // Return the error message
+        }
+    }
+    
 }
