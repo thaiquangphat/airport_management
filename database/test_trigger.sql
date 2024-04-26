@@ -93,6 +93,8 @@ SELECT count_available_seats(1);
 
 SELECT getNoPassenger(1);
 
+SELECT getDuration(1);
+
 
 
 

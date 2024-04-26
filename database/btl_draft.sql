@@ -6,7 +6,7 @@ CREATE SCHEMA Test_New;
 USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
-
+-- --------------------------------------------------------------------
 CREATE TABLE Employee
 (
     SSN    		CHAR(10),
@@ -118,8 +118,12 @@ CREATE TABLE Passenger
     Fname       VARCHAR(50),
     Minit       CHAR(2),
     Lname       VARCHAR(50),
+    -- Tao nghi la phai them 1 attribute de biet thg user (type 3: emp/user) nao` tao.
     UserID 		INT,
+    
+    -- Nay la tao them vao` tao nghi la can nen cu tao data co no di
     PRIMARY KEY (PID)
+    -- FOREIGN KEY (UserID) REFERENCES users (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Passenger_Phone
@@ -223,7 +227,7 @@ CREATE TABLE Flight
     RID             INT,
     Status          ENUM ('On Air', 'Landed', 'Unassigned'),
     AirplaneID      INT       NOT NULL,
-    TCSSN           CHAR(10)  NOT NULL,         -- SSN of Traffic Controller
+    TCSSN           CHAR(10)  NOT NULL, -- SSN of Traffic Controller
     FlightCode      VARCHAR(6)   NOT NULL,
     AAT             DATETIME DEFAULT '1970-01-01',
     EAT             DATETIME DEFAULT '1970-01-01',
@@ -235,12 +239,17 @@ CREATE TABLE Flight
     FOREIGN KEY (RID) REFERENCES Route (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AirplaneID) REFERENCES Airplane (AirplaneID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT `check-valid-date` CHECK (
-		(EAT > EDT AND AAT > ADT) OR 
-		(AAT = '1970-01-01 00:00:00' AND ADT = '1970-01-01 00:00:00') OR 
-		(AAT = '1970-01-01 00:00:00' AND ADT != '1970-01-01 00:00:00')
-	)
+    CONSTRAINT `check-valid-date` CHECK (( EAT > EDT ))
 );
+
+-- ------------------------------------------ IMPORTANT --------------------------------------------------
+-- Assumption: Passenger can still cancel his flight before his check-in time.
+-- Case 1: Passenger SUCCESSFULLY booked his flight. CheckinTime = DEFAULT, CheckinStatus = 'No', Seat.Status = 'Unavailable'.
+-- Case 2: Passenger cancels the flight. CheckinTime = DEFAULT, CheckinStatus = 'No', Seat.Status = 'Available'.
+-- Case 3: Passenger did not check-in or late check-in. CheckinTime = DEFAULT, CheckinStatus = 'No',
+--                                                      [Seat.Status = 'Available' AT THE TIME OF (Flight.EDT - 15MINUTES)]
+-- Case 4: Passenger check-in on-time at the airport and certainly fly: CheckInStatus = 'Yes', Seat.Status = 'Unavailable'.
+-- Every passenger must check-in their flight [at least 15 minutes and at most 24 hours] in advance of Flight.EDT.
 
 CREATE TABLE Seat
 (
@@ -308,6 +317,20 @@ CREATE TABLE Operates
     FOREIGN KEY (FlightID) REFERENCES Flight (FlightID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- --------------------------------------------------------------------
+-- /*Paul added*/ -- TABLE NEW_SEAT_LOG to insert a new booking ticket and view
+-- NOTE: this table doesn't need to have any references constraint, just for viewing purpose
+
+CREATE TABLE new_seat_log 
+(
+	logid		INT		AUTO_INCREMENT,
+    PID_Decode	VARCHAR(25),
+    SeatNum		VARCHAR(3),
+    FlightCode	VARCHAR(6),
+    
+    PRIMARY KEY (logid)
+);
+
 DROP USER IF EXISTS 'sManager'@'localhost';
 DROP USER IF EXISTS 'rUser'@'localhost';
 -- SELECT User, Host FROM mysql.user WHERE User='sManager' AND Host='localhost';
@@ -345,22 +368,21 @@ delimiter //
 CREATE FUNCTION getDuration (fid INT)
 RETURNS VARCHAR(255) DETERMINISTIC
 BEGIN
-	DECLARE aAT TIMESTAMP; 
-    DECLARE aDT TIMESTAMP;
+	DECLARE _aAT TIMESTAMP; 
+    DECLARE _aDT TIMESTAMP;
     
 	SELECT AAT, ADT
-    INTO aAT, aDT
+    INTO _aAT, _aDT
     FROM flight AS f
     WHERE f.FlightID = fid;
     
-    IF (aAT = '1970-01-01') OR (aDT = '1970-01-01') THEN
+    IF (_aAT = '1970-01-01') OR (_aDT = '1970-01-01') THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or actual departure time";
 	END IF;
-
     
-    RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(aDT, aAT)) / 24), ' days ',
-				  MOD(HOUR(TIMEDIFF(aDT, aAT)), 24), ' hours ',
-				  MINUTE(TIMEDIFF(aDT, aAT)), ' minutes');
+    RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(_aDT, _aAT)) / 24), ' days ',
+				  MOD(HOUR(TIMEDIFF(_aDT, _aAT)), 24), ' hours ',
+				  MINUTE(TIMEDIFF(_aDT, _aAT)), ' minutes');
 END
 //
 -- --------------------------------------------------------------------
@@ -428,6 +450,7 @@ END
 //
 DELIMITER ;
 -- ----------------------------------------------------------------------------------------------------------- 
+-- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 CREATE FUNCTION getNoPilots (fid INT)
 RETURNS INT DETERMINISTIC
@@ -476,6 +499,7 @@ BEGIN
     RETURN total_spent;
 END;
 //
+-- ----------------------------------------------------------------------------------------------------------- 
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 
@@ -646,7 +670,7 @@ BEGIN
         END IF;
     END IF;
 
-    -- Check if the employee is an Engineer and he is the only expert on some model (we cannot delete him)
+    -- Check if the employee is an Engineer and has expertise in only one model
     IF EXISTS (
         SELECT 1
         FROM Engineer
@@ -674,6 +698,7 @@ BEGIN
         FROM Pilot
         WHERE SSN = OLD.SSN
     ) THEN
+		
         SELECT COUNT(*)
         INTO pilot_count
         FROM Operates
@@ -758,7 +783,37 @@ END;
 
 DELIMITER ;
 
+-- ----------------------------------------------------------------------------------------------------------- 
+-- This trigger is for checking EAT EDT AAT ADT of a Flight
+DELIMITER //
 
+CREATE TRIGGER check_flight_constraints
+BEFORE UPDATE ON Flight
+FOR EACH ROW
+BEGIN
+    DECLARE error_message VARCHAR(255);
+
+    IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
+        SET error_message = 'EAT must be larger than EDT';
+    ELSEIF NEW.EAT <> OLD.EAT AND NEW.EDT = OLD.EDT AND NEW.EAT <= OLD.EDT THEN
+        SET error_message = 'EAT must be larger than EDT';
+    ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
+        SET error_message = 'AAT must be larger than ADT';
+    ELSEIF NEW.AAT <> OLD.AAT AND NEW.AAT <= NEW.ADT THEN
+        SET error_message = 'AAT must be larger than ADT';
+    ELSE
+        SET error_message = NULL; -- No error
+    END IF;
+
+    IF error_message IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------------------------------------- 
 -- Trigger of EXPERT_AT: total side CONSULTANT (ID)
 -- This check before delete the last record in EXPERT_AT of a Consultant
 delimiter //
@@ -899,7 +954,6 @@ BEGIN
 	END IF;
 END //
 delimiter ;
-
 -- --------------------------------------------------------------------
 -- Trigger ATC cannot work in 2 consecutive shift
 DELIMITER //
@@ -933,7 +987,9 @@ END //
 DELIMITER ;
 
 -- --------------------------------------------------------------------
--- Every model must be maintained by at least 1 engineer
+-- Every model must be maintained by at least 1 engineer of each EType
+-- Model PK: ID
+-- 'Avionic Engineer', 'Mechanical Engineer', 'Electric Engineer'
 DELIMITER //
 
 CREATE TRIGGER check_engineer_after_delete
@@ -1046,22 +1102,9 @@ DELIMITER ;
 --         UPDATE Seat
 --         SET Status = 'Unavailable'
 --         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+
+--         SET NEW.CheckInTime = CURRENT_TIMESTAMP;
 --     END IF;
--- END;
--- //
-
--- DELIMITER ;
-
--- This trigger is for update the status of the seat when delete a ticket
--- DELIMITER //
-
--- CREATE TRIGGER update_seat_status_after_ticket_delete
--- AFTER DELETE ON Ticket
--- FOR EACH ROW
--- BEGIN
---     UPDATE Seat
---     SET Status = 'Unavailable'
---     WHERE FlightID = OLD.FlightID AND SeatNum = OLD.SeatNum;
 -- END;
 -- //
 
@@ -1112,6 +1155,21 @@ END;
 DELIMITER ;
 
 -- --------------------------------------------------------------------
+-- This trigger is for update the status of the seat when delete a ticket
+DELIMITER //
+
+CREATE TRIGGER update_seat_status_after_ticket_delete
+AFTER DELETE ON Ticket
+FOR EACH ROW
+BEGIN
+    UPDATE Seat
+    SET Status = 'Unavailable'
+    WHERE FlightID = OLD.FlightID AND SeatNum = OLD.SeatNum;
+END;
+//
+
+DELIMITER ;
+
 DELIMITER //
 
 CREATE TRIGGER before_insert_ticket
@@ -1167,6 +1225,8 @@ BEGIN
         SET MESSAGE_TEXT = 'Error: Invalid flight ID or associated route does not exist.';
     ELSE
         -- Calculate the base price by multiplying the distance with 0.05
+        -- SET base_price = @distance * 0.05;
+        
         SET base_price = @distance * 0.05;
         
         -- Update the base price of the flight
@@ -1289,6 +1349,13 @@ BEGIN
 END;
 //
 
+-- Function nay tao chu hong dung hjhj :))
+CREATE FUNCTION deg2rad(deg FLOAT) RETURNS FLOAT
+BEGIN
+    RETURN deg * (PI() / 180);
+END;
+//
+
 DELIMITER ;
 
 -- This trigger is to insert a new route into Route table after the new insertion of an airport
@@ -1333,8 +1400,19 @@ END;
 DELIMITER ;
 
 DELIMITER //
+CREATE TRIGGER update_seat_status_after_ticket_insert
+AFTER INSERT ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        UPDATE Seat
+        SET Status = 'Unavailable'
+        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+    END IF;
+END;
+//
+DELIMITER ;
 
--- AFTER INSERT Trigger to update Seat status
 CREATE TRIGGER insert_seat_status_after
 AFTER INSERT ON Ticket
 FOR EACH ROW
@@ -1359,7 +1437,6 @@ END;
 //
 
 DELIMITER ;
-
 
 
 -- This view is for ploting the graph
