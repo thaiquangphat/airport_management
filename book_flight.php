@@ -25,20 +25,22 @@ $resultSeats = $stmtSeats->get_result();
 $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
 ?>
 
+<h2>Booking for Flight <?php echo $row['FlightCode']; ?></h2>
+
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="card-tools">
                         <a class="btn btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_passenger"
                             target='_blank'> <i class="fa fa-plus"></i> Add New Passenger if Not Exist
                         </a>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-12">
-                    <div><small>Note that when the ticket has been booked, If you want to cancel the ticket, you
-                            have to come to View Passenger</small></div>
+                    <div><small>Note that when the ticket has been booked, if you want to cancel the ticket, you
+                            have to come to <b>View Passenger</b></small></div>
                 </div>
             </div>
         </div>
@@ -144,6 +146,8 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                 <div class="col-lg-12 text-right justify-content-center d-flex">
                     <button class="btn btn-primary mr-2" type="button"
                         onclick="location.href = './index.php?page=view_flight&id=<?php echo $flightID?>'">Save</button>
+                    <button class="btn btn-secondary" type="button"
+                        onclick="location.href = './index.php?page=new_passenger'">Can't find your PID, create one here</button>
                 </div>
             </form>
         </div>

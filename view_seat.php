@@ -141,9 +141,8 @@
                                 $feinfo = $conn->query("
                                     SELECT Passenger.PID_Decode, Passenger.PID, Passenger.PassportNo, CONCAT(Passenger.Fname, ' ', Passenger.Lname) as Name, Passenger.DOB, Passenger.Sex, Passenger.Nationality, Ticket.SeatNum
                                     FROM Ticket
-                                    JOIN Seat ON Ticket.FlightID = Seat.FlightID AND Ticket.SeatNum = Seat.SeatNum
-                                    JOIN Passenger ON Passenger.PID = Ticket.PID
-                                    WHERE Passenger.PID = '" . $PID . "'");
+                                    JOIN Passenger ON Passenger.PID = Ticket.PID 
+                                    WHERE Passenger.PID = '" . $PID . "' AND Ticket.FlightID = '" .$FlightID."'");
 
                                 $i++;
                                 while ($row = $feinfo->fetch_assoc()):
