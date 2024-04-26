@@ -52,7 +52,8 @@ You should be able to access the login page as below
 This is a small demonstration of some functionalities of our website.
 <br></br>
 
-![](/img/demo.gif)
+![](/img/demo-vid.gif)
+
 
 As the clip shows, we can perform some simple operations such as:
 
@@ -60,6 +61,7 @@ As the clip shows, we can perform some simple operations such as:
 
 - **Viewing**: Listing out values in the table, references `SELECT` operation in MySQL.
 
+- **Handling Errors**: As users may make mistakes, we provide a mechanism to prevent so the database remains stable.
 
 <h2 align="center">💟 Contributors 💟</h2>
 

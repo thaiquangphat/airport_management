@@ -40,7 +40,7 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                 </div> -->
                 <div class="col-md-12">
                     <div><small>Note that when the ticket has been booked, if you want to cancel the ticket, you
-                            have to come to <b>View Passenger</b></small></div>
+                            have to come to <b><a href="index.php?page=list_passenger">View Passenger</a></b></small></div>
                 </div>
             </div>
         </div>
