@@ -207,7 +207,7 @@ CREATE TABLE Airplane
     AirlineID         CHAR(3)		NOT NULL,
     OwnerID           INT			NOT NULL,
     ModelID           INT,
-    LeasedDate        DATETIME 		DEFAULT '1970-01-01' NOT NULL,
+    LeasedDate        DATETIME 		DEFAULT '1970-01-01 00:00:00' NOT NULL,
     PRIMARY KEY (AirplaneID),
     FOREIGN KEY (AirlineID) REFERENCES Airline (AirlineID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -229,10 +229,10 @@ CREATE TABLE Flight
     AirplaneID      INT       NOT NULL,
     TCSSN           CHAR(10)  NOT NULL, -- SSN of Traffic Controller
     FlightCode      VARCHAR(6)   NOT NULL,
-    AAT             DATETIME DEFAULT '1970-01-01',
-    EAT             DATETIME DEFAULT '1970-01-01',
-    ADT             DATETIME DEFAULT '1970-01-01',
-    EDT             DATETIME DEFAULT '1970-01-01',
+    AAT             DATETIME DEFAULT '1970-01-01  00:00:00',
+    EAT             DATETIME DEFAULT '1970-01-01  00:00:00',
+    ADT             DATETIME DEFAULT '1970-01-01  00:00:00',
+    EDT             DATETIME DEFAULT '1970-01-01  00:00:00',
     BasePrice       FLOAT DEFAULT 0.05,
     PRIMARY KEY (FlightID),
     UNIQUE (RID, FlightCode),
@@ -370,14 +370,15 @@ RETURNS VARCHAR(255) DETERMINISTIC
 BEGIN
 	DECLARE _aAT TIMESTAMP; 
     DECLARE _aDT TIMESTAMP;
+    DECLARE _year INT;
     
 	SELECT AAT, ADT
     INTO _aAT, _aDT
     FROM flight AS f
     WHERE f.FlightID = fid;
     
-    IF (_aAT = '1970-01-01') OR (_aDT = '1970-01-01') THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or actual departure time";
+    IF (YEAR(_aAT) = 0 OR YEAR(_aDT) = 0) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or/and actual departure time";
 	END IF;
     
     RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(_aDT, _aAT)) / 24), ' days ',
@@ -1144,7 +1145,7 @@ CREATE TRIGGER update_seat_status_on_cancel
 AFTER UPDATE ON Ticket
 FOR EACH ROW
 BEGIN
-    IF NEW.CancelTime != '1970-01-01' THEN
+    IF NEW.CancelTime != '1970-01-01 07:00:00' THEN
         UPDATE Seat
         SET Status = 'Available'
         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
@@ -1413,6 +1414,7 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
 CREATE TRIGGER insert_seat_status_after
 AFTER INSERT ON Ticket
 FOR EACH ROW
@@ -1424,7 +1426,9 @@ BEGIN
     END IF;
 END;
 //
+DELIMITER ;
 
+DELIMITER //
 -- BEFORE INSERT Trigger to set CheckInTime
 CREATE TRIGGER insert_checkin_time_before
 BEFORE INSERT ON Ticket
@@ -1435,7 +1439,6 @@ BEGIN
     END IF;
 END;
 //
-
 DELIMITER ;
 
 
