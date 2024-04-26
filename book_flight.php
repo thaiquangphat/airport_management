@@ -24,14 +24,29 @@ $stmtSeats->execute();
 $resultSeats = $stmtSeats->get_result();
 $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
 ?>
-<h2>Booking for Flight <?php echo $row['FlightCode'], '-', $row['FlightID']; ?></h2>
 
 <div class="col-lg-12">
     <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card-tools">
+                        <a class="btn btn-sm btn-default btn-flat border-primary" href="./index.php?page=new_passenger"
+                            target='_blank'> <i class="fa fa-plus"></i> Add New Passenger if Not Exist
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div><small>Note that when the ticket has been booked, If you want to cancel the ticket, you
+                            have to come to View Passenger</small></div>
+                </div>
+            </div>
+        </div>
         <div class="card-body">
             <form action="" id="manage_booking">
                 <input hidden="hidden" name="FID" value="<?php echo isset($FID) ? $FID : $row['FlightID'] ?>" readonly>
                 <div class="row">
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Flight Code</label>
@@ -64,16 +79,24 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                             <select class="form-control form-control-sm select2" name="SeatNum" id="SeatNumSelect">
                                 <option></option>
                                 <?php 
-                                    $seats = $conn->query("SELECT Seat.SeatNum, Seat.Class, Seat.Price
-                                                           FROM Seat JOIN Ticket ON Seat.FlightID = Ticket.FlightID
-                                                           WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
-                                                           AND (Seat.FlightID, Seat.SeatNum) NOT IN 
-                                                           (SELECT FlightID, SeatNum FROM Ticket)");
+                                    // $seats = $conn->query("SELECT DISTINCT Seat.SeatNum, Seat.Class, Seat.Price
+                                    //                        FROM Seat 
+                                    //                        JOIN Ticket ON Seat.FlightID = Ticket.FlightID AND Seat.SeatNum = Ticket.SeatNum
+                                    //                        WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
+                                    //                        AND (Seat.SeatNum) NOT IN 
+                                    //                        (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND CheckInStatus = 'No')");
+                                    
+                                    $seats = $conn->query("SELECT DISTINCT Seat.SeatNum, Seat.Class, Seat.Price
+                                                            FROM Seat 
+                                                            WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
+                                                            AND (Seat.SeatNum) NOT IN 
+                                                                (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND CheckInStatus = 'No')
+                                                            ");
                                     while($srow= $seats->fetch_assoc()):
                                 ?>
                                 <option value="<?php echo $srow['SeatNum'] ?>"
-                                    <?php echo ucwords($srow['SeatNum'] . '-' . $srow['Class'] . '-' . $srow['Price']) ?>>
-                                    <?php echo ucwords($srow['SeatNum'] . '-' . $srow['Class'] . '-' . $srow['Price']) ?>
+                                    <?php echo ucwords($srow['SeatNum'] . '-' . $srow['Class'] . '-$' . $srow['Price']) ?>>
+                                    <?php echo ucwords($srow['SeatNum'] . '-' . $srow['Class'] . '-$' . $srow['Price']) ?>
                                 </option>
                                 <?php endwhile; ?>
                             </select>
@@ -222,5 +245,4 @@ $('#manage_booking').submit(function(e) {
 //             }.bind(this)
 //         });
 //     });
-
 </script>
