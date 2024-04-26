@@ -354,23 +354,24 @@ delimiter //
 CREATE FUNCTION getDuration (fid INT)
 RETURNS VARCHAR(255) DETERMINISTIC
 BEGIN
-	DECLARE aAT TIMESTAMP; 
-    DECLARE aDT TIMESTAMP;
+	DECLARE _aAT TIMESTAMP; 
+    DECLARE _aDT TIMESTAMP;
     
 	SELECT AAT, ADT
-    INTO aAT, aDT
+    INTO _aAT, _aDT
     FROM flight AS f
     WHERE f.FlightID = fid;
     
-    IF ISNULL(aAT) OR ISNULL(aDT) THEN
+    IF ISNULL(_aAT) OR ISNULL(_aDT) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or actual departure time";
 	END IF;
     
-    RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(aDT, aAT)) / 24), ' days ',
-				  MOD(HOUR(TIMEDIFF(aDT, aAT)), 24), ' hours ',
-				  MINUTE(TIMEDIFF(aDT, aAT)), ' minutes');
-END
-//
+    RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(_aDT, _aAT)) / 24), ' days ',
+				  MOD(HOUR(TIMEDIFF(_aDT, _aAT)), 24), ' hours ',
+				  MINUTE(TIMEDIFF(_aDT, _aAT)), ' minutes');
+END //
+DELIMITER ;
+
 -- --------------------------------------------------------------------
 
 DELIMITER //
@@ -506,13 +507,13 @@ RETURNS INT DETERMINISTIC
 BEGIN
 	DECLARE age INT;
     
-	SELECT TIMESTAMPDIFF(YEAR, NOW(), dob) INTO age
+	SELECT TIMESTAMPDIFF(YEAR, dob, NOW()) INTO age
     FROM passenger AS p
     WHERE p.pid = pid_input;
     
     RETURN age;
-END
-//
+END //
+delimiter ;
 
 delimiter //
 CREATE FUNCTION CheckEmployeeAge(DOB DATE) RETURNS BOOLEAN DETERMINISTIC
@@ -525,8 +526,8 @@ BEGIN
     ELSE
         RETURN TRUE;
     END IF;
-END;
-//
+END //
+delimiter ;
 
 ALTER TABLE Employee
 ADD CONSTRAINT CheckAge CHECK (CheckEmployeeAge(DOB));
