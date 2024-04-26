@@ -7,6 +7,20 @@ USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
 -- --------------------------------------------------------------------
+
+-- /*Paul added*/ -- TABLE NEW_SEAT_LOG to insert a new booking ticket and view
+-- NOTE: this table doesn't need to have any references constraint, just for viewing purpose
+
+CREATE TABLE new_seat_log 
+(
+	logid		INT		AUTO_INCREMENT,
+    PID_Decode	VARCHAR(25),
+    SeatNum		VARCHAR(3),
+    FlightCode	VARCHAR(6),
+    
+    PRIMARY KEY (logid)
+);
+
 CREATE TABLE Employee
 (
     SSN    		CHAR(10),
@@ -19,7 +33,7 @@ CREATE TABLE Employee
     Sex    		ENUM ('F', 'M'),
     Date_Start  DATE,
     PRIMARY KEY (SSN),
-    CONSTRAINT `check-salary` CHECK (( Salary > 0 ))
+    CONSTRAINT `check-salary` CHECK (Salary > 0)
 );
 
 CREATE TABLE Supervision
@@ -370,14 +384,15 @@ RETURNS VARCHAR(255) DETERMINISTIC
 BEGIN
 	DECLARE _aAT TIMESTAMP; 
     DECLARE _aDT TIMESTAMP;
+    DECLARE _year INT;
     
 	SELECT AAT, ADT
     INTO _aAT, _aDT
     FROM flight AS f
     WHERE f.FlightID = fid;
     
-    IF ISNULL(_aAT) OR ISNULL(_aDT) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or actual departure time";
+    IF (YEAR(_aAT) = 0 OR YEAR(_aDT) = 0) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or/and actual departure time";
 	END IF;
     
     RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(_aDT, _aAT)) / 24), ' days ',
@@ -485,6 +500,7 @@ DELIMITER ;
 
 DELIMITER //
 
+
 CREATE FUNCTION CalculateTotalSpent(PassengerID INT)
 RETURNS FLOAT DETERMINISTIC
 BEGIN
@@ -502,6 +518,7 @@ END;
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 
+-- Hàm này mơ hồ vậy
 CREATE FUNCTION CalculateAge(birthDate DATE)
 RETURNS INT DETERMINISTIC
 BEGIN
@@ -529,12 +546,12 @@ END
 //
 
 delimiter //
-CREATE FUNCTION CheckEmployeeAge(DOB DATE) RETURNS BOOLEAN DETERMINISTIC
+CREATE FUNCTION CheckEmployeeAge(ESSN INT) RETURNS BOOLEAN DETERMINISTIC
 BEGIN
     DECLARE emp_age INT;
-    SET emp_age = YEAR(CURRENT_DATE()) - YEAR(DOB);
+    SELECT TIMESTAMPDIFF(YEAR, DOB, NOW()) INTO emp_age FROM Employee WHERE SSN = ESSN;
     
-    IF (emp_age < 18) THEN
+    IF (emp_age < 18 OR emp_age > 75) THEN
         RETURN FALSE;
     ELSE
         RETURN TRUE;
@@ -542,14 +559,14 @@ BEGIN
 END;
 //
 
-ALTER TABLE Employee
-ADD CONSTRAINT CheckAge CHECK (CheckEmployeeAge(DOB));
 
 -- ----------------------------------------------------------------------------------------------------------- 
 -- Trigger
 -- ----------------------------------------------------------------------------------------------------------- 
-DELIMITER //
+-- DELIMITER //
 
+-- -- Đã có function + Constraint CHECK thì có cần trigger nữa không?
+-- Edit: à thì mysql ko support constraint checking với functions
 CREATE TRIGGER EnsureEmployeeAge
 BEFORE INSERT ON Employee
 FOR EACH ROW
@@ -971,8 +988,13 @@ BEGIN
     -- Check if the new shift is consecutive to the last shift
     IF (
         (lastShift = 'Morning' AND NEW.Shift = 'Afternoon') OR
+        (lastShift = 'Morning' AND NEW.Shift = 'Night') OR
         (lastShift = 'Afternoon' AND NEW.Shift = 'Evening') OR
-        (lastShift = 'Evening' AND NEW.Shift = 'Night') 
+        (lastShift = 'Afternoon' AND NEW.Shift = 'Night') OR
+        (lastShift = 'Evening' AND NEW.Shift = 'Night') OR
+        (lastShift = 'Evening' AND NEW.Shift = 'Afternoon') OR
+        (lastShift = 'Night' AND NEW.Shift = 'Morning') OR
+        (lastShift = 'Night' AND NEW.Shift = 'Evening')
     ) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ATC cannot work in two consecutive shifts';
     END IF;
@@ -1137,7 +1159,7 @@ CREATE TRIGGER update_seat_status_on_cancel
 AFTER UPDATE ON Ticket
 FOR EACH ROW
 BEGIN
-    IF NEW.CancelTime != '1970-01-01 00:00:00' THEN
+    IF NEW.CancelTime != '1970-01-01 07:00:00' THEN
         UPDATE Seat
         SET Status = 'Available'
         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
@@ -1405,6 +1427,34 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER insert_seat_status_after
+AFTER INSERT ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        UPDATE Seat
+        SET Status = 'Unavailable'
+        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+    END IF;
+END;
+//
+DELIMITER ;
+
+DELIMITER //
+-- BEFORE INSERT Trigger to set CheckInTime
+CREATE TRIGGER insert_checkin_time_before
+BEFORE INSERT ON Ticket
+FOR EACH ROW
+BEGIN
+    IF NEW.CheckInStatus = 'Yes' THEN
+        SET NEW.CheckInTime = CURRENT_TIMESTAMP;
+    END IF;
+END;
+//
+DELIMITER ;
+
 
 -- This view is for ploting the graph
 CREATE VIEW employee_distribution_by_type AS
@@ -4389,18 +4439,15 @@ INSERT INTO tcshift(TCSSN,Shift) VALUES (1443933295,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9559423186,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9777755494,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (6154727188,'Afternoon');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (5666989915,'Evening');
+INSERT INTO tcshift(TCSSN,Shift) VALUES (5666989915,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9777755494,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (6794118189,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (3300076804,'Night');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Evening');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Afternoon');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (7782466558,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9993757512,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (6144043210,'Morning');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (6794118189,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (3058929914,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9993757512,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9559423186,'Morning');
