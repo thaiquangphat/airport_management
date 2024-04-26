@@ -19,7 +19,7 @@ CREATE TABLE Employee
     Sex    		ENUM ('F', 'M'),
     Date_Start  DATE,
     PRIMARY KEY (SSN),
-    CONSTRAINT `check-salary` CHECK (( Salary > 0 ))
+    CONSTRAINT `check-salary` CHECK (Salary > 0)
 );
 
 CREATE TABLE Supervision
@@ -203,7 +203,7 @@ CREATE TABLE Airplane
     AirlineID         CHAR(3)		NOT NULL,
     OwnerID           INT			NOT NULL,
     ModelID           INT,
-    LeasedDate        DATETIME 		DEFAULT '1970-01-01 00:00:00' NOT NULL,
+    LeasedDate        DATETIME 		DEFAULT '1970-01-01' NOT NULL,
     PRIMARY KEY (AirplaneID),
     FOREIGN KEY (AirlineID) REFERENCES Airline (AirlineID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (OwnerID) REFERENCES Owner (OwnerID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -225,10 +225,10 @@ CREATE TABLE Flight
     AirplaneID      INT       NOT NULL,
     TCSSN           CHAR(10)  NOT NULL,         -- SSN of Traffic Controller
     FlightCode      VARCHAR(6)   NOT NULL,
-    AAT             DATETIME DEFAULT '1970-01-01 00:00:00',
-    EAT             DATETIME DEFAULT '1970-01-01 00:00:00',
-    ADT             DATETIME DEFAULT '1970-01-01 00:00:00',
-    EDT             DATETIME DEFAULT '1970-01-01 00:00:00',
+    AAT             DATETIME DEFAULT '1970-01-01',
+    EAT             DATETIME DEFAULT '1970-01-01',
+    ADT             DATETIME DEFAULT '1970-01-01',
+    EDT             DATETIME DEFAULT '1970-01-01',
     BasePrice       FLOAT DEFAULT 0.05,
     PRIMARY KEY (FlightID),
     UNIQUE (RID, FlightCode),
@@ -353,9 +353,10 @@ BEGIN
     FROM flight AS f
     WHERE f.FlightID = fid;
     
-    IF ISNULL(aAT) OR ISNULL(aDT) THEN
+    IF (aAT = '1970-01-01') OR (aDT = '1970-01-01') THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Unknown actual arrival time or actual departure time";
 	END IF;
+
     
     RETURN CONCAT(FLOOR(HOUR(TIMEDIFF(aDT, aAT)) / 24), ' days ',
 				  MOD(HOUR(TIMEDIFF(aDT, aAT)), 24), ' hours ',
@@ -461,6 +462,7 @@ DELIMITER ;
 
 DELIMITER //
 
+
 CREATE FUNCTION CalculateTotalSpent(PassengerID INT)
 RETURNS FLOAT DETERMINISTIC
 BEGIN
@@ -477,6 +479,7 @@ END;
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
 
+-- Hàm này mơ hồ vậy
 CREATE FUNCTION CalculateAge(birthDate DATE)
 RETURNS INT DETERMINISTIC
 BEGIN
@@ -495,7 +498,7 @@ RETURNS INT DETERMINISTIC
 BEGIN
 	DECLARE age INT;
     
-	SELECT TIMESTAMPDIFF(YEAR, NOW(), dob) INTO age
+	SELECT TIMESTAMPDIFF(YEAR, dob, NOW()) INTO age
     FROM passenger AS p
     WHERE p.pid = pid_input;
     
@@ -504,12 +507,12 @@ END
 //
 
 delimiter //
-CREATE FUNCTION CheckEmployeeAge(DOB DATE) RETURNS BOOLEAN DETERMINISTIC
+CREATE FUNCTION CheckEmployeeAge(ESSN INT) RETURNS BOOLEAN DETERMINISTIC
 BEGIN
     DECLARE emp_age INT;
-    SET emp_age = YEAR(CURRENT_DATE()) - YEAR(DOB);
+    SELECT TIMESTAMPDIFF(YEAR, DOB, NOW()) INTO emp_age FROM Employee WHERE SSN = ESSN;
     
-    IF (emp_age < 18) THEN
+    IF (emp_age < 18 OR emp_age > 75) THEN
         RETURN FALSE;
     ELSE
         RETURN TRUE;
@@ -517,14 +520,14 @@ BEGIN
 END;
 //
 
-ALTER TABLE Employee
-ADD CONSTRAINT CheckAge CHECK (CheckEmployeeAge(DOB));
 
 -- ----------------------------------------------------------------------------------------------------------- 
 -- Trigger
 -- ----------------------------------------------------------------------------------------------------------- 
-DELIMITER //
+-- DELIMITER //
 
+-- -- Đã có function + Constraint CHECK thì có cần trigger nữa không?
+-- Edit: à thì mysql ko support constraint checking với functions
 CREATE TRIGGER EnsureEmployeeAge
 BEFORE INSERT ON Employee
 FOR EACH ROW
@@ -916,8 +919,13 @@ BEGIN
     -- Check if the new shift is consecutive to the last shift
     IF (
         (lastShift = 'Morning' AND NEW.Shift = 'Afternoon') OR
+        (lastShift = 'Morning' AND NEW.Shift = 'Night') OR
         (lastShift = 'Afternoon' AND NEW.Shift = 'Evening') OR
-        (lastShift = 'Evening' AND NEW.Shift = 'Night') 
+        (lastShift = 'Afternoon' AND NEW.Shift = 'Night') OR
+        (lastShift = 'Evening' AND NEW.Shift = 'Night') OR
+        (lastShift = 'Evening' AND NEW.Shift = 'Afternoon') OR
+        (lastShift = 'Night' AND NEW.Shift = 'Morning') OR
+        (lastShift = 'Night' AND NEW.Shift = 'Evening')
     ) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ATC cannot work in two consecutive shifts';
     END IF;
@@ -1093,7 +1101,7 @@ CREATE TRIGGER update_seat_status_on_cancel
 AFTER UPDATE ON Ticket
 FOR EACH ROW
 BEGIN
-    IF NEW.CancelTime != '1970-01-01 00:00:00' THEN
+    IF NEW.CancelTime != '1970-01-01' THEN
         UPDATE Seat
         SET Status = 'Available'
         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
@@ -4337,18 +4345,15 @@ INSERT INTO tcshift(TCSSN,Shift) VALUES (1443933295,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9559423186,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9777755494,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (6154727188,'Afternoon');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (5666989915,'Evening');
+INSERT INTO tcshift(TCSSN,Shift) VALUES (5666989915,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9777755494,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (6794118189,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (3300076804,'Night');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Evening');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Afternoon');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (9656325312,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (7782466558,'Morning');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9993757512,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (6144043210,'Morning');
-INSERT INTO tcshift(TCSSN,Shift) VALUES (6794118189,'Night');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (3058929914,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9993757512,'Afternoon');
 INSERT INTO tcshift(TCSSN,Shift) VALUES (9559423186,'Morning');

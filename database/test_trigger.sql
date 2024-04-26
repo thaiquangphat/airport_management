@@ -66,10 +66,32 @@ INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Night');				-- Will not w
 INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Evening');			-- Will work
 
 
+-- Test function getAge (of passenger):
+SELECT getAge(1000);
 
+-- CHECK constraint:
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073016,'Neo','X.','Martin',-26182,6767209659,'F','2008-01-18','2017-09-15');
 
+-- Function: check employee age (cái này có cần thiết không?? khi mà đã chặn tuổi ngay từ trigger)
+SELECT checkEmployeeAge(1443933295);
 
+-- Test trigger: ensureEmployeeAge
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073016,'Neo','X.','Martin',26182,6767209659,'F','2008-01-18','2017-09-15');
 
+--
+SELECT CalculateTotalSpent(1000);
+
+SELECT getNoFlightAttendants(1);
+
+sELECT getNoPilots(1);
+
+SELECT getNoFEmployees(1);
+
+SELECT revenue_flights(1);
+
+SELECT count_available_seats(1);
+
+SELECT getNoPassenger(1);
 
 
 
