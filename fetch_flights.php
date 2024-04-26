@@ -15,6 +15,7 @@ $stmt = $conn->prepare("SELECT Flight.FlightID, Flight.Status, Flight.FlightCode
                        FROM Flight 
                        JOIN Route ON Flight.RID = Route.ID 
                        WHERE RName = CONCAT(?, '-', ?) 
+                       AND Flight.Status = 'Unassigned'
                        AND DATE(EAT) BETWEEN ? AND ? 
                        AND DATE(EDT) BETWEEN ? AND ?");
 $stmt->bind_param("ssssss", $departureAirport, $destinationAirport, $datedaparting, $datereturning, $datedaparting, $datereturning);
