@@ -7,6 +7,20 @@ USE Test_New;
 
 SET SQL_SAFE_UPDATES = 0; -- note this for allow to not use the safe mode on update
 -- --------------------------------------------------------------------
+
+-- /*Paul added*/ -- TABLE NEW_SEAT_LOG to insert a new booking ticket and view
+-- NOTE: this table doesn't need to have any references constraint, just for viewing purpose
+
+CREATE TABLE new_seat_log 
+(
+	logid		INT		AUTO_INCREMENT,
+    PID_Decode	VARCHAR(25),
+    SeatNum		VARCHAR(3),
+    FlightCode	VARCHAR(6),
+    
+    PRIMARY KEY (logid)
+);
+
 CREATE TABLE Employee
 (
     SSN    		CHAR(10),
