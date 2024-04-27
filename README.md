@@ -45,7 +45,12 @@ http://localhost/airport_management/index.php
 You should be able to access the login page as below
 
 ![](/img/login.png)
+Account for Administrator (With all permissions granted):
 - `Username: sManager`
+- `Password: 123456`
+  
+Account for normal User (Some permissions are Restricted):
+- `Username: rUser`
 - `Password: 123456`
 
 <h2 align="center">🛫 Demonstration 🛫</h2>
