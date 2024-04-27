@@ -332,6 +332,17 @@ CREATE TABLE new_seat_log
     PRIMARY KEY (logid)
 );
 
+-- --------------------------------------------------------------------
+-- /*Paul added*/ -- TABLE PID_LOG to insert a PID for a new passenger
+-- NOTE: this table doesn't need to have any references constraint, just for viewing purpose
+
+CREATE TABLE pid_log 
+(
+	logid		INT(4) 		ZEROFILL    AUTO_INCREMENT,
+    
+    PRIMARY KEY (logid)
+);
+
 DROP USER IF EXISTS 'sManager'@'localhost';
 DROP USER IF EXISTS 'rUser'@'localhost';
 -- SELECT User, Host FROM mysql.user WHERE User='sManager' AND Host='localhost';
@@ -1085,13 +1096,40 @@ CREATE TRIGGER passenger_pid BEFORE INSERT
 ON Passenger
 FOR EACH ROW
 BEGIN
-    DECLARE pass_pid VARCHAR(25);
-	SET pass_pid = CONCAT('P', NEW.PID);
+    -- DECLARE pass_pid VARCHAR(25);
+	-- SET pass_pid = CONCAT('P', NEW.PID);
     
-    SET NEW.PID_Decode = pass_pid;
+    -- SET NEW.PID_Decode = pass_pid;
+
+    DECLARE pid_num INT(4) ZEROFILL;
+
+    INSERT INTO pid_log() VALUES ();
+    SELECT LAST_INSERT_ID() INTO pid_num FROM pid_log LIMIT 1;
+
+    SET NEW.PID_Decode = CONCAT('P', pid_num);
 END;
 //
 DELIMITER ;
+
+-- -- --------------------------------------------------------------------
+-- -- This trigger is used for create a Primary key of Passenger
+-- -- by concat the AUTO_INCRE postfix with the prefix 'P'
+-- DELIMITER //
+-- CREATE TRIGGER passenger_pid BEFORE INSERT
+-- ON pid_log
+-- FOR EACH ROW
+-- BEGIN
+--     -- DECLARE pass_pid VARCHAR(25);
+-- 	-- SET pass_pid = CONCAT('P', NEW.PID);
+    
+--     -- SET NEW.PID_Decode = pass_pid;
+
+--     UPDATE Passenger
+--     SET PID_Decode = CONCAT('P', NEW.logid)
+--     WHERE PID = NEW.logid;
+-- END;
+-- //
+-- DELIMITER ;
 -- --------------------------------------------------------------------
 -- This trigger is for update the status of the seat when ticket has been checked in
 -- DELIMITER //
