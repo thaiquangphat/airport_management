@@ -206,10 +206,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index.php?page=graph_average_salary"
-                                class="nav-link nav-graph_average_salary tree-item">
+                            <a href="./index.php?page=graph_annual_salary"
+                                class="nav-link nav-graph_annual_salary tree-item">
                                 <i class="fas fa-angle-right nav-icon"></i>
-                                <p>Graph Average Salary</p>
+                                <p>Graph Annual Salary</p>
                             </a>
                         </li>
                         <li class="nav-item">
