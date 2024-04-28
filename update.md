@@ -79,3 +79,7 @@
     - Make a simple view for booking flights.
     - Fix for enable to see the 'Cancel' button in the passenger's ticket list.
     - Create `new_seat_log` table for viewing every time making a new ticket, clear every new session.
+- [28/04/24]
+    - Adjust book site for better performance.
+    - New_Seat_Log changed structure, check DDL.
+    - New_Seat_Log refresh everytime log out (destruct session).

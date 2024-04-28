@@ -325,6 +325,7 @@ CREATE TABLE Operates
 CREATE TABLE new_seat_log 
 (
 	logid		INT		AUTO_INCREMENT,
+    ticket_id   INT,
     PID_Decode	VARCHAR(25),
     SeatNum		VARCHAR(3),
     FlightCode	VARCHAR(6),

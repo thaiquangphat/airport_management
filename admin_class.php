@@ -19,6 +19,9 @@ class Action
 	// Close the database connection and ends output buffering
     function __destruct()
     {
+        /*Paul added*/
+        $this->db->query("DELETE FROM new_seat_log");
+
         $this->db->close();
         ob_end_flush();
     }
@@ -3185,7 +3188,7 @@ class Action
         extract($_POST);
     
         try {
-            $check = $this->db->query("SELECT * FROM Ticket WHERE PID = '" . $PID . "' AND FlightID = '" . $FID . "'")->num_rows;
+            $check = $this->db->query("SELECT * FROM Ticket WHERE PID = '" . $PID . "' AND FlightID = '" . $FID . "' AND CancelTime <> '1970-01-01 00:00:00'")->num_rows;
             if ($check > 0) {
                 $test_err = "This passenger already booked a ticket for this flight.";
                 return 0;
@@ -3198,8 +3201,13 @@ class Action
                 $prow = $pqry->fetch_assoc();
                 $pid_decode = $prow['PID_Decode'];
                 
+                // get the newly inserted ticket id
+                $get = $this->db->query("SELECT * FROM Ticket ORDER BY TicketID DESC LIMIT 1");
+                $get_row = $get->fetch_assoc();
+                $tid = $get_row['TicketID'];
+                
                 // insert into log table for display
-                $log = $this->db->query("INSERT INTO new_seat_log SET PID_Decode = '" .$pid_decode. "', SeatNum = '" .$SeatNum."', FlightCode = '" .$flightcode."'");
+                $log = $this->db->query("INSERT INTO new_seat_log SET ticket_id = '" .$tid. "', PID_Decode = '" .$pid_decode. "', SeatNum = '" .$SeatNum."', FlightCode = '" .$flightcode."'");
                 return 1;
             }
 

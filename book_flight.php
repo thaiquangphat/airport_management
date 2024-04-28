@@ -116,6 +116,8 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                         <th>PID</th>
                                         <th>Seat Number</th>
                                         <th>Flight Code</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -130,6 +132,32 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                         <td><b><?php echo $rowlog['PID_Decode'] ?></b></td>
                                         <td><b><?php echo $rowlog['SeatNum'] ?></b></td>
                                         <td><b><?php echo $rowlog['FlightCode'] ?></b></td>
+                                        <?php
+                                            // get flight id for query
+                                            $fid_qry = $conn->query("SELECT * FROM Flight WHERE FlightCode = '" .$rowlog['FlightCode']. "'");
+                                            $fid_row = $fid_qry->fetch_assoc();
+                                            $fid = $fid_row['FlightID'];
+
+                                            // get cancel status for query
+                                            $pid_pass = substr($rowlog['PID_Decode'], 1);
+                                            $stat = $conn->query("SELECT * FROM Ticket WHERE PID = '" .$pid_pass. "' AND SeatNum = '" .$rowlog['SeatNum']. "' AND FlightID = '" .$fid. "' AND CancelTime <> '1970-01-01 00:00:00' LIMIT 1")->num_rows;
+                                            $can_stat = "";
+                                            if ($stat > 0) $can_stat = "Canceled";
+                                            else $can_stat = "Booked";
+                                        ?>
+                                        <td><b><?php echo $can_stat ?></b></td>
+                                        <td class="text-center">
+                                            <button type="button"
+                                                class="btn btn-default btn-sm btn-flat border-info wave-effect text-info dropdown-toggle"
+                                                data-toggle="dropdown" aria-expanded="true">
+                                                Action
+                                            </button>
+                                            <div class="dropdown-menu" style="">
+                                                <a class="dropdown-item view_airplane"
+                                                    href="./index.php?page=view_passenger&pid=<?php echo $pid_pass ?>"
+                                                    data-id="<?php echo $pid_pass ?>">View</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <?php endwhile; ?>
                                 </tbody>
