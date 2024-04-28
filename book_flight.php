@@ -113,6 +113,7 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                 <thead>
                                     <tr>
                                         <!-- <th>No.</th> -->
+                                        <th>Ticket ID</th>
                                         <th>PID</th>
                                         <th>Seat Number</th>
                                         <th>Flight Code</th>
@@ -123,12 +124,13 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                 <tbody>
                                     <?php
                                     $i = 1;
-                                    $qrylog = $conn->query("SELECT * FROM new_seat_log");
+                                    $qrylog = $conn->query("SELECT * FROM new_seat_log ORDER BY logid DESC");
                                     $i++;
                                     while($rowlog= $qrylog->fetch_assoc()):
                                     ?>
                                     <tr>
                                         <!-- <td><b><?php echo $rowlog['logid'] ?></b></td> -->
+                                        <td><b><?php echo $rowlog['ticket_id'] ?></b></td>
                                         <td><b><?php echo $rowlog['PID_Decode'] ?></b></td>
                                         <td><b><?php echo $rowlog['SeatNum'] ?></b></td>
                                         <td><b><?php echo $rowlog['FlightCode'] ?></b></td>

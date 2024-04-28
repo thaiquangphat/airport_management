@@ -20,7 +20,7 @@ class Action
     function __destruct()
     {
         /*Paul added*/
-        $this->db->query("DELETE FROM new_seat_log");
+        //$this->db->query("DELETE FROM new_seat_log");
 
         $this->db->close();
         ob_end_flush();
@@ -180,6 +180,9 @@ class Action
 	// logout meethod destroys the session and redirects user to login page.
     function logout()
     {
+        /*Paul added*/
+        $this->db->query("DELETE FROM new_seat_log");
+        
         session_destroy();
         foreach ($_SESSION as $key => $value) {
             unset($_SESSION[$key]);

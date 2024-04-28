@@ -83,3 +83,5 @@
     - Adjust book site for better performance.
     - New_Seat_Log changed structure, check DDL.
     - New_Seat_Log refresh everytime log out (destruct session).
+    - Fix dump delete new_seat_log.
+    - Clear new_seat_log only when log out.
