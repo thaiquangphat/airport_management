@@ -249,7 +249,7 @@ $('#manage_flight').submit(function(e) {
                     "error"); // Display the error message returned from the server
                 setTimeout(function() {
                     location.reload();
-                }, 750);
+                }, 20000);
             }
         }.bind(this) // Bind this to the AJAX context
     });
