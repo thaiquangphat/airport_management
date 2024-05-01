@@ -30,11 +30,11 @@
                                     $oldsup = $conn->query("SELECT * FROM Supervision WHERE SSN = '" . $SSN . "'");
                                     $supssn = $oldsup->fetch_assoc();
 
-                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee order by SSN asc ");
+                                    $sup = $conn->query("SELECT *, concat(fname, ' ', minit, ' ', lname) as name FROM Employee WHERE SSN != '" .$SSN. "' order by SSN asc ");
                                     while($row= $sup->fetch_assoc()):
                                 ?>
                                 <option value="<?php echo $row['SSN'] ?>"
-                                    <?php echo $supssn['SuperSSN'] == $row['SSN']  ? "selected" : '' ?>>
+                                    <?php echo $supssn != NULL && $supssn['SuperSSN'] == $row['SSN']  ? "selected" : '' ?>>
                                     <?php echo ucwords($row['SSN'] . ': ' . $row['name']) ?>
                                 </option>
                                 <?php endwhile; ?>

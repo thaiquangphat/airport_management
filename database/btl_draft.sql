@@ -538,6 +538,41 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE TRIGGER before_update_employee
+BEFORE UPDATE ON Employee
+FOR EACH ROW
+BEGIN 
+	DECLARE employeeAge INT;
+    DECLARE supervisorSalary FLOAT;
+    DECLARE empSalary FLOAT;
+    
+    -- age constraint
+    SET employeeAge = CalculateAge(NEW.DOB);
+    IF employeeAge < 18 OR employeeAge > 75 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Employee must be between 18 and 75 years old.';
+    END IF;
+    
+    -- Get the salary of the supervisor
+    SELECT Salary INTO supervisorSalary
+    FROM Employee
+    JOIN Supervision ON Employee.SSN = Supervision.SSN
+    WHERE Employee.SSN = Supervision.SuperSSN;
+    
+    SELECT Salary INTO empSalary
+    FROM Employee
+    WHERE SSN = NEW.SSN;
+    
+    -- Check if the new employee's salary is greater than or equal to the supervisor's salary
+    IF empSalary >= supervisorSalary THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Employee salary must be less than supervisor salary; Cannot let this Employee be Supervise by the Supervisor';
+    END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
 
 CREATE TRIGGER CheckSalaryAgainstSupervisor
 BEFORE INSERT ON Supervision
@@ -709,6 +744,34 @@ DELIMITER ;
 
 -- ----------------------------------------------------------------------------------------------------------- 
 -- This trigger is for checking EAT EDT AAT ADT of a Flight
+-- DELIMITER //
+
+-- CREATE TRIGGER check_flight_constraints
+-- BEFORE UPDATE ON Flight
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE error_message VARCHAR(255);
+
+--     IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
+--         SET error_message = 'EAT must be larger than EDT';
+--     ELSEIF NEW.EAT <> OLD.EAT AND NEW.EDT = OLD.EDT AND NEW.EAT <= OLD.EDT THEN
+--         SET error_message = 'EAT must be larger than EDT';
+--     ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
+--         SET error_message = 'AAT must be larger than ADT';
+--     ELSEIF NEW.AAT <> OLD.AAT AND NEW.AAT <= NEW.ADT THEN
+--         SET error_message = 'AAT must be larger than ADT';
+--     ELSE
+--         SET error_message = NULL; -- No error
+--     END IF;
+
+--     IF error_message IS NOT NULL THEN
+--         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
+--     END IF;
+-- END;
+-- //
+
+-- DELIMITER ;
+
 DELIMITER //
 
 CREATE TRIGGER check_flight_constraints
@@ -717,13 +780,9 @@ FOR EACH ROW
 BEGIN
     DECLARE error_message VARCHAR(255);
 
-    IF NEW.EAT <> OLD.EAT AND NEW.EDT <> OLD.EDT AND NEW.EAT <= NEW.EDT THEN
+    IF (NEW.EAT <> OLD.EAT OR NEW.EDT <> OLD.EDT) AND NEW.EAT <= NEW.EDT THEN
         SET error_message = 'EAT must be larger than EDT';
-    ELSEIF NEW.EAT <> OLD.EAT AND NEW.EDT = OLD.EDT AND NEW.EAT <= OLD.EDT THEN
-        SET error_message = 'EAT must be larger than EDT';
-    ELSEIF NEW.AAT <> OLD.AAT AND NEW.ADT <> OLD.ADT AND NEW.AAT <= NEW.ADT THEN
-        SET error_message = 'AAT must be larger than ADT';
-    ELSEIF NEW.AAT <> OLD.AAT AND NEW.AAT <= NEW.ADT THEN
+    ELSEIF (NEW.AAT <> OLD.AAT OR NEW.ADT <> OLD.ADT) AND NEW.AAT <= NEW.ADT THEN
         SET error_message = 'AAT must be larger than ADT';
     ELSE
         SET error_message = NULL; -- No error
