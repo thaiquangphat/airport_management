@@ -2210,13 +2210,13 @@ class Action
                     }
 
                     switch ($EmpType) {
-                        case 'ADSupport':
+                        case 'Administrative Support':
                             return 3;
-                        case 'FlightEmployee':
+                        case 'Flight Employee':
                             return 4;
                         case 'Engineer':
                             return 5;
-                        case 'TrafficController':
+                        case 'Traffic Controller':
                             return 6;
                         default:
                             return 1;
@@ -2224,7 +2224,9 @@ class Action
                 } else {
                     return 0; // Return an error message or code indicating failure
                 }
-            } else {
+            } 
+            // this 'else' is never encountered but just leave it here for sure
+            else {
                 $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");
                 
                 if ($save) {

@@ -8,10 +8,10 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="" class="control-label">New SSN</label>
+                            <label for="" class="control-label">SSN</label>
                             <input type="text" name="NewSSN" class="form-control form-control-sm"
                                 placeholder="Leave this section blank if no change in SSN"
-                                value="<?php echo isset($NewSSN) ? $NewSSN : '' ?>">
+                                value="<?php echo isset($SSN) ? $SSN : '' ?>" readonly>
                         </div>
                     </div>
                     <div class="col-md-4">
