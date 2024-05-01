@@ -85,3 +85,6 @@
     - New_Seat_Log refresh everytime log out (destruct session).
     - Fix dump delete new_seat_log.
     - Clear new_seat_log only when log out.
+- [01/05/24]
+    - Fix error in edit flight.
+    - Fix new_operate.
