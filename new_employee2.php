@@ -92,14 +92,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="" class="control-label">Employee Type</label>
                             <?php 
                                 $type="";
                                 $query="SELECT * FROM Administrative_Support WHERE SSN = '" . $SSN . "'";
                                 $verify=$conn->query($query)->num_rows;
-                                if ($verify > 0) $type="ADSupport";
+                                if ($verify > 0) $type="Administrative Support";
 
                                 $query="SELECT * FROM Engineer WHERE SSN = '" . $SSN . "'";
                                 $verify=$conn->query($query)->num_rows;
@@ -107,17 +107,17 @@
 
                                 $query="SELECT * FROM Flight_Employee WHERE FESSN = '" . $SSN . "'";
                                 $verify=$conn->query($query)->num_rows;
-                                if ($verify > 0) $type="FlightEmployee";
+                                if ($verify > 0) $type="Flight Employee";
 
                                 $query="SELECT * FROM Traffic_Controller WHERE SSN = '" . $SSN . "'";
                                 $verify=$conn->query($query)->num_rows;
-                                if ($verify > 0) $type="TrafficController";
+                                if ($verify > 0) $type="Traffi Controller";
                             ?>
                             <input type="text" class="form-control form-control-sm" name="EmpType"
                                 value="<?php echo isset($type) ? $type : '' ?>" readonly>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">Choose type</label>
                             <select class="form-control form-control-sm select2" name="NewEmpType">
@@ -129,7 +129,7 @@
                                 <option value="TrafficController">Traffic Controller</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <hr>
                 <div class="col-lg-12 text-right justify-content-center d-flex">

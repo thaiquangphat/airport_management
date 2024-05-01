@@ -2197,7 +2197,7 @@ class Action
                     }
                 }
             }
-    
+            $NewEmpType = 'No change';
             if ($EmpType == $NewEmpType || $NewEmpType == 'No change') {
                 // Execute the SQL update query
                 $save = $this->db->query("UPDATE Employee SET $data WHERE SSN = '" . $SSN . "'");

@@ -88,3 +88,4 @@
 - [01/05/24]
     - Fix error in edit flight.
     - Fix new_operate.
+    - Update employee disable edit type (**so many constraint/trigger conflicts**).

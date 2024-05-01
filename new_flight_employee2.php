@@ -17,7 +17,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="control-label">Type</label>
-                            <select class="form-control form-control-sm select2" name="FType">
+                            <select class="form-control form-control-sm select2" name="FType" disabled>
                                 <?php
                                     $type="";
                                     $check=$conn->query("SELECT * FROM Pilot WHERE SSN = '" . $FSSN . "'")->num_rows; 
@@ -32,6 +32,7 @@
                                 <option value="Pilot" <?php echo isset($type) && $type == 'Pilot' ? 'selected' : '' ?>>
                                     Pilot</option>
                             </select>
+                            <input type="hidden" name="FType" value="<?php echo $type; ?>">
                         </div>
                     </div>
                 </div>
