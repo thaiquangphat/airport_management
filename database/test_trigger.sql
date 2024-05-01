@@ -53,9 +53,24 @@ SELECT * FROM Seat WHERE FlightID = 1 AND SeatNum = '09B';
 -- Test trigger 13: generate all seats after inserting a flight into database
 SELECT * FROM seat WHERE FlightID = 51;
 
--- Test constraint: Check legitimate value of EAT/EDT/AAT/ADT when isnerting a flight
-INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) VALUES (7,'Landed',14,9656325312,'QC0113','2024-05-03 23:00:00','2024-05-03 08:00:00','2024-05-02 23:10:10','2024-05-03 07:15:52');
-INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) VALUES (7,'Landed',14,9656325312,'QC0114','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','2024-05-03 07:15:52');
+-- Test constraint "check-salary": salary must be > 0
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (0123456788,'Cat','M.','Mr',-99852,1726864584,'M','1999-08-11','2018-11-24');
+
+-- Test constraint "check-valid-date": Check legitimate value of EAT/EDT/AAT/ADT when isnerting a flight
+INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
+VALUES (7,'Landed',14,9656325312,'QC0113','2024-05-03 23:00:00','2024-05-03 08:00:00','2024-05-02 23:10:10','2024-05-03 07:15:52');		-- fail
+INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
+VALUES (7,'Landed',14,9656325312,'QC0114','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','2024-05-03 07:15:52');		-- fail
+INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
+VALUES (7,'Landed',14,9656325312,'QC0115','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','1970-01-01 00:00:00');		-- work
+
+-- Test trigger 16: check-flight-constraints: Check legitimate value of EAT/EDT/AAT/ADT when UPDATING a flight
+-- PHẢI LÀM TEST TRIGGER 3 TRƯỚC VÌ flightID là auto-increment
+UPDATE flight SET EDT = '2024-05-03 09:00:00' WHERE FlightID = 52;		-- will fail
+UPDATE flight SET EAT = '2024-05-02 08:00:00' WHERE FlightID = 52;		-- will fail
+UPDATE flight SET ADT = '2024-05-03 23:30:00' WHERE FlightID = 52;		-- will work
+UPDATE flight SET AAT = '2024-05-03 22:30:00' WHERE FlightID = 52;		-- will fail
+UPDATE flight SET AAT = '2024-05-04 09:00:00' WHERE FlightID = 52;		-- will work
 
 -- Test trigger 14: check insert ticket when seat is unavailable
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (1003, 999, 1, '2024-02-13 13:31:17', '09B', '1970-01-01', '2024-04-17 13:44:38', 'Yes');
@@ -65,24 +80,12 @@ INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Afternoon');			-- Will no
 INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Night');				-- Will not work because this member already works in the morning
 INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Evening');			-- Will work
 
-
-UPDATE operates SET FSSN = 8281942741 WHERE FSSN = 3544575412 AND FlightID = 1;
-UPDATE operates SET FSSN = 7356719401 WHERE FSSN = 8281942741 AND FlightID = 1;
-UPDATE operates SET FSSN = 7356719401 WHERE FSSN = 1036077180 AND FlightID = 1;
+-- Test trigger 17: ensureEmployeeAge
+INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073016,'Neo','X.','Martin',26182,6767209659,'F','2008-01-18','2017-01-18');
 
 -- Test function getAge (of passenger):
 SELECT getAge(1000);
 
--- CHECK constraint:
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073016,'Neo','X.','Martin',-26182,6767209659,'F','2008-01-18','2017-09-15');
-
--- Function: check employee age (cái này có cần thiết không?? khi mà đã chặn tuổi ngay từ trigger)
-SELECT checkEmployeeAge(1443933295);
-
--- Test trigger: ensureEmployeeAge
-INSERT INTO employee(SSN,Fname,Minit,Lname,Salary,Phone,Sex,DOB,Date_Start) VALUES (1723073016,'Neo','X.','Martin',26182,6767209659,'F','2008-01-18','2017-09-15');
-
---
 SELECT CalculateTotalSpent(1000);
 
 SELECT getNoFlightAttendants(1);
