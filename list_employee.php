@@ -52,7 +52,7 @@
                         <td><b><?php echo $row['Phone'] ?></b></td>
                         <td><b><?php echo $row['DOB'] ?></b></td>
                         <td><b><?php 
-                            $qry2 = $conn->query("SELECT COALESCE(CalculateAgeBySSN({$row['emp_SSN']}), 0) as empage")->fetch_assoc();
+                            $qry2 = $conn->query("SELECT COALESCE(CalculateAgeBySSN('{$row['emp_SSN']}'), 0) as empage")->fetch_assoc();
                             echo $qry2['empage']; 
                         ?></b></td>
                         <td><b><?php echo $row['role'] ?></b></td>

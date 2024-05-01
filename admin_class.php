@@ -1712,16 +1712,16 @@ class Action
                         $row = $qry->fetch_assoc();
 
                         // PHP trigger for price
-                        if ($Salary > $row['Salary']) {
-                            $test_err = "Employee must have salary less than its supervisor";
-                            $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $SSN ."'");
-                            if (!$delete) {
-                                $test_err = "Failed to delete";
-                                return 0;
-                            }
+                        // if ($Salary > $row['Salary']) {
+                        //     $test_err = "Employee must have salary less than its supervisor";
+                        //     $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $SSN ."'");
+                        //     if (!$delete) {
+                        //         $test_err = "Failed to delete";
+                        //         return 0;
+                        //     }
 
-                            return 0;
-                        }
+                        //     return 0;
+                        // }
 
                         $sup = $this->db->query("INSERT INTO Supervision SET SSN = '" .$SSN. "', SuperSSN = '" . $super . "'");
                         if (!$sup) {
@@ -1757,6 +1757,7 @@ class Action
             }
         
             // Store error message in $test_err
+            $delete = $this->db->query("DELETE FROM Employee WHERE SSN = '" . $SSN ."'");
             $test_err = $error_message;
             return $test_err; // Return the error message
         }

@@ -24,7 +24,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="" class="control-label">Supervisor</label>
-                            <select class="form-control form-control-sm select2" name="super">
+                            <select class="form-control form-control-sm select2" name="super" disabled>
                                 <option></option>
                                 <?php
                                     $oldsup = $conn->query("SELECT * FROM Supervision WHERE SSN = '" . $SSN . "'");
@@ -39,6 +39,7 @@
                                 </option>
                                 <?php endwhile; ?>
                             </select>
+                            <input type="hidden" name="super" value="<?php echo $supssn; ?>">
                         </div>
                     </div>
                 </div>

@@ -553,18 +553,24 @@ BEGIN
         SET MESSAGE_TEXT = 'Employee must be between 18 and 75 years old.';
     END IF;
     
-    -- Get the salary of the supervisor
-    SELECT Salary INTO supervisorSalary
-    FROM Employee
-    JOIN Supervision ON Employee.SSN = Supervision.SSN
-    WHERE Employee.SSN = Supervision.SuperSSN;
+    SELECT E2.Salary INTO supervisorSalary
+    FROM Employee E1
+    JOIN Supervision ON E1.SSN = Supervision.SSN
+    JOIN Employee E2 ON Supervision.SuperSSN = E2.SSN
+    WHERE E1.SSN = NEW.SSN;
     
-    SELECT Salary INTO empSalary
-    FROM Employee
-    WHERE SSN = NEW.SSN;
+    -- Get the salary of the supervisor
+    -- SELECT Salary INTO supervisorSalary
+--     FROM Employee
+--     JOIN Supervision ON Employee.SSN = Supervision.SSN
+--     WHERE Employee.SSN = Supervision.SuperSSN;
+    
+    -- SELECT Salary INTO empSalary
+--     FROM Employee
+--     WHERE SSN = NEW.SSN;
     
     -- Check if the new employee's salary is greater than or equal to the supervisor's salary
-    IF empSalary >= supervisorSalary THEN
+    IF NEW.Salary >= supervisorSalary THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Employee salary must be less than supervisor salary; Cannot let this Employee be Supervise by the Supervisor';
     END IF;
