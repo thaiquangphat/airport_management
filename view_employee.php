@@ -93,7 +93,7 @@ APCode char(3)
                             </dl>
                             <dl>
                                 <dt><b class="border-bottom border-primary">Role</b></dt>
-                                <dd><?php echo ucwords($role) ?></dd>
+                                <dd><?php echo $role == "" ? 'Unknown' : ucwords($role) ?></dd>
                             </dl>
                         </div>
                     </div>
