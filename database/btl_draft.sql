@@ -270,7 +270,7 @@ CREATE TABLE Ticket
     CheckInTime   	DATETIME DEFAULT '1970-01-01 00:00:00',
     CheckInStatus 	ENUM ('No', 'Yes') DEFAULT 'No',
     BookTime      	DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
-    CancelTime		DATETIME,
+    CancelTime		DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
     FlightID      	INT,
     PRIMARY KEY (TicketID),
     FOREIGN KEY (PID) REFERENCES Passenger (PID) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1208,7 +1208,7 @@ BEGIN
     SELECT COUNT(*)
     INTO existing_ticket
     FROM Ticket
-    WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+    WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum AND CancelTime = '1970-01-01 00:00:00';
 
     IF existing_ticket > 0 THEN
         SIGNAL SQLSTATE '45000'
