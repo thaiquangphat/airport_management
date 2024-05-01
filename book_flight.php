@@ -96,11 +96,15 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                     //                         ");
                                     
                                     $seats = $conn->query("SELECT DISTINCT Seat.SeatNum, Seat.Class, Seat.Price
-                                                             FROM Seat 
-                                                             WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
-                                                             AND (Seat.SeatNum) NOT IN 
-                                                                 (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND (CheckInStatus = 'No' OR CancelTime <> '1970-01-01 00:00:00'))
-                                                             ");
+                                                            FROM Seat 
+                                                            WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
+                                                            AND (Seat.SeatNum) NOT IN 
+                                                            (
+                                                                SELECT SeatNum FROM Ticket 
+                                                                WHERE Ticket.FlightID = ". $row['FlightID'] ."
+                                                                AND (Ticket.CheckInStatus = 'Yes' OR (Ticket.CheckInStatus = 'No' AND Ticket.CancelTime = '1970-01-01 00:00:00'))
+                                                            );
+                                     ");
                                     
                                     while($srow= $seats->fetch_assoc()):
                                 ?>
