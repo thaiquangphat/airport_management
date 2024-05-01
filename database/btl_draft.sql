@@ -247,15 +247,6 @@ CREATE TABLE Flight
 	)
 );
 
--- ------------------------------------------ IMPORTANT --------------------------------------------------
--- Assumption: Passenger can still cancel his flight before his check-in time.
--- Case 1: Passenger SUCCESSFULLY booked his flight. CheckinTime = DEFAULT, CheckinStatus = 'No', Seat.Status = 'Unavailable'.
--- Case 2: Passenger cancels the flight. CheckinTime = DEFAULT, CheckinStatus = 'No', Seat.Status = 'Available'.
--- Case 3: Passenger did not check-in or late check-in. CheckinTime = DEFAULT, CheckinStatus = 'No',
---                                                      [Seat.Status = 'Available' AT THE TIME OF (Flight.EDT - 15MINUTES)]
--- Case 4: Passenger check-in on-time at the airport and certainly fly: CheckInStatus = 'Yes', Seat.Status = 'Unavailable'.
--- Every passenger must check-in their flight [at least 15 minutes and at most 24 hours] in advance of Flight.EDT.
-
 CREATE TABLE Seat
 (
     FlightID INT,
@@ -520,9 +511,7 @@ END;
 -- ----------------------------------------------------------------------------------------------------------- 
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
-
--- Hàm này mơ hồ vậy
-CREATE FUNCTION CalculateAge(birthDate DATE)
+CREATE FUNCTION CalculateAge(birthDate DATE)			-- use to ensure employee age
 RETURNS INT DETERMINISTIC
 BEGIN
     DECLARE age INT;
@@ -532,44 +521,7 @@ END //
 
 DELIMITER ;
 
--- ----------------------------------------------------------------------------------------------------------- 
--- Get the age of the Passenger
-delimiter //
-CREATE FUNCTION getAge (pid_input INT)
-RETURNS INT DETERMINISTIC
-BEGIN
-	DECLARE age INT;
-    
-	SELECT TIMESTAMPDIFF(YEAR, dob, NOW()) INTO age
-    FROM passenger AS p
-    WHERE p.pid = pid_input;
-    
-    RETURN age;
-END
-//
-
-delimiter //
-CREATE FUNCTION CheckEmployeeAge(ESSN INT) RETURNS BOOLEAN DETERMINISTIC
-BEGIN
-    DECLARE emp_age INT;
-    SELECT TIMESTAMPDIFF(YEAR, DOB, NOW()) INTO emp_age FROM Employee WHERE SSN = ESSN;
-    
-    IF (emp_age < 18 OR emp_age > 75) THEN
-        RETURN FALSE;
-    ELSE
-        RETURN TRUE;
-    END IF;
-END;
-//
-
-
--- ----------------------------------------------------------------------------------------------------------- 
--- Trigger
--- ----------------------------------------------------------------------------------------------------------- 
--- DELIMITER //
-
--- -- Đã có function + Constraint CHECK thì có cần trigger nữa không?
--- Edit: à thì mysql ko support constraint checking với functions
+DELIMITER //
 CREATE TRIGGER EnsureEmployeeAge
 BEFORE INSERT ON Employee
 FOR EACH ROW
@@ -612,52 +564,6 @@ END //
 
 DELIMITER ;
 
--- ----------------------------------------------------------------------------------------------------------- 
--- A flight must have at least 2 pilots and 2 flight attendants
-delimiter //
-CREATE TRIGGER Operate_2_Pilot_FA_AU AFTER UPDATE
-ON Flight_Employee
-FOR EACH ROW
-BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE FlightID INT; -- Define FlightID variable
-    DECLARE numPilots INT;
-    DECLARE numFlightAttendants INT;
-    DECLARE curFlight CURSOR FOR
-        SELECT DISTINCT FlightID
-        FROM Operates
-        WHERE FSSN = OLD.FESSN;
-    
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
-    OPEN curFlight;
-    read_loop: LOOP
-        FETCH curFlight INTO FlightID;
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
-        
-        -- Count the number of pilots for the current flight
-        SELECT COUNT(*) INTO numPilots
-        FROM Operates o
-        JOIN Pilot p ON o.FSSN = p.SSN
-        WHERE o.FlightID = FlightID;
-
-        -- Count the number of flight attendants for the current flight
-        SELECT COUNT(*) INTO numFlightAttendants
-        FROM Operates o
-        JOIN Flight_Attendant fa ON o.FSSN = fa.SSN
-        WHERE o.FlightID = FlightID;
-
-        -- Check if the current flight violates the constraint
-        IF numPilots < 2 OR numFlightAttendants < 2 THEN
-            SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Each flight must have at least 2 pilots and 2 flight attendants.';
-        END IF;
-    END LOOP;
-    CLOSE curFlight;
-END //
-delimiter ;
 -- --------------------------------------------------------------------
 -- ----------------------------------------------------------------------------------------------------------- 
 DELIMITER //
