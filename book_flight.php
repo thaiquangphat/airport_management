@@ -88,12 +88,20 @@ $availableSeats = $resultSeats->fetch_all(MYSQLI_ASSOC);
                                     //                        AND (Seat.SeatNum) NOT IN 
                                     //                        (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND CheckInStatus = 'No')");
                                     
+                                    // $seats = $conn->query("SELECT DISTINCT Seat.SeatNum, Seat.Class, Seat.Price
+                                    //                         FROM Seat 
+                                    //                         WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
+                                    //                         AND (Seat.SeatNum) NOT IN 
+                                    //                             (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND (CheckInStatus = 'No' OR CancelTime <> '1970-01-01 00:00:00'))
+                                    //                         ");
+                                    
                                     $seats = $conn->query("SELECT DISTINCT Seat.SeatNum, Seat.Class, Seat.Price
-                                                            FROM Seat 
-                                                            WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
-                                                            AND (Seat.SeatNum) NOT IN 
-                                                                (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND CheckInStatus = 'No')
-                                                            ");
+                                                             FROM Seat 
+                                                             WHERE Seat.FlightID = " . $row['FlightID'] . " AND Seat.Status = 'Available' 
+                                                             AND (Seat.SeatNum) NOT IN 
+                                                                 (SELECT SeatNum FROM Ticket WHERE FlightID = " . $row['FlightID'] . " AND (CheckInStatus = 'No' OR CancelTime <> '1970-01-01 00:00:00'))
+                                                             ");
+                                    
                                     while($srow= $seats->fetch_assoc()):
                                 ?>
                                 <option value="<?php echo $srow['SeatNum'] ?>"

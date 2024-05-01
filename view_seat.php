@@ -8,8 +8,8 @@
 
         $qry = $conn->query("SELECT Seat.FlightID, Seat.SeatNum, Seat.Class, Seat.Status, Seat.Price, Ticket.TicketID, Ticket.PID, Flight.FlightCode
                              FROM Seat
-                             JOIN Ticket ON Seat.FlightID = Ticket.FlightID AND Seat.SeatNum = Ticket.SeatNum
-                             JOIN Flight ON Flight.FlightID = Seat.FlightID
+                             LEFT JOIN Ticket ON Seat.FlightID = Ticket.FlightID AND Seat.SeatNum = Ticket.SeatNum
+                             LEFT JOIN Flight ON Flight.FlightID = Seat.FlightID
                              WHERE Seat.FlightID = '" . $fid . "' AND Seat.SeatNum = '" . $seatnum . "'")->fetch_array();
         foreach($qry as $k => $v){
             $$k = $v;
@@ -142,8 +142,7 @@
                                     SELECT Passenger.PID_Decode, Passenger.PID, Passenger.PassportNo, CONCAT(Passenger.Fname, ' ', Passenger.Lname) as Name, Passenger.DOB, Passenger.Sex, Passenger.Nationality, Ticket.SeatNum
                                     FROM Ticket
                                     JOIN Passenger ON Passenger.PID = Ticket.PID 
-                                    WHERE Passenger.PID = '" . $PID . "' AND Ticket.FlightID = '" .$FlightID."'");
-
+                                    WHERE Passenger.PID = '" . $PID . "' AND Ticket.FlightID = '" .$FlightID."' AND Ticket.SeatNum = '" .$seatnum."'");
                                 $i++;
                                 while ($row = $feinfo->fetch_assoc()):
                                 ?>

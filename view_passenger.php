@@ -64,6 +64,7 @@ if(isset($_GET['pid'])){
                                 <th>Class</th>
                                 <th>Price</th>
                                 <th>Book Time</th>
+                                <th>Cancel Time</th>
                                 <th>Check In</th>
                                 <th>Action</th>
                             </thead>
@@ -93,6 +94,7 @@ if(isset($_GET['pid'])){
                                     <td class=""><?php echo $row['Class'] ?></td>
                                     <td class=""><?php echo $row['Price'] ?></td>
                                     <td class=""><?php echo $row['BookTime'] ?></td>
+                                    <td class=""><?php echo $row['CancelTime'] ?></td>
                                     <td class=""><?php echo $row['CheckInStatus'] ?></td>
                                     <td class="">
                                         <button type="button"
