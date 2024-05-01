@@ -1133,13 +1133,23 @@ CREATE TRIGGER update_seat_status_after
 AFTER UPDATE ON Ticket
 FOR EACH ROW
 BEGIN
-    IF NEW.CheckInStatus = 'Yes' THEN
+    IF NEW.CheckInStatus = 'Yes' AND NEW.CheckInStatus <> OLD.CheckInStatus THEN
         UPDATE Seat
-        SET Status = 'Unavailable'
+        SET Seat.Status = 'Unavailable'
+        WHERE Seat.FlightID = NEW.FlightID AND Seat.SeatNum = NEW.SeatNum;
+    END IF;
+    
+    IF NEW.CancelTime != '1970-01-01 00:00:00' AND NEW.CancelTime != OLD.CancelTime THEN
+        UPDATE Seat
+        SET Status = 'Available'
         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
     END IF;
 END;
 //
+
+DELIMITER ;
+
+DELIMITER //
 
 -- BEFORE UPDATE Trigger to set CheckInTime
 CREATE TRIGGER update_checkin_time_before
@@ -1154,21 +1164,21 @@ END;
 
 DELIMITER ;
 
-DELIMITER //
+-- DELIMITER //
 
-CREATE TRIGGER update_seat_status_on_cancel
-AFTER UPDATE ON Ticket
-FOR EACH ROW
-BEGIN
-    IF NEW.CancelTime != '1970-01-01 07:00:00' THEN
-        UPDATE Seat
-        SET Status = 'Available'
-        WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
-    END IF;
-END;
-//
+-- CREATE TRIGGER update_seat_status_on_cancel
+-- AFTER UPDATE ON Ticket
+-- FOR EACH ROW
+-- BEGIN
+--     IF NEW.CancelTime != '1970-01-01 07:00:00' THEN
+--         UPDATE Seat
+--         SET Status = 'Available'
+--         WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum;
+--     END IF;
+-- END;
+-- //
 
-DELIMITER ;
+-- DELIMITER ;
 
 -- --------------------------------------------------------------------
 -- This trigger is for update the status of the seat when delete a ticket

@@ -107,21 +107,18 @@ if(isset($_GET['pid'])){
                                                 href="./index.php?page=view_ticket&ticketid=<?php echo $row['TicketID'] ?>"
                                                 data-id="<?php echo $row['TicketID'] ?>">View</a>
 
-                                            <?php if($row['CancelTime'] == '1970-01-01 00:00:00'): ?>
+                                            <?php if($row['CancelTime'] == '1970-01-01 00:00:00' && $row['CheckInStatus'] == 'No'): ?>
 
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item edit_ticket"
                                                 href="./index.php?page=edit_ticket&tid=<?php echo $row['TicketID'] ?>"
                                                 data-id="<?php echo $row['TicketID'] ?>">Edit</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item delete_ticket" href="javascript:void(0)"
-                                                data-id="<?php echo $row['TicketID'] ?>">Delete</a>
                                             
                                             <?php endif; ?>
                                             
                                             <!-- New dropdown menu item for Cancel action -->
 
-                                            <?php if($row['CheckInStatus'] == 'No'): ?>
+                                            <?php if($row['CheckInStatus'] == 'No' && $row['CancelTime'] == '1970-01-01 00:00:00'): ?>
 
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item cancel_ticket" href="javascript:void(0)"

@@ -100,11 +100,13 @@
                                             data-toggle="dropdown" aria-expanded="true">
                                             Action
                                         </button>
+                                        <?php if($row['CancelTime'] == '1970-01-01 00:00:00' && $row['CheckInStatus'] == 'No'): ?>
                                         <div class="dropdown-menu" style="">
                                             <a class="dropdown-item edit_ticket"
                                                 href="./index.php?page=edit_ticket&tid=<?php echo $row['TicketID'] ?>"
                                                 data-id="<?php echo $row['TicketID'] ?>">Edit</a>
                                         </div>
+                                        <?php endif ?>
                                     </td>
                                 </tr>
                                 <?php 
