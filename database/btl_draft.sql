@@ -240,7 +240,11 @@ CREATE TABLE Flight
     FOREIGN KEY (RID) REFERENCES Route (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AirplaneID) REFERENCES Airplane (AirplaneID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `check-valid-date` CHECK (( EAT > EDT ))
+    CONSTRAINT `check-valid-date` CHECK (
+		(EAT > EDT AND AAT > ADT) OR 
+		(AAT = '1970-01-01 00:00:00' AND ADT = '1970-01-01 00:00:00') OR 
+		(AAT = '1970-01-01 00:00:00' AND ADT != '1970-01-01 00:00:00')
+	)
 );
 
 -- ------------------------------------------ IMPORTANT --------------------------------------------------

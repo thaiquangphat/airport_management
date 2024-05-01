@@ -66,6 +66,10 @@ INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Night');				-- Will not w
 INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Evening');			-- Will work
 
 
+UPDATE operates SET FSSN = 8281942741 WHERE FSSN = 3544575412 AND FlightID = 1;
+UPDATE operates SET FSSN = 7356719401 WHERE FSSN = 8281942741 AND FlightID = 1;
+UPDATE operates SET FSSN = 7356719401 WHERE FSSN = 1036077180 AND FlightID = 1;
+
 -- Test function getAge (of passenger):
 SELECT getAge(1000);
 
