@@ -36,7 +36,7 @@
                                 $i = 1;
                                 $flight_employee = $conn->query("SELECT Operates.fssn, CONCAT(Employee.Fname, ' ', Employee.Lname) as name, 
                                                                 CASE 
-                                                                    WHEN Operates.Role = 'FA' THEN 'Flight Attendant'
+                                                                    WHEN Operates.Role = 'Flight Attendant' THEN 'Flight Attendant'
                                                                     ELSE 'Pilot'
                                                                 END AS Role
                                                                 FROM Operates JOIN Employee ON Operates.fssn = Employee.ssn WHERE FlightID = '" . $fid . "'");

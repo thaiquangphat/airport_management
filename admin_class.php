@@ -1328,14 +1328,26 @@ class Action
         try {
             // Check if all required fields are received
             if (!isset($FlightID) || !isset($FlightCode)) { // Add other required fields as needed
-                return "MissingFields"; // Return a string to identify the missing fields
+                return "Missing Fields"; // Return a string to identify the missing fields
             }
     
             // Check for existing FlightID and FlightCode
             $checkFlight = $this->db->query("SELECT * FROM Flight WHERE FlightID = '$FlightID' AND FlightCode = '$FlightCode'");
             if ($checkFlight->num_rows > 0 && !empty($FlightID)) {
-                $test_err = "Flight ID and Flight Code combination already exists";
-                return 2; // Flight ID and Flight Code combination already exists
+                // $test_err = "Flight ID and Flight Code combination already exists"; // Flight ID and Flight Code combination already exists
+                /*paul added*/
+                /*---------------------------------------------*/ 
+                $update = $this->update_flight($test_err);
+                if (empty($FlightID)) {
+                    $qry = $this->db->query("SELECT * FROM Flight WHERE FlightCode = '$FlightCode'");
+                    $row = $qry->fetch_assoc();
+                    $_SESSION['fid'] = $row['FlightID'];
+                } else {
+                    $_SESSION['fid'] = $FlightID;
+                }
+                /*---------------------------------------------*/ 
+                if ($update == 0) return 0;
+                return $update;
             }
     
             // Check for existing FlightID
