@@ -5,8 +5,8 @@ SELECT * FROM route;
 
 -- Test trigger 2: Check before delete An Employee
 SELECT * FROM test_new.operates;
-DELETE FROM Employee WHERE SSN='2049569671';		-- Avoid delete flight attendant to ensure total constraint of `operates`
-DELETE FROM Employee WHERE SSN='2552794347';		-- Avoid delete pilot to ensure total constraint of `operates`
+DELETE FROM Employee WHERE SSN='2049569671';		-- Avoid delete flight attendant to ensure total constraint of operates
+DELETE FROM Employee WHERE SSN='2552794347';		-- Avoid delete pilot to ensure total constraint of operates
 SELECT * FROM test_new.tcshift;
 DELETE FROM Employee WHERE SSN='3058929914';		-- Avoid delete ATC member who only controls one flight
 SELECT * FROM test_new.expertise;
