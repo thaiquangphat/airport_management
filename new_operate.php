@@ -55,7 +55,7 @@
                                         </button>
                                         <div class="dropdown-menu" style="">
                                             <a class="dropdown-item view_employee"
-                                                href="./index.php?page=view_employee&id=<?php echo $row['fssn'] ?>"
+                                                href="./index.php?page=view_employee&ssn=<?php echo $row['fssn'] ?>"
                                                 data-id="<?php echo $row['fssn'] ?>">View</a>
 
                                             <div class="dropdown-divider"></div>
@@ -118,7 +118,7 @@
                                         </button>
                                         <div class="dropdown-menu" style="">
                                             <a class="dropdown-item view_employee"
-                                                href="./index.php?page=view_employee&id=<?php echo $row['ssn'] ?>"
+                                                href="./index.php?page=view_employee&ssn=<?php echo $row['ssn'] ?>"
                                                 data-id="<?php echo $row['ssn'] ?>">View</a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item save_operate" href="javascript:void(0)"

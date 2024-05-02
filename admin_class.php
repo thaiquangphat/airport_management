@@ -1544,7 +1544,7 @@ class Action
             if ($check > 0) {
                 $role = 'Pilot';
             } else {
-                $role = 'FA';
+                $role = 'Flight Attendant';
             }
     
             // Execute the SQL insert query
