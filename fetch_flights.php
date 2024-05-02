@@ -51,8 +51,6 @@ while($row = $result->fetch_assoc()):
                         <a class="dropdown-item" href="./index.php?page=edit_flight&flightid='.$row["FlightID"].'">Edit</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="./index.php?page=book_flight&flightid='.$row['FlightID'].'">Booking</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item delete_flight" href="javascript:void(0)" data-id="'.$row['FlightID'].'">Delete</a>
                     </div>
                 </td>
             </tr>';

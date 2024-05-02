@@ -20,7 +20,7 @@ foreach($qry as $k => $v){
                     <div class="col-md-7 col-md-offset-1">
                         <div class="booking-form">
                             <form>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <div class="form-checkbox">
                                         <label for="baseflight">
                                             <input type="radio" id="baseflight" name="flight-type">
@@ -31,7 +31,7 @@ foreach($qry as $k => $v){
                                             <span></span>Returning Flight
                                         </label>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
