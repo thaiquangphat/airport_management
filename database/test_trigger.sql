@@ -4,9 +4,12 @@ INSERT INTO airport(APCode, APName, City, Latitude, Longitude) VALUES ('AAA', 'A
 SELECT * FROM route;
 
 -- Test trigger 2: Check before delete An Employee
+SELECT * FROM test_new.operates;
 DELETE FROM Employee WHERE SSN='2049569671';		-- Avoid delete flight attendant to ensure total constraint of `operates`
 DELETE FROM Employee WHERE SSN='2552794347';		-- Avoid delete pilot to ensure total constraint of `operates`
+SELECT * FROM test_new.tcshift;
 DELETE FROM Employee WHERE SSN='3058929914';		-- Avoid delete ATC member who only controls one flight
+SELECT * FROM test_new.expertise;
 DELETE FROM Employee WHERE SSN='8660516635';		-- Avoid delete the engineer who is the sole expert of a model (Each model must have at least an engineer participated in)
 
 -- Test trigger 3: Calculate the Base Price for the Flight based on the distance of the Route
@@ -63,14 +66,8 @@ INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT)
 VALUES (7,'Landed',14,9656325312,'QC0114','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','2024-05-03 07:15:52');		-- fail
 INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
 VALUES (7,'Landed',14,9656325312,'QC0115','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','1970-01-01 00:00:00');		-- work
-
--- Test trigger 16: check-flight-constraints: Check legitimate value of EAT/EDT/AAT/ADT when UPDATING a flight
--- PHẢI LÀM TEST TRIGGER 3 TRƯỚC VÌ flightID là auto-increment
-UPDATE flight SET EDT = '2024-05-03 09:00:00' WHERE FlightID = 52;		-- will fail
-UPDATE flight SET EAT = '2024-05-02 08:00:00' WHERE FlightID = 52;		-- will fail
-UPDATE flight SET ADT = '2024-05-03 23:30:00' WHERE FlightID = 52;		-- will work
-UPDATE flight SET AAT = '2024-05-03 22:30:00' WHERE FlightID = 52;		-- will fail
-UPDATE flight SET AAT = '2024-05-04 09:00:00' WHERE FlightID = 52;		-- will work
+INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
+VALUES (7,'Landed',14,9656325312,'QC0116','2024-05-02 23:00:00','2024-05-03 08:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00');		-- work
 
 -- Test trigger 14: check insert ticket when seat is unavailable
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (1003, 999, 1, '2024-02-13 13:31:17', '09B', '1970-01-01', '2024-04-17 13:44:38', 'Yes');
@@ -102,19 +99,10 @@ SELECT getNoPassenger(1);
 
 SELECT getDuration(1);
 
-/*paul added*/
--- Test constraint "check-valid-date": Check legitimate value of EAT/EDT/AAT/ADT when isnerting a flight
-INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
-VALUES (7,'Landed',14,9656325312,'QC0113','2024-05-03 23:00:00','2024-05-03 08:00:00','2024-05-02 23:10:10','2024-05-03 07:15:52');		-- fail
-INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
-VALUES (7,'Landed',14,9656325312,'QC0114','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','2024-05-03 07:15:52');		-- fail
-INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT) 
-VALUES (7,'Landed',14,9656325312,'QC0115','2024-05-02 23:00:00','2024-05-03 08:00:00','2024-05-03 23:10:10','1970-01-01 00:00:00');		-- work
-
 -- Test trigger 16: check-flight-constraints: Check legitimate value of EAT/EDT/AAT/ADT when UPDATING a flight
 -- PHẢI LÀM TEST TRIGGER 3 TRƯỚC VÌ flightID là auto-increment
-UPDATE flight SET EDT = '2024-05-03 09:00:00' WHERE FlightID = 1;		-- will fail
+UPDATE flight SET EDT = '2024-05-04 09:00:00' WHERE FlightID = 1;		-- will fail
 UPDATE flight SET EAT = '2024-04-04 08:00:00' WHERE FlightID = 1;		-- will fail
-UPDATE flight SET ADT = '2024-04-18 23:30:00' WHERE FlightID = 2;		-- will fail
+UPDATE flight SET ADT = '2024-05-18 23:30:00' WHERE FlightID = 2;		-- will fail
 UPDATE flight SET AAT = '2024-04-01 22:30:00' WHERE FlightID = 2;		-- will fail
 UPDATE flight SET AAT = '2024-05-01 09:00:00' WHERE FlightID = 2;		-- will work
