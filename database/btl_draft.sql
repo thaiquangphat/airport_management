@@ -1197,17 +1197,34 @@ BEFORE INSERT ON Ticket
 FOR EACH ROW
 BEGIN
     DECLARE existing_ticket INT;
+    DECLARE seat_cannot_book INT;
 
     -- Check if the FlightID and SeatNum combination already has a ticket
     SELECT COUNT(*)
     INTO existing_ticket
     FROM Ticket
-    WHERE FlightID = NEW.FlightID AND SeatNum = NEW.SeatNum AND CancelTime = '1970-01-01 00:00:00';
+    WHERE FlightID = NEW.FlightID AND PID = NEW.PID AND (CancelTime = '1970-01-01 00:00:00' OR CancelTime = '0000-00-00 00:00:00');
 
     IF existing_ticket > 0 THEN
         SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Cannot insert ticket. This person has already booked on this flight.';
+    END IF;
+    
+    -- added
+    
+    SELECT COUNT(*) 
+    INTO seat_cannot_book
+    FROM Ticket 
+	WHERE Ticket.FlightID = NEW.FlightID
+    AND Ticket.SeatNum = NEW.SeatNum
+	AND (Ticket.CheckInStatus = 'Yes' OR (Ticket.CheckInStatus = 'No' AND Ticket.CancelTime = '1970-01-01 00:00:00'));
+    
+    IF seat_cannot_book > 0 THEN
+		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Cannot insert ticket. The seat is already booked.';
     END IF;
+    
+    -- end added
 
     -- Check if the seat is set to Unavailable
     SELECT Status
@@ -4958,10 +4975,10 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0152,877,5,'2024-02-19 01:19:18.01754','02B','1970-01-01','2024-05-02 10:43:03.182067','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0275,914,5,'2024-04-16 03:12:18.01754','02C','1970-01-01','2024-04-29 14:22:15.209319','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0407,155,5,'2024-03-08 17:18:18.01754','02D','2024-04-10 08:50:15.091484','1970-01-01','No');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0420,121,5,'2024-04-04 22:06:22.01754','02E','1970-01-01','1970-01-01','No');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0420,120,5,'2024-04-04 22:06:22.01754','02E','1970-01-01','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0441,9,5,'2024-03-15 11:32:31.01754','02F','2024-04-23 23:06:49.654649','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0473,184,5,'2024-03-13 11:42:25.01754','03A','1970-01-01','2024-04-29 12:48:34.701309','Yes');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0484,914,5,'2024-03-30 07:01:45.01754','03B','1970-01-01','1970-01-01','No');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0484,918,5,'2024-03-30 07:01:45.01754','03B','1970-01-01','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0497,528,5,'2024-03-21 09:46:07.01754','03C','2024-04-16 13:47:19.406828','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0539,224,5,'2024-02-29 14:03:57.01754','03D','1970-01-01','2024-05-02 02:42:24.997643','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0634,42,5,'2024-03-05 18:23:21.01754','03E','1970-01-01','2024-04-29 23:07:42.047553','Yes');
@@ -5129,7 +5146,7 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0699,820,12,'2024-02-29 10:26:39.01754','03F','1970-01-01','2024-04-29 21:33:07.197804','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0714,632,12,'2024-04-03 21:21:25.01754','04A','2024-04-29 00:02:09.987597','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0805,91,12,'2024-03-25 19:33:21.01754','04B','2024-04-21 08:52:56.521718','1970-01-01','No');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0813,70,12,'2024-02-04 18:37:57.01754','04C','2024-03-09 08:39:20.559652','1970-01-01','No');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0813,71,12,'2024-02-04 18:37:57.01754','04C','2024-03-09 08:39:20.559652','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0843,933,12,'2024-03-25 21:33:00.01754','04D','2024-04-19 11:00:29.914237','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0850,219,12,'2024-03-11 00:34:32.01754','04E','1970-01-01','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0934,126,12,'2024-04-12 11:21:44.01754','04F','2024-04-13 22:11:36.427432','1970-01-01','No');
@@ -5192,7 +5209,7 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0351,978,15,'2024-03-16 19:20:08.01754','03A','2024-04-08 09:02:53.330429','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0397,181,15,'2024-03-21 14:45:40.01754','03B','1970-01-01','2024-05-02 00:14:01.642593','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0411,876,15,'2024-04-30 17:33:00.01754','03C','2024-05-01 02:33:58.681506','1970-01-01','No');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0516,181,15,'2024-04-18 07:47:55.01754','03D','2024-04-26 02:36:43.9427','1970-01-01','No');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0516,182,15,'2024-04-18 07:47:55.01754','03D','2024-04-26 02:36:43.9427','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0560,2,15,'2024-03-28 03:04:53.01754','03E','1970-01-01','2024-05-02 04:13:05.339592','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0578,721,15,'2024-04-10 22:26:57.01754','03F','1970-01-01','2024-05-01 12:11:25.345775','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0615,963,15,'2024-03-10 02:13:44.01754','04A','2024-03-25 10:34:02.849266','1970-01-01','No');
@@ -5440,7 +5457,7 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0130,185,27,'2024-03-05 21:27:18.01754','02A','1970-01-01','2024-05-02 09:29:16.024228','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0140,41,27,'2024-04-16 18:45:24.01754','02B','2024-04-25 15:37:15.601795','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0201,836,27,'2024-04-04 06:32:48.01754','02C','1970-01-01','2024-05-02 20:17:29.196891','Yes');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0279,185,27,'2024-02-07 07:30:03.01754','02D','1970-01-01','2024-04-29 01:24:55.80885','Yes');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0279,186,27,'2024-02-07 07:30:03.01754','02D','1970-01-01','2024-04-29 01:24:55.80885','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0323,926,27,'2024-04-13 13:34:26.01754','02E','1970-01-01','2024-05-01 10:34:21.32165','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0371,375,27,'2024-02-27 22:09:08.01754','02F','2024-02-29 21:57:31.529146','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0377,479,27,'2024-03-12 11:47:05.01754','03A','2024-03-26 09:39:52.720986','1970-01-01','No');
@@ -5465,7 +5482,7 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0542,483,28,'2024-04-04 09:48:41.01754','03C','2024-04-07 17:02:53.86712','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0590,605,28,'2024-04-15 01:25:01.01754','03D','1970-01-01','2024-04-30 13:29:21.428496','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0625,180,28,'2024-03-16 20:12:57.01754','03E','2024-03-21 15:10:49.577437','1970-01-01','No');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0683,605,28,'2024-04-01 16:41:04.01754','03F','1970-01-01','2024-04-29 17:27:29.926064','Yes');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0683,606,28,'2024-04-01 16:41:04.01754','03F','1970-01-01','2024-04-29 17:27:29.926064','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0713,971,28,'2024-03-20 14:45:50.01754','04A','2024-04-18 19:07:18.576064','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0718,413,28,'2024-04-22 07:57:02.01754','04B','2024-04-26 06:28:11.545146','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0722,613,28,'2024-03-01 19:01:23.01754','04C','2024-03-25 13:52:17.466582','1970-01-01','No');
@@ -5810,7 +5827,7 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0568,418,47,'2024-04-02 19:39:46.01754','03A','1970-01-01','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0589,200,47,'2024-02-03 08:48:03.01754','03B','2024-03-01 03:45:00.185641','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0611,49,47,'2024-03-30 09:03:15.01754','03C','1970-01-01','2024-04-30 15:46:03.889141','Yes');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0613,418,47,'2024-03-04 22:25:36.01754','03D','1970-01-01','2024-04-30 22:10:46.421966','Yes');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0613,419,47,'2024-03-04 22:25:36.01754','03D','1970-01-01','2024-04-30 22:10:46.421966','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0669,741,47,'2024-03-26 19:28:09.01754','03E','1970-01-01','2024-04-30 07:00:54.848821','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0715,605,47,'2024-02-09 20:10:41.01754','03F','2024-03-25 20:57:22.589575','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (1000,179,47,'2024-02-19 12:11:37.01754','04A','2024-03-05 20:03:48.254145','1970-01-01','No');
@@ -5837,7 +5854,7 @@ INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0290,261,49,'2024-02-10 00:49:38.01754','02D','2024-04-01 05:34:40.890997','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0409,664,49,'2024-03-24 15:20:31.01754','02E','1970-01-01','2024-05-02 02:39:39.224659','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0416,277,49,'2024-02-04 23:57:22.01754','02F','2024-02-07 09:18:43.208258','1970-01-01','No');
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0417,230,49,'2024-02-27 15:51:50.01754','03A','1970-01-01','1970-01-01','No');
+INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0417,231,49,'2024-02-27 15:51:50.01754','03A','1970-01-01','1970-01-01','No');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0448,948,49,'2024-04-18 07:04:19.01754','03B','1970-01-01','2024-04-30 16:28:30.798902','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0451,16,49,'2024-04-26 10:11:28.01754','03C','1970-01-01','2024-04-30 23:17:42.384941','Yes');
 INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (0508,185,49,'2024-03-18 18:17:11.01754','03D','2024-03-27 02:37:23.987614','1970-01-01','No');
