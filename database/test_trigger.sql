@@ -6,7 +6,7 @@ SELECT * FROM route;
 -- Test trigger 2: Check before delete An Employee
 DELETE FROM Employee WHERE SSN='2049569671';		-- Avoid delete flight attendant to ensure total constraint of `operates`
 DELETE FROM Employee WHERE SSN='2552794347';		-- Avoid delete pilot to ensure total constraint of `operates`
-DELETE FROM Employee WHERE SSN='3300076804';		-- Avoid delete ATC member who only controls one flight
+DELETE FROM Employee WHERE SSN='3058929914';		-- Avoid delete ATC member who only controls one flight
 DELETE FROM Employee WHERE SSN='8660516635';		-- Avoid delete the engineer who is the sole expert of a model (Each model must have at least an engineer participated in)
 
 -- Test trigger 3: Calculate the Base Price for the Flight based on the distance of the Route
