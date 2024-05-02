@@ -9,7 +9,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">Airline ID</label>
                             <input type="text" name="AirlineID" class="form-control form-control-sm" required
-                                value="<?php echo isset($AirlineID) ? $AirlineID : '' ?>">
+                                value="<?php echo isset($AirlineID) ? $AirlineID : '' ?>" maxlength="3">
                             <small id="#msg"></small>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">IATA Designator</label>
                             <input type="text" name="IATADesignator" class="form-control form-control-sm" required
-                                value="<?php echo isset($IATADesignator) ? $IATADesignator : '' ?>">
+                                value="<?php echo isset($IATADesignator) ? $IATADesignator : '' ?>" maxlength="2">
                             <small id="#msg"></small>
                         </div>
                     </div>

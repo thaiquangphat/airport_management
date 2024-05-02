@@ -52,7 +52,7 @@
                                 }
                             ?>
                             <input type="text" name="License" class="form-control form-control-sm"
-                                value="<?php echo isset($license) ? $license : '' ?>"
+                                value="<?php echo isset($license) ? $license : '' ?>" maxlength="10"
                                 placeholder="Leave blank if flight attendant">
                             <small id="#msg"></small>
                         </div>

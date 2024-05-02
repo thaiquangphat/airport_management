@@ -9,7 +9,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">SSN</label>
                             <input type="text" name="SSN" class="form-control form-control-sm" required
-                                value="<?php echo isset($SSN) ? $SSN : '' ?>">
+                                value="<?php echo isset($SSN) ? $SSN : '' ?>" maxlength="10">
                             <small id="#msg"></small>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required
-                                value="<?php echo isset($Phone) ? $Phone : '' ?>">
+                                value="<?php echo isset($Phone) ? $Phone : '' ?>" maxlength="10">
                             <small id="#msg"></small>
                         </div>
                     </div>

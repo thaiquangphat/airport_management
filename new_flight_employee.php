@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">License</label>
                             <input type="text" name="License" class="form-control form-control-sm"
-                                value="<?php echo isset($License) ? $License : '' ?>"
+                                value="<?php echo isset($License) ? $License : '' ?>" maxlength="10"
                                 placeholder="Leave blank if flight attendant">
                             <small id="#msg"></small>
                         </div>

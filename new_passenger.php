@@ -11,7 +11,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">Passport Number</label>
                             <input type="text" name="PassportNo" class="form-control form-control-sm" required
-                                value="<?php echo isset($PassportNo) ? $PassportNo : '' ?>">
+                                value="<?php echo isset($PassportNo) ? $PassportNo : '' ?>" maxlength="12">
                         </div>
                     </div>
                 </div>

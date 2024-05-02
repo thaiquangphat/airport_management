@@ -18,7 +18,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">Phone number</label>
                             <input type="text" name="Phone" class="form-control form-control-sm" required
-                                value="<?php echo isset($Phone) ? $Phone : '' ?>">
+                                value="<?php echo isset($Phone) ? $Phone : '' ?>" maxlength="10">
                         </div>
                     </div>
                     <div class="col-md-4">

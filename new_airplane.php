@@ -10,7 +10,7 @@
                         <div class="form-group">
                             <label for="" class="control-label">License Plate Number</label>
                             <input type="text" name="License_plate_num" class="form-control form-control-sm" required
-                                value="<?php echo isset($License_plate_num) ? $License_plate_num : '' ?>">
+                                value="<?php echo isset($License_plate_num) ? $License_plate_num : '' ?>" maxlength="7">
                             <small id="#msg"></small>
                         </div>
                     </div>
