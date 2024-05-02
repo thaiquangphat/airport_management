@@ -119,10 +119,8 @@ CREATE TABLE Passenger
     Fname       VARCHAR(50),
     Minit       CHAR(2),
     Lname       VARCHAR(50),
-    -- Tao nghi la phai them 1 attribute de biet thg user (type 3: emp/user) nao` tao.
     UserID 		INT,
     
-    -- Nay la tao them vao` tao nghi la can nen cu tao data co no di
     PRIMARY KEY (PID)
     -- FOREIGN KEY (UserID) REFERENCES users (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
