@@ -228,21 +228,16 @@ CREATE TABLE Flight
     AirplaneID      INT       NOT NULL,
     TCSSN           CHAR(10)  NOT NULL, -- SSN of Traffic Controller
     FlightCode      VARCHAR(6)   NOT NULL,
-    AAT             DATETIME,
-    EAT             DATETIME,
-    ADT             DATETIME,
-    EDT             DATETIME,
+    AAT             DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
+    EAT             DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
+    ADT             DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
+    EDT             DATETIME DEFAULT '1970-01-01 00:00:00' NOT NULL,
     BasePrice       FLOAT DEFAULT 0.05,
     PRIMARY KEY (FlightID),
     UNIQUE (RID, FlightCode),
     FOREIGN KEY (RID) REFERENCES Route (ID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (AirplaneID) REFERENCES Airplane (AirplaneID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (TCSSN) REFERENCES Traffic_Controller (SSN) ON DELETE CASCADE ON UPDATE CASCADE,
--- 	CONSTRAINT `check-valid-date` CHECK (
--- 		(EAT > EDT AND AAT > ADT) OR 
--- 		(EAT > EDT AND AAT = NULL AND ADT = NULL) OR 
--- 		(EAT > EDT AND AAT = NULL AND ADT != NULL)
--- 	)
 	CONSTRAINT `check-valid-date` CHECK (
 		(EAT > EDT AND AAT > ADT) OR 
 		(EAT > EDT AND (AAT = '1970-01-01 00:00:00' OR AAT = '0000-00-00 00:00:00') AND (ADT = '1970-01-01 00:00:00' OR ADT = '0000-00-00 00:00:00')) OR 
