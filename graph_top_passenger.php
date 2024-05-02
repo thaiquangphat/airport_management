@@ -40,6 +40,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                 axisY: {
                     title: "Total Amount Spent (in $)"
                 },
+                axisX: {
+                    title: "Passenger Name"
+                },
                 data: [{
                     type: "column",
                     dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>

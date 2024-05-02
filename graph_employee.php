@@ -62,14 +62,14 @@ $dataPoints = array(
             },
             data: [{
                 type: "pie",
-                indexLabel: "{label} - {y}%",
+                indexLabel: "{label} - {y}",
                 yValueFormatString: "#,##0.##\"%\"",
-                indexLabelPlacement: "inside",
+                // indexLabelPlacement: "inside",
                 indexLabelFontColor: "#36454F",
                 indexLabelFontSize: 18,
                 indexLabelFontWeight: "bolder",
-                showInLegend: true,
-                legendText: "{label}",
+                // showInLegend: true,
+                // legendText: "{label}",
                 toolTipContent: "{label}: {y} employees",
                 dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
             }]
