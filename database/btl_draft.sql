@@ -258,10 +258,6 @@ CREATE TABLE Seat
     FOREIGN KEY (FlightID) REFERENCES Flight (FlightID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-ALTER TABLE Seat
-ADD INDEX idx_SeatNum (SeatNum),
-ADD INDEX idx_FlightID (FlightID);
-
 CREATE TABLE Ticket
 (
     TicketID      	INT AUTO_INCREMENT,
@@ -274,7 +270,7 @@ CREATE TABLE Ticket
     FlightID      	INT,
     PRIMARY KEY (TicketID),
     FOREIGN KEY (PID) REFERENCES Passenger (PID) ON DELETE SET NULL ON UPDATE CASCADE,
-    FOREIGN KEY (SeatNum, FlightID) REFERENCES Seat (SeatNum, FlightID) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (FlightID, SeatNum) REFERENCES Seat (FlightID, SeatNum) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- --------------------------------------------------------------------
