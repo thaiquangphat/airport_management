@@ -70,7 +70,13 @@ INSERT INTO flight(RID,Status,AirplaneID,TCSSN,FlightCode,EDT,EAT,ADT,AAT)
 VALUES (7,'Landed',14,9656325312,'QC0116','2024-05-02 23:00:00','2024-05-03 08:00:00','1970-01-01 00:00:00','1970-01-01 00:00:00');		-- work
 
 -- Test trigger 14: check insert ticket when seat is unavailable
-INSERT INTO ticket(TicketID,PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus) VALUES (1003, 999, 1, '2024-02-13 13:31:17', '09B', '1970-01-01', '2024-04-17 13:44:38', 'Yes');
+INSERT INTO ticket(PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus)		-- overlap unavailable seat
+VALUES (999, 1, '2024-02-13 13:31:17', '03D', '1970-01-01', '2024-04-17 13:44:38', 'Yes');
+INSERT INTO ticket(PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus)		-- overlap PID
+VALUES (999, 1, '2024-02-13 13:32:17', '03E', '2024-04-17 13:44:38', '1970-01-01 00:00:00', 'No');
+INSERT INTO ticket(PID,FlightID,BookTime,SeatNum,CancelTime,CheckInTime,CheckInStatus)		-- available seat -> should work
+VALUES (1000, 1, '2024-02-13 13:33:17', '03E', '1970-01-01', '2024-04-17 13:44:38', 'Yes');
+
 
 -- Test trigger 15: Check consecutive shifts for ATC crew
 INSERT INTO tcshift(TCSSN, Shift) VALUES (1443933295, 'Afternoon');			-- Will not work because this member already works in the morning
