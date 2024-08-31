@@ -16,9 +16,6 @@ FACULTY OF COMPUTER SCIENCE AND ENGINEERING
 <img src="https://img.shields.io/github/languages/top/thaiquangphat/airport_management?color=yellow&logo=javascript&logoColor=yellow">&emsp;<img src="https://img.shields.io/github/repo-size/thaiquangphat/airport_management?color=orange&label=size&logo=git&logoColor=orange">
 <br />
 
-**Database Management System / Semester 232**
-<br/>
-
 </div>
 
 <h2 align="center">💡 Project. Airport Management System 💡</h2>
